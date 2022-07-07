@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "mod_wsacarousel",
+  "version": "1.1.0",
+  "description": "This file contains details of the default (bootstrap 5) assets used by mod_wsacarousel, a Joomla 3 and 4 site module.",
+  "license": "GPL-2.0-or-later",
+  "assets": [
+    {
+      "name": "module.wsacarousel.css",
+      "description": "The css file to be used when there is no specific styleid known, will be overridden by template.min.<templatestyleid>.css.",
+      "type": "style",
+      "uri": "mod_wsacarousel/wsacarousel_module.css",
+      "version": "1.1.0"
+    },
+    {
+      "name": "wsacarousel_bootstrap.css",
+      "description": "The default css file to be used with bootstrap 5.1.3, (only) after it is used can be overridden in index.php by older versions",
+      "type": "style",
+      "uri": "mod_wsacarousel/wsacarousel_bootstrap5.1.css",
+      "version": "5.1.3"
+     },
+    {
+      "name": "wsacarousel_bootstrap.js",
+      "description": "The default file containing the javascript used with bootstrap 5.1.3, can be overridden by older versions",
+      "type": "script",
+      "uri": "mod_wsacarousel/wsacarousel_bootstrap5.1.js",
+      "version": "5.1.3",
+      "attributes" : {
+        "defer": true
+      }
+    },
+    {
+      "name": "magnificpopup",
+      "type": "script",
+      "uri": "mod_wsacarousel/magnificpopup/MagnificPopupV1-1-0.js",
+      "version": "1.1.0",
+      "dependencies": [
+      	"jquery"
+      ]
+	},
+    {
+      "name": "module.mod_wsacarousel",
+      "description": "Default with bootstrap 5 override with older bootstrap versions in code after this is used",
+      "type": "preset",
+      "dependencies": [
+        "wsacarousel_bootstrap.css#style",
+        "module.wsacarousel.css#style",
+        "wsacarousel_bootstrap.js#script"
+      ]
+    }
+	
+  ]
+}

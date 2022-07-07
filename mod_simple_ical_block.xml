@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" client="site" method="upgrade">
+	<name>mod_simple_ical_block</name>
+	<creationDate>2-7-2022</creationDate>	
+	<author>A.H.C. Waasdorp</author>
+	<copyright>Copyright (C) 2022 - 2022 A.H.C. Waasdorp, All rights reserved.</copyright>
+	<license> http://www.gnu.org/licenses GNU/GPL</license>
+	<authorEmail>contact@waasdorpsoekhan.nl</authorEmail>
+	<authorUrl>http://www.waasdorpsoekhan.nl</authorUrl>
+	<version>0.0.1<version>
+	<description>Simple Google Calendar Outlook Events Module</description>
+	<namespace path="src">WaasdorpSoekhan\Module\Simpleicalblock</namespace>
+		<!-- Site Main File Copy Section -->
+	<!-- Note the folder attribute: This attribute describes the folder
+		to copy FROM in the package to install therefore files copied
+		in this section are copied from /site/ in the package -->
+ 	<files folder="site/">
+		<filename module="mod_simple_ical_block">mod_simple_ical_block.php</filename>
+		<filename>mod_simple_ical_block.xml</filename>
+		<filename>index.html</filename>
+		<filename>joomla.asset.json</filename>
+		<folder>assets</folder>
+		<folder>language</folder>
+		<folder>src</folder>
+		<folder>tmpl</folder>
+	</files>
+	<media destination="mod_simple_ical_block" folder="assets">
+		<folder>css</folder>
+		<folder>js</folder>
+		<folder>magnific</folder>
+	</media>
+	<languages folder="site/language/">
+		<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.ini</language>
+	</languages>
+	
+	
+	<scriptfile>mod_simple_ical_block.script.php</scriptfile>
+	
+		<administration>
+		<!-- Administration Component Menu Section -->
+		<menu   img="../media/com_wsaonepage/images/Tux-16x16.png"><![CDATA[MOD_SIMPLEICALBLOCK_MENU]]></menu>
+		<submenu>
+			<!-- Note that all & must be escaped to &amp; for the file to be valid
+				XML and be parsed by the installer
+			-->
+			<menu link="option=mod_simple_ical_block" img="class:content"
+				alt="Simpleicalblock/Simpleicalblock"><![CDATA[MOD_SIMPLEICALBLOCK_SUBMENU]]></menu>
+		</submenu>
+		<!-- Administration Main File Copy Section -->
+		<!-- Note the folder attribute: This attribute describes the folder
+			to copy FROM in the package to install therefore files copied
+			in this section are copied from /admin/ in the package -->
+		<files folder="admin/">
+
+			<filename>access.xml</filename>
+			<filename>config.xml</filename>
+			<filename>index.html</filename>
+            <folder>forms</folder>
+            <folder>language</folder>
+            <folder>services</folder>
+            <folder>sql</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+		</files>
+		<languages folder="admin/language/">
+			<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.ini</language>
+			<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.sys.ini</language>
+		</languages>
+	</administration>
+
+ 	<install><!-- Runs on install -->
+ 		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+		</sql>
+	</install>
+	<uninstall><!-- Runs on uninstall -->
+ 		<sql>
+			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+		</sql>
+	</uninstall>
+	<update><!-- Runs on update; New since J2.5 -->
+ 		<schemas>
+			<schemapath type="mysql">sql/updates/mysql</schemapath>
+		</schemas>
+	</update>
+	
+	
+	<config>
+		<fields name="params" <!-- addfieldpath="/administrator/components/com_wsacarousel/models/fields" 
+		   addfieldprefix="Joomla\Component\Wsacarousel\Administrator\Field" --> >
+			<fieldset name="basic">
+				<field name="slider_source" type="list" default="0" label="MOD_WSACAROUSEL_SLIDER_SOURCE" description="MOD_WSACAROUSEL_SLIDER_SOURCE_DESC">
+					<option value="0">MOD_WSACAROUSEL_FOLDER</option>
+					<option value="1">MOD_WSACAROUSEL_COMPONENT</option>
+				</field>
+				<field name="link_image" type="list" default="1" label="MOD_WSACAROUSEL_LINK_IMAGE" description="MOD_WSACAROUSEL_LINK_IMAGE_DESC">
+					<option value="0">MOD_WSACAROUSEL_DONT_LINK</option>
+					<option value="1">MOD_WSACAROUSEL_HYPERLINK</option>
+					<option value="2">MOD_WSACAROUSEL_OPEN_IMAGE_IN_LIGHTBOX</option>
+				</field>
+				<field name="include_magnific" type="radio" layout="joomla.form.field.radio.switcher"
+				class="switcher btn-group" default="1" label="MOD_WSACAROUSEL_INCLUDE_MP" description="MOD_WSACAROUSEL_INCLUDE_MP_DESC" showon="link_image:1">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field type="spacer" label="&lt;hr &#47;&gt;" />
+				
+				<field type="wsaspacer" label="MOD_WSACAROUSEL_FOLDER_AS_SOURCE_SETTINGS" showon="slider_source:0" />
+				<field name="image_folder" type="text" default="images/sampledata/fruitshop" size="50" label="MOD_WSACAROUSEL_IMAGE_FOLDER" description="MOD_WSACAROUSEL_IMAGE_FOLDER_DESC" showon="slider_source:0" />
+				<field name="link" type="text" default="" size="50" label="MOD_WSACAROUSEL_LINK" description="MOD_WSACAROUSEL_LINK_DESC" showon="slider_source:0" />
+				
+				<field type="wsaspacer" label="MOD_WSACAROUSEL_COMPONENT_AS_SOURCE_SETTINGS" showon="slider_source:1" />
+				<field name="category" type="category" extension="com_wsacarousel" label="MOD_WSACAROUSEL_SLIDES_CATEGORY" description="MOD_WSACAROUSEL_SLIDES_CATEGORY_DESC" showon="slider_source:1" />
+
+				<field name="show_title" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="1" label="MOD_WSACAROUSEL_SHOW_TITLE" description="MOD_WSACAROUSEL_SHOW_TITLE_DESC" showon="slider_source:1">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="show_desc" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="1" label="MOD_WSACAROUSEL_SHOW_DESCRIPTION" description="MOD_WSACAROUSEL_SHOW_DESCRIPTION_DESC" showon="slider_source:1">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="show_readmore" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="0" label="MOD_WSACAROUSEL_SHOW_READMORE" description="MOD_WSACAROUSEL_SHOW_READMORE_DESC" showon="slider_source:1">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="readmore_text" type="text" default="" size="50" label="MOD_WSACAROUSEL_READMORE_TEXT" description="MOD_WSACAROUSEL_READMORE_TEXT_DESC" showon="slider_source:1" />
+				<field name="link_title" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="1" label="MOD_WSACAROUSEL_LINK_TITLE" description="MOD_WSACAROUSEL_LINK_TITLE_DESC" showon="slider_source:1">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="link_desc" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="0" label="MOD_WSACAROUSEL_LINK_DESCRIPTION" description="MOD_WSACAROUSEL_LINK_DESCRIPTION_DESC" showon="slider_source:1">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="limit_desc" type="text" default="" size="10" label="MOD_WSACAROUSEL_DESCRIPTION_LIMIT" description="MOD_WSACAROUSEL_DESCRIPTION_LIMIT_DESC" showon="slider_source:1" />
+				<field type="spacer" label="&lt;hr &#47;&gt;" />
+				
+				<field type="wsaspacer" label="MOD_WSACAROUSEL_BASIC_SLIDER_SETTINGS" description="MOD_WSACAROUSEL_SLIDER_DIMENSIONS" />
+				<field name="full_width" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="0" label="MOD_WSACAROUSEL_FULL_WIDTH" description="MOD_WSACAROUSEL_FULL_WIDTH_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="image_width" type="text" default="240" size="10" label="MOD_WSACAROUSEL_SLIDE_WIDTH" description="MOD_WSACAROUSEL_SLIDE_WIDTH_DESC" />
+				<field name="image_height" type="text" default="180" size="10" label="MOD_WSACAROUSEL_SLIDE_HEIGHT" description="MOD_WSACAROUSEL_SLIDE_HEIGHT_DESC" />
+				<field name="fit_to" type="list" default="0" label="MOD_WSACAROUSEL_FIT_SIZE_TO" description="MOD_WSACAROUSEL_FIT_SIZE_TO_DESC">
+					<option value="0">MOD_WSACAROUSEL_SLIDE_AUTO</option>
+					<option value="1">MOD_WSACAROUSEL_SLIDE_WIDTH</option>
+					<option value="2">MOD_WSACAROUSEL_SLIDE_HEIGHT</option>
+				</field>
+				<field name="image_centering" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="0" label="MOD_WSACAROUSEL_VERTICAL_IMAGE_CENTERING">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="visible_images" type="text" default="3" size="10" label="MOD_WSACAROUSEL_VISIBLE_IMAGES" description="MOD_WSACAROUSEL_VISIBLE_IMAGES_DESC" />
+				<field name="space_between_images" type="text" default="10" size="10" label="MOD_WSACAROUSEL_SPACE_BETWEEN_IMAGES" description="MOD_WSACAROUSEL_SPACE_BETWEEN_IMAGES_DESC" />
+				<field name="max_images" type="text" default="20" size="10" label="MOD_WSACAROUSEL_MAX_IMAGES" description="MOD_WSACAROUSEL_MAX_IMAGES_DESC" />
+				<field name="sort_by" type="list" default="1" label="MOD_WSACAROUSEL_SORT_BY" description="MOD_WSACAROUSEL_SORT_BY_DESC">
+					<option value="1">MOD_WSACAROUSEL_FILE_NAME_ORDERING_ASC</option>
+					<option value="2">MOD_WSACAROUSEL_FILE_NAME_ORDERING_DESC</option>
+					<option value="3">MOD_WSACAROUSEL_DATE_ASC</option>
+					<option value="4">MOD_WSACAROUSEL_DATE_DESC</option>
+					<option value="0">MOD_WSACAROUSEL_RANDOMISE</option>
+				</field>
+				<field name ="ii_bgc" type="color" default="" label="MOD_WSACAROUSEL_SLIDE_BGC" description="MOD_WSACAROUSEL_SLIDE_BGC_DESC"                                                                                                        
+				/>
+				<field name="caption_overlay" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="1" label="MOD_WSACAROUSEL_CAPTION_OVERLAY" description="MOD_WSACAROUSEL_CAPTION_OVERLAY_DESC" showon="slider_source:1">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name ="caption_bgc" type="color" default="#000" label="MOD_WSACAROUSEL_CAPTION_BGC" description="MOD_WSACAROUSEL_CAPTION_BGC_DESC"                                                                                                        
+				/>
+				<field name ="caption_opc" type="number" min="0" max="100" default="50" label="MOD_WSACAROUSEL_CAPTION_OPC" description="MOD_WSACAROUSEL_CAPTION_OPC_DESC"                                                                                                        
+				/>
+				<field name ="caption_fgc" type="color" default="#fff" label="MOD_WSACAROUSEL_CAPTION_FGC" description="MOD_WSACAROUSEL_CAPTION_FGC_DESC"                                                                                                        
+				/>
+				<field name="show_buttons" type="radio" class="btn-group" default="1" label="MOD_WSACAROUSEL_SHOW_PLAY_PAUSE" description="MOD_WSACAROUSEL_SHOW_PLAY_PAUSE_DESC">
+					<option value="0">JNO</option>
+					<option value="2">JYES</option>
+					<option value="1">MOD_WSACAROUSEL_ON_MOUSE_OVER</option>
+					<option value="3">MOD_WSACAROUSEL_ON_MOUSE_OVER_SLIDER</option>
+				</field>
+				<field name="show_arrows" type="radio" class="btn-group" default="1" label="MOD_WSACAROUSEL_SHOW_NEXT_PREV" description="MOD_WSACAROUSEL_SHOW_NEXT_PREV_DESC">
+					<option value="0">JNO</option>
+					<option value="2">JYES</option>
+					<option value="1">MOD_WSACAROUSEL_ON_MOUSE_OVER</option>
+					<option value="3">MOD_WSACAROUSEL_ON_MOUSE_OVER_SLIDER</option>
+				</field>
+				<field name="show_custom_nav" type="radio" class="btn-group" default="0" label="MOD_WSACAROUSEL_SHOW_CUSTOM_NAVIGATION" description="MOD_WSACAROUSEL_SHOW_CUSTOM_NAVIGATION_DESC">
+					<option value="0">JNO</option>
+					<option value="2">JYES</option>
+					<option value="1">MOD_WSACAROUSEL_ON_MOUSE_OVER</option>
+				</field>
+			
+			</fieldset>
+			
+			<fieldset name="customise" label="MOD_WSACAROUSEL_CUSTOMISE">
+	
+				<field type="wsaspacer" label="MOD_WSACAROUSEL_CUSTOMISE_SLIDE_DESCRIPTION" />
+				<field name="desc_width" type="text" default="" size="10" label="MOD_WSACAROUSEL_DESCRIPTION_WIDTH" description="MOD_WSACAROUSEL_DESCRIPTION_WIDTH_DESC" />
+				<field name="desc_bottom" type="text" default="0" size="10" label="MOD_WSACAROUSEL_DESCRIPTION_VERTICAL_POSITION" description="MOD_WSACAROUSEL_DESCRIPTION_VERTICAL_POSITION_DESC" />
+				<field name="desc_horizontal" type="text" default="0" size="10" label="MOD_WSACAROUSEL_DESCRIPTION_HORIZONTAL_POSITION" description="MOD_WSACAROUSEL_DESCRIPTION_HORIZONTAL_POSITION_DESC" />
+			
+				<field type="spacer" label="&lt;hr &#47;&gt;" />
+				<field type="wsaspacer" label="MOD_WSACAROUSEL_CUSTOMISE_BUTTONS" />
+				<field name="nav_buttons_style" type="radio"  class="btn-group" default="0" label="MOD_WSACAROUSEL_NAV_BUTTON_STYLE">
+					<option value="0">MOD_WSACAROUSEL_NBS_DEFAULT</option>
+					<option value="1">MOD_WSACAROUSEL_NBS_CUSTOM_IMG</option>
+					<option value="2">MOD_WSACAROUSEL_NBS_CUSTOM_OLD</option>
+				</field>
+
+				<field name="left_arrow" type="media" default="" size="50" label="MOD_WSACAROUSEL_PREV_BUTTON" description="MOD_WSACAROUSEL_PREV_BUTTON_DESC"  showon="nav_buttons_style:1" />
+				<field name="right_arrow" type="media" default="" size="50" label="MOD_WSACAROUSEL_NEXT_BUTTON" description="MOD_WSACAROUSEL_NEXT_BUTTON_DESC"  showon="nav_buttons_style:1" />
+				<field name="play_button" type="media" default="" size="50" label="MOD_WSACAROUSEL_PLAY_BUTTON" description="MOD_WSACAROUSEL_PLAY_BUTTON_DESC" showon="nav_buttons_style:1" />
+				<field name="pause_button" type="media" default="" size="50" label="MOD_WSACAROUSEL_PAUSE_BUTTON" description="MOD_WSACAROUSEL_PAUSE_BUTTON_DESC" showon="nav_buttons_style:1" />
+				<field name="idx_style" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="0" label="MOD_WSACAROUSEL_CUSTOM_NAVIGATION_STYLE">
+					<option value="0">MOD_WSACAROUSEL_CUSTOM_NAVIGATION_POINTS</option>
+					<option value="1">MOD_WSACAROUSEL_CUSTOM_NAVIGATION_NUMBERS</option>
+				</field>
+				
+				<field type="spacer" label="&lt;hr &#47;&gt;" />
+				<field type="wsaspacer" label="MOD_WSACAROUSEL_CUSTOMISE_CAROUSEL" />
+				
+				<field name="include_twbs_css" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="1" label="MOD_WSACAROUSEL_INCLUDE_TWBS_CSS" description="MOD_WSACAROUSEL_INCLUDE_TWBS_CSS_DESC" showon="slider_source:1">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="include_twbs_js" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="1" label="MOD_WSACAROUSEL_INCLUDE_TWBS_JS" description="MOD_WSACAROUSEL_INCLUDE_TWBS_JS_DESC" showon="slider_source:1">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="twbs_version" type="radio" class="btn-group" default="3" label="MOD_WSACAROUSEL_TWBS_VERSION" description="MOD_WSACAROUSEL_TWBS_VERSION_DESC" showon="slider_source:1">
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+<!-- 					<option value="9">5 (Joomla 4)</option> -->
+				</field>
+				<field name="duration" type="text" default="600" size="10" label="MOD_WSACAROUSEL_SLIDE_DURATION" description="MOD_WSACAROUSEL_SLIDE_DURATION_DESC"  />
+				<field name="delay" type="text" default="3000" size="10" label="MOD_WSACAROUSEL_NEXT_SLIDE_DELAY" description="MOD_WSACAROUSEL_NEXT_SLIDE_DELAY_DESC" />
+				<field name="autoplay" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="1" label="MOD_WSACAROUSEL_AUTOPLAY" description="MOD_WSACAROUSEL_AUTOPLAY_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="looponce" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="0" label="MOD_WSACAROUSEL_LOOP_ONCE" description="MOD_WSACAROUSEL_LOOP_ONCE_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field type="spacer" label="&lt;hr &#47;&gt;" />
+				
+			</fieldset>
+			
+			<fieldset name="advanced">
+				
+				<field
+					name="layout"
+					type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+				<field
+					name="moduleclass_sfx"
+					type="textarea"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					rows="3"
+				/>
+				<field
+					name="cache"
+					type="list"
+					default="1"
+					label="COM_MODULES_FIELD_CACHING_LABEL"
+					description="COM_MODULES_FIELD_CACHING_DESC">
+					<option
+						value="1">JGLOBAL_USE_GLOBAL</option>
+					<option
+						value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+				<field
+					name="cache_time"
+					type="text"
+					default="900"
+					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+				
+			</fieldset>
+			
+		</fields>
+	</config>
+    <updateservers>
+	<server type="extension" priority="1" name="WsaCarousel Slider / Carousel Module"><![CDATA[https://www.waasdorpsoekhan.nl/update/wsacarousel/mod_wsacarousel-update.xml]]></server>
+    </updateservers>
+	
+</extension>
