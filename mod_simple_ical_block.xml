@@ -18,8 +18,8 @@
 		<filename module="mod_simple_ical_block">mod_simple_ical_block.php</filename>
 		<filename>mod_simple_ical_block.xml</filename>
 		<filename>index.html</filename>
-		<filename>joomla.asset.json</filename>
-		<folder>assets</folder>
+		<!-- filename>joomla.asset.json</filename -->
+		<!--  folder>assets</folder -->
 		<folder>language</folder>
 		<folder>src</folder>
 		<folder>tmpl</folder>
@@ -27,14 +27,13 @@
 	<media destination="mod_simple_ical_block" folder="assets">
 		<folder>css</folder>
 		<folder>js</folder>
-		<folder>magnific</folder>
 	</media>
 	<languages folder="site/language/">
 		<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.ini</language>
 	</languages>
 	
 	
-	<scriptfile>mod_simple_ical_block.script.php</scriptfile>
+	<!-- scriptfile>mod_simple_ical_block.script.php</scriptfile -->
 	
 		<administration>
 		<!-- Administration Component Menu Section -->
@@ -52,12 +51,12 @@
 			in this section are copied from /admin/ in the package -->
 		<files folder="admin/">
 
-			<filename>access.xml</filename>
+			<!--  filename>access.xml</filename>
 			<filename>config.xml</filename>
 			<filename>index.html</filename>
             <folder>forms</folder>
             <folder>language</folder>
-            <folder>services</folder>
+            <folder>services</folder -->
             <folder>sql</folder>
             <folder>src</folder>
             <folder>tmpl</folder>
@@ -83,31 +82,7 @@
 			<schemapath type="mysql">sql/updates/mysql</schemapath>
 		</schemas>
 	</update>
-	
-<!-- 
-           'blockid' => ['type' => 'string'],
-  b          'title' => ['type' => 'string', 'default' => __('Events', 'simple_ical')],
-  b          'calendar_id' => ['type' => 'string', 'default' => ''],
-  b          'event_count' => ['type' => 'integer', 'default' => 10],
-  b          'event_period' => ['type' => 'integer', 'default' => 92],
-  a          'cache_time' => ['type' => 'integer', 'default' => 60], transient_time
-  b          'startwsum' => ['type' => 'boolean', 'default' => false],
-  b          'dateformat_lg' => ['type' => 'string', 'default' => 'l jS \of F'],
-  b          'dateformat_lgend' => ['type' => 'string', 'default' => ''],
-  a          'tag_sum' => ['type' => 'string', 'enum' => self::$allowed_tags_sum, 'default' => 'a'],
-  b           'dateformat_tsum' => ['type' => 'string', 'default' => 'G:i '],
-  b          'dateformat_tsend' => ['type' => 'string', 'default' => ''],
-  b          'dateformat_tstart' => ['type' => 'string', 'default' => 'G:i'],
-  b          'dateformat_tend' => ['type' => 'string', 'default' => ' - G:i '],
-  a          'excerptlength' => ['type' => 'string', ''],
-  a          'suffix_lg_class' => ['type' => 'string', 'default' => ''],
-  a          'suffix_lgi_class' => ['type' => 'string', 'default' => ' py-0'],
-  a          'suffix_lgia_class' => ['type' => 'string', 'default' => ''],
-  a          'allowhtml' => ['type' => 'boolean', 'default' => false],
-  a          'clear_cache_now' => ['type' => 'boolean', 'default' => false],
-  a          'anchorId' => ['type' => 'string', 'default' => ''],
 
- -->	
 	<config>
 		<fields name="params"  addfieldprefix="Joomla\Module\Simpleicalblock\Administrator\Field"  >
 			<fieldset name="basic">
@@ -194,8 +169,8 @@
 			
 		</fields>
 	</config>
-    <updateservers>
+    <!-- updateservers>
 	<server type="extension" priority="1" name="WsaCarousel Slider / Carousel Module"><![CDATA[https://www.waasdorpsoekhan.nl/update/wsacarousel/mod_wsacarousel-update.xml]]></server>
-    </updateservers>
+    </updateservers  -->
 	
 </extension>
