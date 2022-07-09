@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" client="site" method="upgrade">
 	<name>mod_simple_ical_block</name>
-	<creationDate>2-7-2022</creationDate>	
+	<creationDate>9-7-2022</creationDate>	
 	<author>A.H.C. Waasdorp</author>
 	<copyright>Copyright (C) 2022 - 2022 A.H.C. Waasdorp, All rights reserved.</copyright>
 	<license> http://www.gnu.org/licenses GNU/GPL</license>
 	<authorEmail>contact@waasdorpsoekhan.nl</authorEmail>
 	<authorUrl>http://www.waasdorpsoekhan.nl</authorUrl>
-	<version>0.0.1<version>
+	<version>0.0.1</version>
 	<description>Simple Google Calendar Outlook Events Module</description>
 	<namespace path="src">WaasdorpSoekhan\Module\Simpleicalblock</namespace>
 		<!-- Site Main File Copy Section -->
@@ -94,18 +94,18 @@
   b          'startwsum' => ['type' => 'boolean', 'default' => false],
   b          'dateformat_lg' => ['type' => 'string', 'default' => 'l jS \of F'],
   b          'dateformat_lgend' => ['type' => 'string', 'default' => ''],
-            'tag_sum' => ['type' => 'string', 'enum' => self::$allowed_tags_sum, 'default' => 'a'],
+  a          'tag_sum' => ['type' => 'string', 'enum' => self::$allowed_tags_sum, 'default' => 'a'],
   b           'dateformat_tsum' => ['type' => 'string', 'default' => 'G:i '],
   b          'dateformat_tsend' => ['type' => 'string', 'default' => ''],
   b          'dateformat_tstart' => ['type' => 'string', 'default' => 'G:i'],
   b          'dateformat_tend' => ['type' => 'string', 'default' => ' - G:i '],
-            'excerptlength' => ['type' => 'string', ''],
-            'suffix_lg_class' => ['type' => 'string', 'default' => ''],
-            'suffix_lgi_class' => ['type' => 'string', 'default' => ' py-0'],
-            'suffix_lgia_class' => ['type' => 'string', 'default' => ''],
-            'allowhtml' => ['type' => 'boolean', 'default' => false],
-            'clear_cache_now' => ['type' => 'boolean', 'default' => false],
-            'anchorId' => ['type' => 'string', 'default' => ''],
+  a          'excerptlength' => ['type' => 'string', ''],
+  a          'suffix_lg_class' => ['type' => 'string', 'default' => ''],
+  a          'suffix_lgi_class' => ['type' => 'string', 'default' => ' py-0'],
+  a          'suffix_lgia_class' => ['type' => 'string', 'default' => ''],
+  a          'allowhtml' => ['type' => 'boolean', 'default' => false],
+  a          'clear_cache_now' => ['type' => 'boolean', 'default' => false],
+  a          'anchorId' => ['type' => 'string', 'default' => ''],
 
  -->	
 	<config>
@@ -120,169 +120,47 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="dateformat_lg" type="text" default="l jS \of F" label="MOD_SIMPLEICALBLOCK_DF_LG" description="MOD_SIMPLEICALBLOCK_DF_LG_DESC" />
+				<field name="dateformat_lg" type="text" default="MOD_SIMPLEICALBLOCK_DF_DFT" label="MOD_SIMPLEICALBLOCK_DF_LG" description="MOD_SIMPLEICALBLOCK_DF_LG_DESC" />
 				<field name="dateformat_lgend" type="text" default="" label="MOD_SIMPLEICALBLOCK_DF_LGEND" description="MOD_SIMPLEICALBLOCK_DF_LGEND_DESC" />
 
-				<field name="dateformat_tsum" type="text" default="'G:i " label="MOD_SIMPLEICALBLOCK_DF_TSUM" description="MOD_SIMPLEICALBLOCK_DF_TSUM_DESC" />
+				<field name="dateformat_tsum" type="text" default="MOD_SIMPLEICALBLOCK_DF_TSUM_DFT" label="MOD_SIMPLEICALBLOCK_DF_TSUM" description="MOD_SIMPLEICALBLOCK_DF_TSUM_DESC" />
 				<field name="dateformat_tsend" type="text" default="" label="MOD_SIMPLEICALBLOCK_DF_TSUMEND" description="MOD_SIMPLEICALBLOCK_DF_TSUMEND_DESC" />
 
-				<field name="dateformat_tstart" type="text" default="G:i" label="MOD_SIMPLEICALBLOCK_DF_TSTART" description="MOD_SIMPLEICALBLOCK_DF_TSTART_DESC" />
-				<field name="dateformat_tend" type="text" default=" - G:i " label="MOD_SIMPLEICALBLOCK_DF_TEND" description="MOD_SIMPLEICALBLOCK_DF_TEND_DESC" />
-
-				<field name="link_image" type="list" default="1" label="MOD_WSACAROUSEL_LINK_IMAGE" description="MOD_WSACAROUSEL_LINK_IMAGE_DESC">
-					<option value="0">MOD_WSACAROUSEL_DONT_LINK</option>
-					<option value="1">MOD_WSACAROUSEL_HYPERLINK</option>
-					<option value="2">MOD_WSACAROUSEL_OPEN_IMAGE_IN_LIGHTBOX</option>
-				</field>
-				<field type="spacer" label="&lt;hr &#47;&gt;" />
-				
-				<field type="wsaspacer" label="MOD_WSACAROUSEL_FOLDER_AS_SOURCE_SETTINGS" showon="slider_source:0" />
-				<field name="image_folder" type="text" default="images/sampledata/fruitshop" size="50" label="MOD_WSACAROUSEL_IMAGE_FOLDER" description="MOD_WSACAROUSEL_IMAGE_FOLDER_DESC" showon="slider_source:0" />
-				<field name="link" type="text" default="" size="50" label="MOD_WSACAROUSEL_LINK" description="MOD_WSACAROUSEL_LINK_DESC" showon="slider_source:0" />
-				
-				<field type="wsaspacer" label="MOD_WSACAROUSEL_COMPONENT_AS_SOURCE_SETTINGS" showon="slider_source:1" />
-				<field name="category" type="category" extension="com_wsacarousel" label="MOD_WSACAROUSEL_SLIDES_CATEGORY" description="MOD_WSACAROUSEL_SLIDES_CATEGORY_DESC" showon="slider_source:1" />
-
-				<field name="show_title" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="1" label="MOD_WSACAROUSEL_SHOW_TITLE" description="MOD_WSACAROUSEL_SHOW_TITLE_DESC" showon="slider_source:1">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="show_desc" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="1" label="MOD_WSACAROUSEL_SHOW_DESCRIPTION" description="MOD_WSACAROUSEL_SHOW_DESCRIPTION_DESC" showon="slider_source:1">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="show_readmore" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="0" label="MOD_WSACAROUSEL_SHOW_READMORE" description="MOD_WSACAROUSEL_SHOW_READMORE_DESC" showon="slider_source:1">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="readmore_text" type="text" default="" size="50" label="MOD_WSACAROUSEL_READMORE_TEXT" description="MOD_WSACAROUSEL_READMORE_TEXT_DESC" showon="slider_source:1" />
-				<field name="link_title" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="1" label="MOD_WSACAROUSEL_LINK_TITLE" description="MOD_WSACAROUSEL_LINK_TITLE_DESC" showon="slider_source:1">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="link_desc" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="0" label="MOD_WSACAROUSEL_LINK_DESCRIPTION" description="MOD_WSACAROUSEL_LINK_DESCRIPTION_DESC" showon="slider_source:1">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="limit_desc" type="text" default="" size="10" label="MOD_WSACAROUSEL_DESCRIPTION_LIMIT" description="MOD_WSACAROUSEL_DESCRIPTION_LIMIT_DESC" showon="slider_source:1" />
-				<field type="spacer" label="&lt;hr &#47;&gt;" />
-				
-				<field type="wsaspacer" label="MOD_WSACAROUSEL_BASIC_SLIDER_SETTINGS" description="MOD_WSACAROUSEL_SLIDER_DIMENSIONS" />
-				<field name="full_width" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="0" label="MOD_WSACAROUSEL_FULL_WIDTH" description="MOD_WSACAROUSEL_FULL_WIDTH_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="image_width" type="text" default="240" size="10" label="MOD_WSACAROUSEL_SLIDE_WIDTH" description="MOD_WSACAROUSEL_SLIDE_WIDTH_DESC" />
-				<field name="image_height" type="text" default="180" size="10" label="MOD_WSACAROUSEL_SLIDE_HEIGHT" description="MOD_WSACAROUSEL_SLIDE_HEIGHT_DESC" />
-				<field name="fit_to" type="list" default="0" label="MOD_WSACAROUSEL_FIT_SIZE_TO" description="MOD_WSACAROUSEL_FIT_SIZE_TO_DESC">
-					<option value="0">MOD_WSACAROUSEL_SLIDE_AUTO</option>
-					<option value="1">MOD_WSACAROUSEL_SLIDE_WIDTH</option>
-					<option value="2">MOD_WSACAROUSEL_SLIDE_HEIGHT</option>
-				</field>
-				<field name="image_centering" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="0" label="MOD_WSACAROUSEL_VERTICAL_IMAGE_CENTERING">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="visible_images" type="text" default="3" size="10" label="MOD_WSACAROUSEL_VISIBLE_IMAGES" description="MOD_WSACAROUSEL_VISIBLE_IMAGES_DESC" />
-				<field name="space_between_images" type="text" default="10" size="10" label="MOD_WSACAROUSEL_SPACE_BETWEEN_IMAGES" description="MOD_WSACAROUSEL_SPACE_BETWEEN_IMAGES_DESC" />
-				<field name="max_images" type="text" default="20" size="10" label="MOD_WSACAROUSEL_MAX_IMAGES" description="MOD_WSACAROUSEL_MAX_IMAGES_DESC" />
-				<field name="sort_by" type="list" default="1" label="MOD_WSACAROUSEL_SORT_BY" description="MOD_WSACAROUSEL_SORT_BY_DESC">
-					<option value="1">MOD_WSACAROUSEL_FILE_NAME_ORDERING_ASC</option>
-					<option value="2">MOD_WSACAROUSEL_FILE_NAME_ORDERING_DESC</option>
-					<option value="3">MOD_WSACAROUSEL_DATE_ASC</option>
-					<option value="4">MOD_WSACAROUSEL_DATE_DESC</option>
-					<option value="0">MOD_WSACAROUSEL_RANDOMISE</option>
-				</field>
-				<field name ="ii_bgc" type="color" default="" label="MOD_WSACAROUSEL_SLIDE_BGC" description="MOD_WSACAROUSEL_SLIDE_BGC_DESC"                                                                                                        
-				/>
-				<field name="caption_overlay" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="1" label="MOD_WSACAROUSEL_CAPTION_OVERLAY" description="MOD_WSACAROUSEL_CAPTION_OVERLAY_DESC" showon="slider_source:1">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name ="caption_bgc" type="color" default="#000" label="MOD_WSACAROUSEL_CAPTION_BGC" description="MOD_WSACAROUSEL_CAPTION_BGC_DESC"                                                                                                        
-				/>
-				<field name ="caption_opc" type="number" min="0" max="100" default="50" label="MOD_WSACAROUSEL_CAPTION_OPC" description="MOD_WSACAROUSEL_CAPTION_OPC_DESC"                                                                                                        
-				/>
-				<field name ="caption_fgc" type="color" default="#fff" label="MOD_WSACAROUSEL_CAPTION_FGC" description="MOD_WSACAROUSEL_CAPTION_FGC_DESC"                                                                                                        
-				/>
-				<field name="show_buttons" type="radio" class="btn-group" default="1" label="MOD_WSACAROUSEL_SHOW_PLAY_PAUSE" description="MOD_WSACAROUSEL_SHOW_PLAY_PAUSE_DESC">
-					<option value="0">JNO</option>
-					<option value="2">JYES</option>
-					<option value="1">MOD_WSACAROUSEL_ON_MOUSE_OVER</option>
-					<option value="3">MOD_WSACAROUSEL_ON_MOUSE_OVER_SLIDER</option>
-				</field>
-				<field name="show_arrows" type="radio" class="btn-group" default="1" label="MOD_WSACAROUSEL_SHOW_NEXT_PREV" description="MOD_WSACAROUSEL_SHOW_NEXT_PREV_DESC">
-					<option value="0">JNO</option>
-					<option value="2">JYES</option>
-					<option value="1">MOD_WSACAROUSEL_ON_MOUSE_OVER</option>
-					<option value="3">MOD_WSACAROUSEL_ON_MOUSE_OVER_SLIDER</option>
-				</field>
-				<field name="show_custom_nav" type="radio" class="btn-group" default="0" label="MOD_WSACAROUSEL_SHOW_CUSTOM_NAVIGATION" description="MOD_WSACAROUSEL_SHOW_CUSTOM_NAVIGATION_DESC">
-					<option value="0">JNO</option>
-					<option value="2">JYES</option>
-					<option value="1">MOD_WSACAROUSEL_ON_MOUSE_OVER</option>
-				</field>
-			
+				<field name="dateformat_tstart" type="text" default="MOD_SIMPLEICALBLOCK_DF_TSTART_DFT" label="MOD_SIMPLEICALBLOCK_DF_TSTART" description="MOD_SIMPLEICALBLOCK_DF_TSTART_DESC" />
+				<field name="dateformat_tend" type="text" default="MOD_SIMPLEICALBLOCK_DF_TEND_DFT" label="MOD_SIMPLEICALBLOCK_DF_TEND" description="MOD_SIMPLEICALBLOCK_DF_TEND_DESC" />
 			</fieldset>
 			
-			<fieldset name="customise" label="MOD_WSACAROUSEL_CUSTOMISE">
-	
-				<field type="wsaspacer" label="MOD_WSACAROUSEL_CUSTOMISE_SLIDE_DESCRIPTION" />
-				<field name="desc_width" type="text" default="" size="10" label="MOD_WSACAROUSEL_DESCRIPTION_WIDTH" description="MOD_WSACAROUSEL_DESCRIPTION_WIDTH_DESC" />
-				<field name="desc_bottom" type="text" default="0" size="10" label="MOD_WSACAROUSEL_DESCRIPTION_VERTICAL_POSITION" description="MOD_WSACAROUSEL_DESCRIPTION_VERTICAL_POSITION_DESC" />
-				<field name="desc_horizontal" type="text" default="0" size="10" label="MOD_WSACAROUSEL_DESCRIPTION_HORIZONTAL_POSITION" description="MOD_WSACAROUSEL_DESCRIPTION_HORIZONTAL_POSITION_DESC" />
-			
-				<field type="spacer" label="&lt;hr &#47;&gt;" />
-				<field type="wsaspacer" label="MOD_WSACAROUSEL_CUSTOMISE_BUTTONS" />
-				<field name="nav_buttons_style" type="radio"  class="btn-group" default="0" label="MOD_WSACAROUSEL_NAV_BUTTON_STYLE">
-					<option value="0">MOD_WSACAROUSEL_NBS_DEFAULT</option>
-					<option value="1">MOD_WSACAROUSEL_NBS_CUSTOM_IMG</option>
-					<option value="2">MOD_WSACAROUSEL_NBS_CUSTOM_OLD</option>
-				</field>
-
-				<field name="left_arrow" type="media" default="" size="50" label="MOD_WSACAROUSEL_PREV_BUTTON" description="MOD_WSACAROUSEL_PREV_BUTTON_DESC"  showon="nav_buttons_style:1" />
-				<field name="right_arrow" type="media" default="" size="50" label="MOD_WSACAROUSEL_NEXT_BUTTON" description="MOD_WSACAROUSEL_NEXT_BUTTON_DESC"  showon="nav_buttons_style:1" />
-				<field name="play_button" type="media" default="" size="50" label="MOD_WSACAROUSEL_PLAY_BUTTON" description="MOD_WSACAROUSEL_PLAY_BUTTON_DESC" showon="nav_buttons_style:1" />
-				<field name="pause_button" type="media" default="" size="50" label="MOD_WSACAROUSEL_PAUSE_BUTTON" description="MOD_WSACAROUSEL_PAUSE_BUTTON_DESC" showon="nav_buttons_style:1" />
-				<field name="idx_style" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="0" label="MOD_WSACAROUSEL_CUSTOM_NAVIGATION_STYLE">
-					<option value="0">MOD_WSACAROUSEL_CUSTOM_NAVIGATION_POINTS</option>
-					<option value="1">MOD_WSACAROUSEL_CUSTOM_NAVIGATION_NUMBERS</option>
-				</field>
-				
-				<field type="spacer" label="&lt;hr &#47;&gt;" />
-				<field type="wsaspacer" label="MOD_WSACAROUSEL_CUSTOMISE_CAROUSEL" />
-				
-				<field name="include_twbs_css" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="1" label="MOD_WSACAROUSEL_INCLUDE_TWBS_CSS" description="MOD_WSACAROUSEL_INCLUDE_TWBS_CSS_DESC" showon="slider_source:1">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="include_twbs_js" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="1" label="MOD_WSACAROUSEL_INCLUDE_TWBS_JS" description="MOD_WSACAROUSEL_INCLUDE_TWBS_JS_DESC" showon="slider_source:1">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="twbs_version" type="radio" class="btn-group" default="3" label="MOD_WSACAROUSEL_TWBS_VERSION" description="MOD_WSACAROUSEL_TWBS_VERSION_DESC" showon="slider_source:1">
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
-<!-- 					<option value="9">5 (Joomla 4)</option> -->
-				</field>
-				<field name="duration" type="text" default="600" size="10" label="MOD_WSACAROUSEL_SLIDE_DURATION" description="MOD_WSACAROUSEL_SLIDE_DURATION_DESC"  />
-				<field name="delay" type="text" default="3000" size="10" label="MOD_WSACAROUSEL_NEXT_SLIDE_DELAY" description="MOD_WSACAROUSEL_NEXT_SLIDE_DELAY_DESC" />
-				<field name="autoplay" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="1" label="MOD_WSACAROUSEL_AUTOPLAY" description="MOD_WSACAROUSEL_AUTOPLAY_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="looponce" type="radio" layout="joomla.form.field.radio.switcher"  class="switcher btn-group" default="0" label="MOD_WSACAROUSEL_LOOP_ONCE" description="MOD_WSACAROUSEL_LOOP_ONCE_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field type="spacer" label="&lt;hr &#47;&gt;" />
-				
-			</fieldset>
 			
 			<fieldset name="advanced">
 				<field name="transient_time" type="number" min="2" max="1440" default="60"  label="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME" description="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME_DESC" />
-				
+				<field name="excerptlength" type="text" default="" label="MOD_SIMPLEICALBLOCK_EXCERPTL" description="MOD_SIMPLEICALBLOCK_EXCERPTL_DESC" />
+				<field name="tag_sum" type="list" default="div" label="MOD_SIMPLEICALBLOCK_TAG_SUM" description="MOD_SIMPLEICALBLOCK_TAG_SUM_DESC">
+					<option value="a">MOD_SIMPLEICALBLOCK_TAG_SUM_A</option>
+					<option value="b">MOD_SIMPLEICALBLOCK_TAG_SUM_B</option>
+					<option value="div">MOD_SIMPLEICALBLOCK_TAG_SUM_DIV</option>
+					<option value="h4">MOD_SIMPLEICALBLOCK_TAG_SUM_H4</option>
+					<option value="h5">MOD_SIMPLEICALBLOCK_TAG_SUM_H5</option>
+					<option value="h6">MOD_SIMPLEICALBLOCK_TAG_SUM_H6</option>
+					<option value="i">MOD_SIMPLEICALBLOCK_TAG_SUM_I</option>
+					<option value="span">MOD_SIMPLEICALBLOCK_TAG_SUM_SPAN</option>
+					<option value="strong">MOD_SIMPLEICALBLOCK_TAG_SUM_STRONG</option>
+					<option value="u">MOD_SIMPLEICALBLOCK_TAG_SUM_U</option>
+				</field>
+				<field name="suffix_lg_class" type="text" default="" label="MOD_SIMPLEICALBLOCK_SFLG" description="MOD_SIMPLEICALBLOCK_SFLG_DESC" />
+				<field name="suffix_lgi_class" type="text" default=" py-0" label="MOD_SIMPLEICALBLOCK_SFLGI" description="MOD_SIMPLEICALBLOCK_SFLGI_DESC" />
+				<field name="suffix_lgia_class" type="text" default="" label="MOD_SIMPLEICALBLOCK_SFLGIA" description="MOD_SIMPLEICALBLOCK_SFLGIA_DESC" />
+				<field name="allowhtml" type="radio" layout="joomla.form.field.radio.switcher"
+				class="switcher btn-group" default="0" label="MOD_SIMPLEICALBLOCK_ALLOWHTML" description="MOD_SIMPLEICALBLOCK_ALLOWHTML_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="clear_cache_now" type="radio" layout="joomla.form.field.radio.switcher"
+				class="switcher btn-group" default="0" label="MOD_SIMPLEICALBLOCK_CCN" description="MOD_SIMPLEICALBLOCK_CCN_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="anchorId" type="text" default="" label="MOD_SIMPLEICALBLOCK_ANCHORID" description="MOD_SIMPLEICALBLOCK_ANCHORID_DESC" />
+
 				<field
 					name="layout"
 					type="modulelayout"
