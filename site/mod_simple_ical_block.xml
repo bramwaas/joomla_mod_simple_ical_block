@@ -28,9 +28,9 @@
 		<folder>css</folder>
 		<folder>js</folder>
 	</media -->
-	<languages folder="site/language/">
+	<!--  languages folder="site/language/">
 		<language tag="en-GB">en-GB/en-GB.mod_simpleicalblock.ini</language>
-	</languages>
+	</languages -->
 	
 	
 	<!-- scriptfile>mod_simple_ical_block.script.php</scriptfile -->
