@@ -28,12 +28,15 @@
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
-use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
+//use Joomla\CMS\Factory;
+//use Joomla\CMS\Language\Text;
 
 ?>
 
 <div id="simpleicalblock<?php echo $mid; ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
 <h3>site simpleicalblock<?php echo $mid; ?></h3>
+<div>
+<?php print_r($params); ?>
+</div>
 </div>
 

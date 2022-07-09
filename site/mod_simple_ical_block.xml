@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" client="site" method="upgrade">
-	<name>mod_simple_ical_block</name>
+	<name>Simple iCal Block</name>
 	<creationDate>9-7-2022</creationDate>	
 	<author>A.H.C. Waasdorp</author>
 	<copyright>Copyright (C) 2022 - 2022 A.H.C. Waasdorp, All rights reserved.</copyright>
