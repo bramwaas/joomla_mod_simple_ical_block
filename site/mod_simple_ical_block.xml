@@ -19,6 +19,7 @@
 		<filename>mod_simple_ical_block.xml</filename>
 		<filename>index.html</filename>
 		<!-- filename>joomla.asset.json</filename -->
+        <folder>sql</folder>
 		<folder>assets</folder>
 		<folder>language</folder>
 		<folder>src</folder>
