@@ -84,24 +84,55 @@
 		</schemas>
 	</update>
 	
-	
+<!-- 
+           'blockid' => ['type' => 'string'],
+  b          'title' => ['type' => 'string', 'default' => __('Events', 'simple_ical')],
+  b          'calendar_id' => ['type' => 'string', 'default' => ''],
+  b          'event_count' => ['type' => 'integer', 'default' => 10],
+  b          'event_period' => ['type' => 'integer', 'default' => 92],
+  a          'cache_time' => ['type' => 'integer', 'default' => 60], transient_time
+  b          'startwsum' => ['type' => 'boolean', 'default' => false],
+  b          'dateformat_lg' => ['type' => 'string', 'default' => 'l jS \of F'],
+  b          'dateformat_lgend' => ['type' => 'string', 'default' => ''],
+            'tag_sum' => ['type' => 'string', 'enum' => self::$allowed_tags_sum, 'default' => 'a'],
+  b           'dateformat_tsum' => ['type' => 'string', 'default' => 'G:i '],
+  b          'dateformat_tsend' => ['type' => 'string', 'default' => ''],
+  b          'dateformat_tstart' => ['type' => 'string', 'default' => 'G:i'],
+  b          'dateformat_tend' => ['type' => 'string', 'default' => ' - G:i '],
+            'excerptlength' => ['type' => 'string', ''],
+            'suffix_lg_class' => ['type' => 'string', 'default' => ''],
+            'suffix_lgi_class' => ['type' => 'string', 'default' => ' py-0'],
+            'suffix_lgia_class' => ['type' => 'string', 'default' => ''],
+            'allowhtml' => ['type' => 'boolean', 'default' => false],
+            'clear_cache_now' => ['type' => 'boolean', 'default' => false],
+            'anchorId' => ['type' => 'string', 'default' => ''],
+
+ -->	
 	<config>
-		<fields name="params" <!-- addfieldpath="/administrator/components/com_wsacarousel/models/fields" 
-		   addfieldprefix="Joomla\Component\Wsacarousel\Administrator\Field" --> >
+		<fields name="params"  addfieldprefix="Joomla\Module\Simpleicalblock\Administrator\Field"  >
 			<fieldset name="basic">
-				<field name="slider_source" type="list" default="0" label="MOD_WSACAROUSEL_SLIDER_SOURCE" description="MOD_WSACAROUSEL_SLIDER_SOURCE_DESC">
-					<option value="0">MOD_WSACAROUSEL_FOLDER</option>
-					<option value="1">MOD_WSACAROUSEL_COMPONENT</option>
+				<field name="title" type="text" default="MOD_SIMPLEICALBLOCK_TITLE_DFT" label="MOD_SIMPLEICALBLOCK_TITLE" description="MOD_SIMPLEICALBLOCK_TITLE_DESC" />
+				<field name="calendar_id" type="text" default="#example" label="MOD_SIMPLEICALBLOCK_CALENDAR_ID" description="MOD_SIMPLEICALBLOCK_CALENDAR_ID_DESC" />
+				<field name="event_count" type="number" min="0" max="100" default="10"  label="MOD_SIMPLEICALBLOCK_CNT_EVENTS" description="MOD_SIMPLEICALBLOCK_CNT_EVENTS_DESC" />
+				<field name="event_period" type="number" min="0" max="730" default="92"  label="MOD_SIMPLEICALBLOCK_PR_EVENTS" description="MOD_SIMPLEICALBLOCK_PR_EVENTS_DESC" />
+				<field name="startwsum" type="radio" layout="joomla.form.field.radio.switcher"
+				class="switcher btn-group" default="0" label="MOD_SIMPLEICALBLOCK_STARTWSUM" description="MOD_SIMPLEICALBLOCK_STARTWSUM_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
 				</field>
+				<field name="dateformat_lg" type="text" default="l jS \of F" label="MOD_SIMPLEICALBLOCK_DF_LG" description="MOD_SIMPLEICALBLOCK_DF_LG_DESC" />
+				<field name="dateformat_lgend" type="text" default="" label="MOD_SIMPLEICALBLOCK_DF_LGEND" description="MOD_SIMPLEICALBLOCK_DF_LGEND_DESC" />
+
+				<field name="dateformat_tsum" type="text" default="'G:i " label="MOD_SIMPLEICALBLOCK_DF_TSUM" description="MOD_SIMPLEICALBLOCK_DF_TSUM_DESC" />
+				<field name="dateformat_tsend" type="text" default="" label="MOD_SIMPLEICALBLOCK_DF_TSUMEND" description="MOD_SIMPLEICALBLOCK_DF_TSUMEND_DESC" />
+
+				<field name="dateformat_tstart" type="text" default="G:i" label="MOD_SIMPLEICALBLOCK_DF_TSTART" description="MOD_SIMPLEICALBLOCK_DF_TSTART_DESC" />
+				<field name="dateformat_tend" type="text" default=" - G:i " label="MOD_SIMPLEICALBLOCK_DF_TEND" description="MOD_SIMPLEICALBLOCK_DF_TEND_DESC" />
+
 				<field name="link_image" type="list" default="1" label="MOD_WSACAROUSEL_LINK_IMAGE" description="MOD_WSACAROUSEL_LINK_IMAGE_DESC">
 					<option value="0">MOD_WSACAROUSEL_DONT_LINK</option>
 					<option value="1">MOD_WSACAROUSEL_HYPERLINK</option>
 					<option value="2">MOD_WSACAROUSEL_OPEN_IMAGE_IN_LIGHTBOX</option>
-				</field>
-				<field name="include_magnific" type="radio" layout="joomla.form.field.radio.switcher"
-				class="switcher btn-group" default="1" label="MOD_WSACAROUSEL_INCLUDE_MP" description="MOD_WSACAROUSEL_INCLUDE_MP_DESC" showon="link_image:1">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
 				</field>
 				<field type="spacer" label="&lt;hr &#47;&gt;" />
 				
@@ -250,6 +281,7 @@
 			</fieldset>
 			
 			<fieldset name="advanced">
+				<field name="transient_time" type="number" min="2" max="1440" default="60"  label="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME" description="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME_DESC" />
 				
 				<field
 					name="layout"

@@ -8,7 +8,6 @@
  * @author email contact@waasdorpsoekhan.nl
  * @developer AHC Waasdorp
  *
- * @copyright   (C) 2009 Open Source Matters, Inc. <https://www.joomla.org>
  */
 
 defined('_JEXEC') or die;
@@ -22,4 +21,13 @@ $mid = $module->id;
 $direction = $document->direction;
 $asset_dir =  "media/mod_simple_ical_block/";
 
+if ($joomlaverge4) {
 require ModuleHelper::getLayoutPath('mod_simple_ical_block', $params->get('layout','default'));
+}
+else {
+    ?>
+    <div id="simpleicalblock<?php echo $mid; ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
+<h3>site simpleicalblock needs joomla v4</h3>
+</div>
+<?php
+}
