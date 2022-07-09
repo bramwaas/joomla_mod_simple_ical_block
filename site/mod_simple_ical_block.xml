@@ -24,12 +24,12 @@
 		<folder>src</folder>
 		<folder>tmpl</folder>
 	</files>
-	<media destination="mod_simple_ical_block" folder="assets">
+	<!-- media destination="mod_simple_ical_block" folder="assets">
 		<folder>css</folder>
 		<folder>js</folder>
-	</media>
+	</media -->
 	<languages folder="site/language/">
-		<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.ini</language>
+		<language tag="en-GB">en-GB/en-GB.mod_simpleicalblock.ini</language>
 	</languages>
 	
 	
