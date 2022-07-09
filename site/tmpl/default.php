@@ -33,8 +33,8 @@ defined('_JEXEC') or die ('Restricted access');
 
 ?>
 
-<div id="simpleicalblock<?php echo $mid; ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
-<h3>site simpleicalblock<?php echo $mid; ?></h3>
+<div id="simpleicalblock<?php echo  $params->get('blockid'); ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
+<h3>Site simpleicalblock<?php echo  $params->get('blockid'); ?></h3>
 <div>
 <?php print_r($params); ?>
 </div>

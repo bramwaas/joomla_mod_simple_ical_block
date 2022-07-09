@@ -19,7 +19,7 @@ use Joomla\CMS\Language\Text;
 $joomlaverge4 = (version_compare(JVERSION, '4.0', '>='));
 $app = Factory::getApplication();
 $document = Factory::getDocument();
-$mid = $module->id;
+$params->set('blockid', $module->id);
 $direction = $document->direction;
 $asset_dir =  "media/mod_simple_ical_block/";
 
@@ -28,7 +28,7 @@ require ModuleHelper::getLayoutPath('mod_simple_ical_block', $params->get('layou
 }
 else {
     ?>
-    <div id="simpleicalblock<?php echo $mid; ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
+    <div id="simpleicalblock<?php echo $params->get('blockid'); ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
 <h3>site simpleicalblock needs joomla v4</h3>
 </div>
 <?php
