@@ -95,7 +95,7 @@ class SimpleicalblockHelper
      *
      * @return boolean true on succes.
      */
-    static function set_transient($transientId, $transientData, $transientTime)
+    static function set_transient($transientId, $transientData, $transientExpires)
     {
         $transientId = 'SimpleicalBlock'  . $instance['blockid']   ;
         if ($instance['clear_cache_now']) delete_transient($transientId);
