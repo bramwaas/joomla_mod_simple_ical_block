@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" client="site" method="upgrade">
+<extension type="module" method="upgrade">
+<!--  client="site" -->
 	<name>Simple iCal Block</name>
 	<creationDate>9-7-2022</creationDate>	
 	<author>A.H.C. Waasdorp</author>
@@ -78,7 +79,7 @@
 			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
 		</sql>
 	</uninstall>
-	<update><!-- Runs on update; New since J2.5 -->
+	<update><!-- Runs on update -->
  		<schemas>
 			<schemapath type="mysql">sql/updates/mysql</schemapath>
 		</schemas>
@@ -87,7 +88,7 @@
 	<config>
 		<fields name="params"  addfieldprefix="Joomla\Module\Simpleicalblock\Administrator\Field"  >
 			<fieldset name="basic">
-				<field name="title" type="text" default="MOD_SIMPLEICALBLOCK_TITLE_DFT" label="MOD_SIMPLEICALBLOCK_TITLE" description="MOD_SIMPLEICALBLOCK_TITLE_DESC" />
+				<field name="title" type="text" default="Events" label="MOD_SIMPLEICALBLOCK_TITLE" description="MOD_SIMPLEICALBLOCK_TITLE_DESC" />
 				<field name="calendar_id" type="text" default="#example" label="MOD_SIMPLEICALBLOCK_CALENDAR_ID" description="MOD_SIMPLEICALBLOCK_CALENDAR_ID_DESC" />
 				<field name="event_count" type="number" min="0" max="100" default="10"  label="MOD_SIMPLEICALBLOCK_CNT_EVENTS" description="MOD_SIMPLEICALBLOCK_CNT_EVENTS_DESC" />
 				<field name="event_period" type="number" min="0" max="730" default="92"  label="MOD_SIMPLEICALBLOCK_PR_EVENTS" description="MOD_SIMPLEICALBLOCK_PR_EVENTS_DESC" />
@@ -96,14 +97,14 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="dateformat_lg" type="text" default="MOD_SIMPLEICALBLOCK_DF_DFT" label="MOD_SIMPLEICALBLOCK_DF_LG" description="MOD_SIMPLEICALBLOCK_DF_LG_DESC" />
+				<field name="dateformat_lg" type="text" default="l jS \of F" label="MOD_SIMPLEICALBLOCK_DF_LG" description="MOD_SIMPLEICALBLOCK_DF_LG_DESC" />
 				<field name="dateformat_lgend" type="text" default="" label="MOD_SIMPLEICALBLOCK_DF_LGEND" description="MOD_SIMPLEICALBLOCK_DF_LGEND_DESC" />
 
-				<field name="dateformat_tsum" type="text" default="MOD_SIMPLEICALBLOCK_DF_TSUM_DFT" label="MOD_SIMPLEICALBLOCK_DF_TSUM" description="MOD_SIMPLEICALBLOCK_DF_TSUM_DESC" />
+				<field name="dateformat_tsum" type="text" default="G:i " label="MOD_SIMPLEICALBLOCK_DF_TSUM" description="MOD_SIMPLEICALBLOCK_DF_TSUM_DESC" />
 				<field name="dateformat_tsend" type="text" default="" label="MOD_SIMPLEICALBLOCK_DF_TSUMEND" description="MOD_SIMPLEICALBLOCK_DF_TSUMEND_DESC" />
 
-				<field name="dateformat_tstart" type="text" default="MOD_SIMPLEICALBLOCK_DF_TSTART_DFT" label="MOD_SIMPLEICALBLOCK_DF_TSTART" description="MOD_SIMPLEICALBLOCK_DF_TSTART_DESC" />
-				<field name="dateformat_tend" type="text" default="MOD_SIMPLEICALBLOCK_DF_TEND_DFT" label="MOD_SIMPLEICALBLOCK_DF_TEND" description="MOD_SIMPLEICALBLOCK_DF_TEND_DESC" />
+				<field name="dateformat_tstart" type="text" default="G:i" label="MOD_SIMPLEICALBLOCK_DF_TSTART" description="MOD_SIMPLEICALBLOCK_DF_TSTART_DESC" />
+				<field name="dateformat_tend" type="text" default=" - G:i " label="MOD_SIMPLEICALBLOCK_DF_TEND" description="MOD_SIMPLEICALBLOCK_DF_TEND_DESC" />
 			</fieldset>
 			
 			
