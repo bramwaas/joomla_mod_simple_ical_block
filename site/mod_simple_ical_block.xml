@@ -63,7 +63,8 @@
 	<config>
 		<fields name="params"  addfieldprefix="Joomla\Module\Simpleicalblock\Site\Field"  >
 			<fieldset name="basic">
-				<field name="title" type="text" default="Events" label="MOD_SIMPLEICALBLOCK_TITLE" description="MOD_SIMPLEICALBLOCK_TITLE_DESC" />
+			    <!-- Title unnecessary because ther is a module title -->
+				<!-- field name="title" type="text" default="Events" label="MOD_SIMPLEICALBLOCK_TITLE" description="MOD_SIMPLEICALBLOCK_TITLE_DESC" /  replaced by module title -->
 				<field name="calendar_id" type="text" default="#example" label="MOD_SIMPLEICALBLOCK_CALENDAR_ID" description="MOD_SIMPLEICALBLOCK_CALENDAR_ID_DESC" />
 				<field name="event_count" type="number" min="0" max="100" default="10"  label="MOD_SIMPLEICALBLOCK_CNT_EVENTS" description="MOD_SIMPLEICALBLOCK_CNT_EVENTS_DESC" />
 				<field name="event_period" type="number" min="0" max="730" default="92"  label="MOD_SIMPLEICALBLOCK_PR_EVENTS" description="MOD_SIMPLEICALBLOCK_PR_EVENTS_DESC" />
