@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" method="upgrade">
-<!--  client="site" -->
+<extension type="module"   client="site" method="upgrade">
 	<name>Simple iCal Block</name>
 	<creationDate>9-7-2022</creationDate>	
 	<author>A.H.C. Waasdorp</author>
@@ -30,44 +29,20 @@
 		<folder>css</folder>
 		<folder>js</folder>
 	</media -->
-	<!--  languages folder="site/language/">
-		<language tag="en-GB">en-GB/en-GB.mod_simpleicalblock.ini</language>
-	</languages -->
-	
-	
-	<!-- scriptfile>mod_simple_ical_block.script.php</scriptfile -->
-	
-		<administration>
-		<!-- Administration Component Menu Section -->
-		<menu   img="../media/com_wsaonepage/images/Tux-16x16.png"><![CDATA[MOD_SIMPLEICALBLOCK_MENU]]></menu>
-		<submenu>
-			<!-- Note that all & must be escaped to &amp; for the file to be valid
-				XML and be parsed by the installer
-			-->
-			<menu link="option=mod_simple_ical_block" img="class:content"
-				alt="Simpleicalblock/Simpleicalblock"><![CDATA[MOD_SIMPLEICALBLOCK_SUBMENU]]></menu>
-		</submenu>
-		<!-- Administration Main File Copy Section -->
-		<!-- Note the folder attribute: This attribute describes the folder
-			to copy FROM in the package to install therefore files copied
-			in this section are copied from /admin/ in the package -->
-		<files folder="admin/">
-
-			<!--  filename>access.xml</filename>
-			<filename>config.xml</filename>
-			<filename>index.html</filename>
-            <folder>forms</folder>
-            <folder>language</folder>
-            <folder>services</folder -->
-            <folder>sql</folder>
-            <folder>src</folder>
-            <folder>tmpl</folder>
-		</files>
+	<languages folder="site/language/">
+		<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.ini</language>
+		<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.sys.ini</language>
+	</languages>
+		<!-- Administration Module Menu Section -->
+	<!--  administration>
 		<languages folder="admin/language/">
 			<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.ini</language>
 			<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.sys.ini</language>
 		</languages>
-	</administration>
+	</administration -->
+	
+	
+	<!-- scriptfile>mod_simple_ical_block.script.php</scriptfile -->
 
  	<install><!-- Runs on install -->
  		<sql>
@@ -86,7 +61,7 @@
 	</update>
 
 	<config>
-		<fields name="params"  addfieldprefix="Joomla\Module\Simpleicalblock\Administrator\Field"  >
+		<fields name="params"  addfieldprefix="Joomla\Module\Simpleicalblock\Site\Field"  >
 			<fieldset name="basic">
 				<field name="title" type="text" default="Events" label="MOD_SIMPLEICALBLOCK_TITLE" description="MOD_SIMPLEICALBLOCK_TITLE_DESC" />
 				<field name="calendar_id" type="text" default="#example" label="MOD_SIMPLEICALBLOCK_CALENDAR_ID" description="MOD_SIMPLEICALBLOCK_CALENDAR_ID_DESC" />
