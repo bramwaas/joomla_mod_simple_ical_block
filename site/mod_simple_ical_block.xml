@@ -29,10 +29,10 @@
 		<folder>css</folder>
 		<folder>js</folder>
 	</media -->
-	<languages folder="site/language/">
+	<!--languages folder="site/language/">
 		<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.ini</language>
 		<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.sys.ini</language>
-	</languages>
+	</languages -->
 		<!-- Administration Module Menu Section -->
 	<!--  administration>
 		<languages folder="admin/language/">
