@@ -126,7 +126,7 @@ class SimpleicalblockHelper
                  $query->clear();
                  if ($found){
                      $query->update($db->quoteName('#__simpleicalblock', 'a'))
-                     ->set($db->quoteName(["transient_blob = '" . $transientData . "'", "transient_expires = '" . $transientExpires . "'"]))
+                     ->set(["transient_blob = '" . $transientData . "'", "transient_expires = '" . $transientExpires . "'"])
                      ->where($db->quoteName('a.transient_id') . " = '" . $transientId ."'");
                  } else {
                      $query->insert($db->quoteName('#__simpleicalblock'), true)
