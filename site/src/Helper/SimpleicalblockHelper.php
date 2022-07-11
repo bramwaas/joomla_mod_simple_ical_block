@@ -111,6 +111,7 @@ class SimpleicalblockHelper
             ->from($db->quoteName('#__simpleicalblock', 'a'))
             ->where($db->quoteName('a.transient_id') . " = '" . $transientId ."'");
             $db->setQuery($query);
+            $query->clear();
             try
             {
                 $query->update($db->quoteName('#__simpleicalblock', 'a'))
