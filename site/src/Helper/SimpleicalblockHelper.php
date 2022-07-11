@@ -115,12 +115,12 @@ class SimpleicalblockHelper
             $db->setQuery($query);
             try
             {
-                $db->execute();
-                $found = TRUE;
+                $found = FALSE;
+                if (!(FALSE === $db->execute()))  $found = TRUE;
             }
             catch (\RuntimeException $e)
             {
-                $found = FALSE;
+                Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ':' . $e->getMessage(), 'warning');
             }
             try {
                  $query->clear();
