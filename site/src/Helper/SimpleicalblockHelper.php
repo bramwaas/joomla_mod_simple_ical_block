@@ -102,9 +102,11 @@ class SimpleicalblockHelper
      *
      * @return boolean true on succes.
      */
-    static function set_transient($transientId, $transientData, $transientExpires)
+    static function set_transient($transientId, $transientData, $transientTime)
     {
         if ((isset($transientId) && ' ' < $transientId) && isset($transientData)) {
+            $transientExpiresTS = time() + ((isset($transientTime) && 0 < int($transientTime)) ? int($transientTime) : 0 );
+            $transientExpires = date("Y-m-d H:i:s", $transientExpiresTS);
             $db    = Factory::getDbo();
             $query = $db->getQuery(true)
             ->select($db->quoteName(['a.id', 'a.transient_id', 'a.transient_blob', 'a.transient_expires']))
@@ -133,7 +135,7 @@ class SimpleicalblockHelper
                  
              } catch (\RuntimeException $e) 
              {
-                 Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+                 Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED :'. $e->getMessage()), 'error');
                  
                  return false;
                  
