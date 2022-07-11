@@ -116,26 +116,28 @@ class SimpleicalblockHelper
             try
             {
                 $db->execute();
-                $query->clear();
-                $query->update($db->quoteName('#__simpleicalblock', 'a'))
-                ->set($db->quoteName(["a.transient_blob = '" . $transientData . "'", "a.transient_expires = '" . $transientExpires . "'"]))
-                ->where($db->quoteName('a.transient_id') . " = '" . $transientId ."'");
-                $db->setQuery($query);
+                $found = TRUE;
             }
             catch (\RuntimeException $e)
             {
-                $query->clear();
-                $query->insert($db->quoteName('#__simpleicalblock'), true)
-                      ->columns($db->quoteName(['transient_id', 'transient_blob', 'transient_expires']))
-                      ->values("'" . $transientId . "', '" . $transientData . "', '" . $transientExpires . "'");
-                $db->setQuery($query);
-             }
-             try {
+                $found = FALSE;
+            }
+            try {
+                 $query->clear();
+                 if ($found){
+                     $query->update($db->quoteName('#__simpleicalblock', 'a'))
+                     ->set($db->quoteName(["a.transient_blob = '" . $transientData . "'", "a.transient_expires = '" . $transientExpires . "'"]))
+                     ->where($db->quoteName('a.transient_id') . " = '" . $transientId ."'");
+                 } else {
+                     $query->insert($db->quoteName('#__simpleicalblock'), true)
+                     ->columns($db->quoteName(['transient_id', 'transient_blob', 'transient_expires']))
+                     ->values("'" . $transientId . "', '" . $transientData . "', '" . $transientExpires . "'");
+                 }
+                 $db->setQuery($query);
                  return $db->execute();
-                 
              } catch (\RuntimeException $e) 
              {
-                 Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED :'. $e->getMessage()), 'error');
+                 Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ':' . $e->getMessage(), 'error');
                  
                  return false;
                  
