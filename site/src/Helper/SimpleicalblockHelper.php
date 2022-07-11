@@ -111,9 +111,10 @@ class SimpleicalblockHelper
             ->from($db->quoteName('#__simpleicalblock', 'a'))
             ->where($db->quoteName('a.transient_id') . " = '" . $transientId ."'");
             $db->setQuery($query);
-            $query->clear();
             try
             {
+                $db->execute();
+                $query->clear();
                 $query->update($db->quoteName('#__simpleicalblock', 'a'))
                 ->set($db->quoteName(['a.transient_blob = ' . $transientData, 'a.transient_expires = ' . $transientExpires]))
                 ->where($db->quoteName('a.transient_id') . ' = ' . $transientId);
@@ -121,6 +122,7 @@ class SimpleicalblockHelper
             }
             catch (\RuntimeException $e)
             {
+                $query->clear();
                 $query->insert($db->quoteName('#__simpleicalblock', 'a'), true)
                       ->columns($db->quoteName(['a.transient_id', 'a.transient_blob', 'a.transient_expires']))
                       ->values($transientId, $transientData, $transientExpires);
