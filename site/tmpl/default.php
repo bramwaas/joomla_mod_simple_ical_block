@@ -29,13 +29,13 @@ use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 $attributes = $params->toArray();
 // Include the syndicate functions it thea are not autoloaded only once
 if (!class_exists('WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper')) {
-    echo '<div>' . (dirname(__FILE__, 2).'/src/Helper/SimpleicalblockHelper.php') .'</div>';
-    echo '<div> -- class SimpleicalblockHelper not autoloaded </div>';
+//    echo '<!-- div>' . (dirname(__FILE__, 2).'/src/Helper/SimpleicalblockHelper.php') .'</div -->';
+    echo '<!-- div> -- class SimpleicalblockHelper not autoloaded </div -->';
     require_once (dirname(__FILE__, 2). '/src/Helper/SimpleicalblockHelper.php');
     class_alias('WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper', 'SimpleicalblockHelper');
 }
-//$helper = new SimpleicalblockHelper;
-//$helper->set_transient('SimpleiCalBlock' . $attributes['blockid'], 'test1' , getdate());
+$helper = new SimpleicalblockHelper;
+$helper->set_transient('SimpleiCalBlock' . $attributes['blockid'], 'test1' , getdate());
 ?>
 
 <div id="simpleicalblock<?php echo  $attributes['blockid']; ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
