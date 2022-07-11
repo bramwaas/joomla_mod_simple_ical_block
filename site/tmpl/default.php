@@ -35,7 +35,7 @@ if (!class_exists('WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\Simpleical
     class_alias('WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper', 'SimpleicalblockHelper');
 }
 $helper = new SimpleicalblockHelper;
-$helper->set_transient('SimpleiCalBlock' . $attributes['blockid'], 'test1' , getdate());
+$helper->set_transient('SimpleiCalBlock' . $attributes['blockid'], 'test1' , 600);
 ?>
 
 <div id="simpleicalblock<?php echo  $attributes['blockid']; ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
