@@ -105,7 +105,7 @@ class SimpleicalblockHelper
     static function set_transient($transientId, $transientData, $transientTime)
     {
         if ((isset($transientId) && ' ' < $transientId) && isset($transientData)) {
-            $transientExpiresTS = time() + ((isset($transientTime) && 0 < int($transientTime)) ? int($transientTime) : 0 );
+            $transientExpiresTS = time() + ((isset($transientTime) && 0 < intval($transientTime)) ? intval($transientTime) : 0 );
             $transientExpires = date("Y-m-d H:i:s", $transientExpiresTS);
             $db    = Factory::getDbo();
             $query = $db->getQuery(true)
