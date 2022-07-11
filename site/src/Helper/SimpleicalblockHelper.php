@@ -125,7 +125,7 @@ class SimpleicalblockHelper
                 $query->clear();
                 $query->insert($db->quoteName('#__simpleicalblock'), true)
                       ->columns($db->quoteName(['transient_id', 'transient_blob', 'transient_expires']))
-                      ->values($transientId, $transientData, $transientExpires);
+                      ->values("'" . $transientId . "'" , "'" . $transientData . "'", "'" . $transientExpires . "'");
                 $db->setQuery($query);
              }
              try {
