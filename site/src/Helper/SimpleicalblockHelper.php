@@ -109,14 +109,15 @@ class SimpleicalblockHelper
             $transientExpires = date("Y-m-d H:i:s", $transientExpiresTS);
             $db    = Factory::getDbo();
             $query = $db->getQuery(true)
-            ->select($db->quoteName(['a.id', 'a.transient_id', 'a.transient_blob', 'a.transient_expires']))
+//            ->select($db->quoteName(['a.id', 'a.transient_id', 'a.transient_blob', 'a.transient_expires']))
+            ->select($db->quoteName(['a.id']))
             ->from($db->quoteName('#__simpleicalblock', 'a'))
             ->where($db->quoteName('a.transient_id') . " = '" . $transientId ."'");
             $db->setQuery($query);
             try
             {
                 $found = FALSE;
-                if (!(FALSE === $db->execute()))  $found = TRUE;
+                if (!(NULL === $db->loadResult())  $found = TRUE;
             }
             catch (\RuntimeException $e)
             {
