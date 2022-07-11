@@ -31,13 +31,7 @@ defined('_JEXEC') or die ('Restricted access');
 
 
 use Joomla\CMS\Factory;
-// use Joomla\CMS\Language\Text;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
-use Joomla\CMS\Router\Route;
-use Joomla\CMS\Uri\Uri;
-use Joomla\Component\Content\Site\Helper\RouteHelper as ContentHelperRoute;
-use Joomla\Filesystem\Path;
-use Joomla\Registry\Registry;
+use Joomla\CMS\Language\Text;
 
 /**
  * Helper for mod_simpleicalblock
@@ -56,6 +50,7 @@ class SimpleicalblockHelper
     static function delete_transient($transientId)
     {
         $transientId = 'SimpleicalBlock'  . $instance['blockid']   ;
+        /*
         if ($instance['clear_cache_now']) delete_transient($transientId);
         if(false === ($data = get_transient($transientId))) {
             $data =self::fetch(  $instance,  );
@@ -64,27 +59,39 @@ class SimpleicalblockHelper
                 set_transient($transientId, $data, $instance['cache_time']*60);
             }
         }
-        return $data;
+        return $data; */
     }
     /**
      * Retrieves transient data stored with transientId and still valid.
      *
-     * @param string  $transientId    Id for the transient
+     * @param string  $transientId    Id for the transient ( $transientId = 'SimpleicalBlock'  . $instance['blockid']   ;)
      *
      * @return        $data or false when transient with transientId doesn't exist or is not valid. 
      */
     static function get_transient($transientId)
     {
-        $transientId = 'SimpleicalBlock'  . $instance['blockid']   ;
-        if ($instance['clear_cache_now']) delete_transient($transientId);
-        if(false === ($data = get_transient($transientId))) {
-            $data =self::fetch(  $instance,  );
-            // do not cache data if fetching failed
-            if ($data) {
-                set_transient($transientId, $data, $instance['cache_time']*60);
-            }
+        if (isset($transientId) && ' ' < $transientId) {
+        $db    = Factory::getDbo();
+        $query = $db->getQuery(true)
+        ->select($db->quoteName(['a.id', 'a.transient_id', 'a.transient_blob', 'a.transient_expires']))
+        ->from($db->quoteName('#__simpleicalblock', 'a'))
+        ->where($db->quoteName('a.transient_id') . ' = ' . $transientId);
+        $db->setQuery($query);
+        try
+        {
+            return (array) $db->loadObjectList();
         }
-        return $data;
+        catch (\RuntimeException $e)
+        {
+            Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+            
+            return false;
+        }
+        } else 
+        {
+            Factory::getApplication()->enqueueMessage(Text::_('Transientid empty'), 'warning');
+            return false;
+        }
     }
     /**
      * Creates or updates transient data to store (cache) data that are valid for a period of time.
@@ -97,16 +104,42 @@ class SimpleicalblockHelper
      */
     static function set_transient($transientId, $transientData, $transientExpires)
     {
-        $transientId = 'SimpleicalBlock'  . $instance['blockid']   ;
-        if ($instance['clear_cache_now']) delete_transient($transientId);
-        if(false === ($data = get_transient($transientId))) {
-            $data =self::fetch(  $instance,  );
-            // do not cache data if fetching failed
-            if ($data) {
-                set_transient($transientId, $data, $instance['cache_time']*60);
+        if ((isset($transientId) && ' ' < $transientId) && isset($transientData)) {
+            $db    = Factory::getDbo();
+            $query = $db->getQuery(true)
+            ->select($db->quoteName(['a.id', 'a.transient_id', 'a.transient_blob', 'a.transient_expires']))
+            ->from($db->quoteName('#__simpleicalblock', 'a'))
+            ->where($db->quoteName('a.transient_id') . ' = ' . $transientId);
+            $db->setQuery($query);
+            try
+            {
+                $query->update($db->quoteName('#__simpleicalblock', 'a'))
+                ->set($db->quoteName(['a.transient_blob = ' . $transientData, 'a.transient_expires = ' . $transientExpires]))
+                ->where($db->quoteName('a.transient_id') . ' = ' . $transientId);
+                $db->setQuery($query);
             }
+            catch (\RuntimeException $e)
+            {
+                $query->insert($db->quoteName('#__simpleicalblock', 'a'), true)
+                      ->columns($db->quoteName(['a.transient_id', 'a.transient_blob', 'a.transient_expires']))
+                      ->values($transientId, $transientData, $transientExpires);
+                $db->setQuery($query);
+             }
+             try {
+                 return $db->execute();
+                 
+             } catch (\RuntimeException $e) 
+             {
+                 Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+                 
+                 return false;
+                 
+             }
+        } else
+        {
+            Factory::getApplication()->enqueueMessage(Text::_('Transientid or data is empty'), 'warning');
+            return false;
         }
-        return $data;
     }
     
 

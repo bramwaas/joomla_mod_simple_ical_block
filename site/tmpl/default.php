@@ -24,11 +24,20 @@
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
 //use Joomla\CMS\Factory;
-//use Joomla\CMS\Language\Text;
+use Joomla\CMS\Language\Text;
+use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 $attributes = $params->toArray();
+// Include the syndicate functions it thea are not autoloaded only once
+if (!class_exists('WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper')) {
+     echo '<div> -- class SimpleicalblockHelper not autoloaded </div>';
+     require_once (dirname(__FILE__, 2).DS.'src'.DS.'Helper'.DS. 'SimpleicalblockHelper.php');
+    class_alias('WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper', 'SimpleicalblockHelper');
+}
+$helper = new SimpleicalblockHelper;
+$helper->set_transient('SimpleiCalBlock' . $attributes('blockid'), 'test1' , getdate());
 ?>
 
-<div id="simpleicalblock<?php echo  $params->get('blockid'); ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
+<div id="simpleicalblock<?php echo  $attributes('blockid'); ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
 <div><?php print_r($attributes); ?></div>
 </div>
 
