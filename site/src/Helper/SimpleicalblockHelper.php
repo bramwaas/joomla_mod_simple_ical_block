@@ -117,7 +117,7 @@ class SimpleicalblockHelper
             try
             {
                 $found = FALSE;
-                if (!(NULL === $db->loadResult())  $found = TRUE;
+                if (!(NULL === $db->loadResult()))  $found = TRUE;
             }
             catch (\RuntimeException $e)
             {
