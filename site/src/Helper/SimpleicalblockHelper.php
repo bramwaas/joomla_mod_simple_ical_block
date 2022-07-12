@@ -75,7 +75,7 @@ class SimpleicalblockHelper
         $query = $db->getQuery(true)
         ->select($db->quoteName(['a.transient_blob', 'a.transient_expires']))
         ->from($db->quoteName('#__simpleicalblock', 'a'))
-        ->where($db->quoteName('a.transient_id') . ' = ' . $transientId . ' and ' . $db->quoteName('a.transient_expires') . ' > ' . time());
+        ->where($db->quoteName('a.transient_id') . " = '" . $transientId . "' and " . $db->quoteName('a.transient_expires') . ' > ' . time());
         $db->setQuery($query);
         try
         {
