@@ -79,7 +79,7 @@ class SimpleicalblockHelper
         $db->setQuery($query);
         try
         {
-            $transient_blob = unserialize($db->loadResult());
+            $transient_blob = unserialize(base64decode($db->loadResult()));
         }
         catch (\RuntimeException $e)
         {
@@ -98,7 +98,7 @@ class SimpleicalblockHelper
      * Creates or updates transient data to store (cache) data that are valid for a period of time.
      *
      * @param string  $transientId    Id for the transient
-     *                $transientData  data to store
+     *                $transientData  data to store serialized to store objects, base64endoced to prevent issues with backslash or other escape chars. 
      *        integer $transientTime  time in seconds that the stored data is valid. 
      *
      * @return boolean true on succes.
@@ -107,7 +107,7 @@ class SimpleicalblockHelper
     {
         if ((isset($transientId) && ' ' < $transientId) && isset($transientData)) {
             $transientExpiresTS = time() + ((isset($transientTime) && 0 < intval($transientTime)) ? intval($transientTime) : 0 );
-            $transientDataS = addslashes(serialize($transientData));
+            $transientDataS = base64encode(serialize($transientData));
             $db    = Factory::getDbo();
             $query = $db->getQuery(true)
 //            ->select($db->quoteName(['a.id', 'a.transient_id', 'a.transient_blob', 'a.transient_expires']))
