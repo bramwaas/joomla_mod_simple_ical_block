@@ -79,7 +79,7 @@ class SimpleicalblockHelper
         $db->setQuery($query);
         try
         {
-            $transient_blob = unserialize(base64decode($db->loadResult()));
+            $transient_blob = unserialize(base64_decode($db->loadResult()));
         }
         catch (\RuntimeException $e)
         {
@@ -107,7 +107,7 @@ class SimpleicalblockHelper
     {
         if ((isset($transientId) && ' ' < $transientId) && isset($transientData)) {
             $transientExpiresTS = time() + ((isset($transientTime) && 0 < intval($transientTime)) ? intval($transientTime) : 0 );
-            $transientDataS = base64encode(serialize($transientData));
+            $transientDataS = base64_encode(serialize($transientData));
             $db    = Factory::getDbo();
             $query = $db->getQuery(true)
 //            ->select($db->quoteName(['a.id', 'a.transient_id', 'a.transient_blob', 'a.transient_expires']))
