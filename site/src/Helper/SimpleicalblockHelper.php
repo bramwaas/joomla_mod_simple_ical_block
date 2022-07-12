@@ -73,13 +73,13 @@ class SimpleicalblockHelper
         if (isset($transientId) && ' ' < $transientId) {
         $db    = Factory::getDbo();
         $query = $db->getQuery(true)
-        ->select($db->quoteName(['a.id', 'a.transient_id', 'a.transient_blob', 'a.transient_expires']))
+        ->select($db->quoteName(['a.transient_blob', 'a.transient_expires']))
         ->from($db->quoteName('#__simpleicalblock', 'a'))
-        ->where($db->quoteName('a.transient_id') . ' = ' . $transientId);
+        ->where($db->quoteName('a.transient_id') . ' = ' . $transientId . ' and ' . $db->quoteName('a.transient_expires') . ' > ' . time());
         $db->setQuery($query);
         try
         {
-            return (array) $db->loadObjectList();
+            $transient_blob = unserialize($db->loadResult());
         }
         catch (\RuntimeException $e)
         {
@@ -87,6 +87,7 @@ class SimpleicalblockHelper
             
             return false;
         }
+        return $transient_blob;
         } else 
         {
             Factory::getApplication()->enqueueMessage(Text::_('Transientid empty'), 'warning');
