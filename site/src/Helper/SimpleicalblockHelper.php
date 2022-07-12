@@ -106,7 +106,6 @@ class SimpleicalblockHelper
     {
         if ((isset($transientId) && ' ' < $transientId) && isset($transientData)) {
             $transientExpiresTS = time() + ((isset($transientTime) && 0 < intval($transientTime)) ? intval($transientTime) : 0 );
-            $transientExpires = date("Y-m-d H:i:s", $transientExpiresTS);
             $db    = Factory::getDbo();
             $query = $db->getQuery(true)
 //            ->select($db->quoteName(['a.id', 'a.transient_id', 'a.transient_blob', 'a.transient_expires']))
@@ -127,12 +126,12 @@ class SimpleicalblockHelper
                  $query->clear();
                  if ($found){
                      $query->update($db->quoteName('#__simpleicalblock', 'a'))
-                     ->set([$db->quoteName('transient_blob') . " = '" . $transientData . "'", $db->quoteName('transient_expires') . " = '" . $transientExpires . "'"])
+                     ->set([$db->quoteName('transient_blob') . " = '" . $transientData . "'", $db->quoteName('transient_expires') . " = " . $transientExpiresTS ])
                      ->where($db->quoteName('a.transient_id') . " = '" . $transientId ."'");
                  } else {
                      $query->insert($db->quoteName('#__simpleicalblock'), true)
                      ->columns($db->quoteName(['transient_id', 'transient_blob', 'transient_expires']))
-                     ->values("'" . $transientId . "', '" . $transientData . "', '" . $transientExpires . "'");
+                     ->values("'" . $transientId . "', '" . $transientData . "', " . $transientExpiresTS );
                  }
                  $db->setQuery($query);
                  return $db->execute();
