@@ -36,13 +36,13 @@ if (!class_exists('WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\Simpleical
 }
 $data = 'test2';
 $helper = new SimpleicalblockHelper;
-$helper->set_transient('SimpleiCalBlock' . $attributes['blockid'], $data , 60 * $attributes['transient_time']);
+$helper->set_transient('SimpleiCalBlock' . $attributes['blockid'], $params , 60 * $attributes['transient_time']);
 $data = $helper->get_transient('SimpleiCalBlock' . $attributes['blockid']);
 ?>
 
 <div id="simpleicalblock<?php echo  $attributes['blockid']; ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
 <!-- <?php print_r($attributes); ?>  -->
-<div><?php echo $data; ?></div>
+<div><?php print_r( $data); ?></div>
 
 </div>
 
