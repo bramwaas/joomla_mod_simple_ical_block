@@ -107,7 +107,7 @@ class SimpleicalblockHelper
     {
         if ((isset($transientId) && ' ' < $transientId) && isset($transientData)) {
             $transientExpiresTS = time() + ((isset($transientTime) && 0 < intval($transientTime)) ? intval($transientTime) : 0 );
-            $transientDataS = serialize($transientData);
+            $transientDataS = addslashes(serialize($transientData));
             $db    = Factory::getDbo();
             $query = $db->getQuery(true)
 //            ->select($db->quoteName(['a.id', 'a.transient_id', 'a.transient_blob', 'a.transient_expires']))
