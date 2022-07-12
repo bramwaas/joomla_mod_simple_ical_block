@@ -106,6 +106,7 @@ class SimpleicalblockHelper
     {
         if ((isset($transientId) && ' ' < $transientId) && isset($transientData)) {
             $transientExpiresTS = time() + ((isset($transientTime) && 0 < intval($transientTime)) ? intval($transientTime) : 0 );
+            $transientDataS = serialize($transientData);
             $db    = Factory::getDbo();
             $query = $db->getQuery(true)
 //            ->select($db->quoteName(['a.id', 'a.transient_id', 'a.transient_blob', 'a.transient_expires']))
@@ -120,24 +121,24 @@ class SimpleicalblockHelper
             }
             catch (\RuntimeException $e)
             {
-                Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ':' . $e->getMessage(), 'warning');
+                Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ' 1: ' . $e->getMessage(), 'warning');
             }
             try {
                  $query->clear();
                  if ($found){
                      $query->update($db->quoteName('#__simpleicalblock', 'a'))
-                     ->set([$db->quoteName('transient_blob') . " = '" . $transientData . "'", $db->quoteName('transient_expires') . " = " . $transientExpiresTS ])
+                     ->set([$db->quoteName('transient_blob') . " = '" . $transientDataS . "'", $db->quoteName('transient_expires') . " = " . $transientExpiresTS ])
                      ->where($db->quoteName('a.transient_id') . " = '" . $transientId ."'");
                  } else {
                      $query->insert($db->quoteName('#__simpleicalblock'), true)
                      ->columns($db->quoteName(['transient_id', 'transient_blob', 'transient_expires']))
-                     ->values("'" . $transientId . "', '" . $transientData . "', " . $transientExpiresTS );
+                     ->values("'" . $transientId . "', '" . $transientDataS . "', " . $transientExpiresTS );
                  }
                  $db->setQuery($query);
                  return $db->execute();
              } catch (\RuntimeException $e) 
              {
-                 Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ':' . $e->getMessage(), 'error');
+                 Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ' 2: ' . $e->getMessage(), 'error');
                  
                  return false;
                  
