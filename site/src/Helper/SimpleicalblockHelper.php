@@ -49,17 +49,20 @@ class SimpleicalblockHelper
      */
     static function delete_transient($transientId)
     {
-        $transientId = 'SimpleicalBlock'  . $instance['blockid']   ;
-        /*
-        if ($instance['clear_cache_now']) delete_transient($transientId);
-        if(false === ($data = get_transient($transientId))) {
-            $data =self::fetch(  $instance,  );
-            // do not cache data if fetching failed
-            if ($data) {
-                set_transient($transientId, $data, $instance['cache_time']*60);
-            }
+        $db    = Factory::getDbo();
+        $query = $db->getQuery(true)
+        ->delete($db->quoteName('#__simpleicalblock', 'a'))
+        ->where($db->quoteName('a.transient_id') . " = '" . $transientId ."'");
+        $db->setQuery($query);
+        try
+        {
+            $found = FALSE;
+            if (!(NULL === $db->loadResult()))  $found = TRUE;
         }
-        return $data; */
+        catch (\RuntimeException $e)
+        {
+            Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ' 1: ' . $e->getMessage(), 'warning');
+        }
     }
     /**
      * Retrieves transient data stored with transientId and still valid.
