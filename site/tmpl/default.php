@@ -19,24 +19,39 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with WsaCarousel. If not, see <http://www.gnu.org/licenses/>.
- * 0.2.0
- * ook voor eigen javascript 3 wsacarousel
- * 1.0.6 20-2-2022 adjustments for J4
+ * 0.0.0 2022-07-10 first adjustments for J4 convert parameters to array $attributes.
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
 //use Joomla\CMS\Factory;
-//use Joomla\CMS\Language\Text;
+use Joomla\CMS\Language\Text;
+use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
+$attributes = $params->toArray();
+// Include the syndicate functions it thea are not autoloaded only once
+if (!class_exists('WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper')) {
+//    echo '<!-- div>' . (dirname(__FILE__, 2).'/src/Helper/SimpleicalblockHelper.php') .'</div -->';
+    echo '<!-- div> -- class SimpleicalblockHelper not autoloaded </div -->';
+    require_once (dirname(__FILE__, 2). '/src/Helper/SimpleicalblockHelper.php');
+    class_alias('WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper', 'SimpleicalblockHelper');
+}
 
+$data = ['Red', 'Green \of' , 'Blue'];
+$transientId = 'SimpleiCalBlock' . $attributes['blockid'];
+//$helper = new SimpleicalblockHelper;
+
+if ($attributes['clear_cache_now']) SimpleicalblockHelper::delete_transient($transientId);
+if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR empty($data)) {
+    $data = new \DateTime();
+    if ($data) {
+        SimpleicalblockHelper::set_transient($transientId, $data , 60 * $attributes['transient_time']);
+     }
+ }
+ 
 ?>
 
-<div id="simpleicalblock<?php echo  $params->get('blockid'); ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
-<h3>Site simpleicalblock<?php echo  $params->get('blockid'); ?></h3>
-<div>
-<?php print_r($params); ?>
-</div>
+<div id="simpleicalblock<?php echo  $attributes['blockid']; ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
+<!-- <?php  print_r($attributes); ?>  -->
+<div><?php print_r( $data); ?></div>
+
 </div>
 
