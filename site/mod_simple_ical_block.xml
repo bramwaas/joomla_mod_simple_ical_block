@@ -63,10 +63,7 @@
 
 	<config>
 		<fields name="params"  
-		addrulepath="/modules/mod_simple_ical_block/rules">
-			  
-			 <!-- addruleprefix="WaasdorpSoekhan\Module\Simpleicalblock\Site\Rule"> werkt nog niet -->
- >
+			 addruleprefix="WaasdorpSoekhan\Module\Simpleicalblock\Site\Rule">
 			<fieldset name="basic">
 			    <!-- Title unnecessary because there is a module title -->
 				<!-- field name="title" type="text" default="Events" label="MOD_SIMPLEICALBLOCK_TITLE" description="MOD_SIMPLEICALBLOCK_TITLE_DESC" /  replaced by module title -->
