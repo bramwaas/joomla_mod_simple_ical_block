@@ -37,13 +37,13 @@ if (!class_exists('WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\Simpleical
 
 $data = ['Red', 'Green \of' , 'Blue'];
 $transientId = 'SimpleiCalBlock' . $attributes['blockid'];
-$helper = new SimpleicalblockHelper;
+//$helper = new SimpleicalblockHelper;
 
-if ($attributes['clear_cache_now']) delete_transient($transientId);
-if(false === ($data = $helper->get_transient($transientId)) OR empty($data)) {
+if ($attributes['clear_cache_now']) SimpleicalblockHelper::delete_transient($transientId);
+if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR empty($data)) {
     $data = new \DateTime();
     if ($data) {
-     $helper->set_transient($transientId, $data , 60 * $attributes['transient_time']);
+        SimpleicalblockHelper::set_transient($transientId, $data , 60 * $attributes['transient_time']);
      }
  }
  
