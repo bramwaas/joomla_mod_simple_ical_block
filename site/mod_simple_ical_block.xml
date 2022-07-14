@@ -19,6 +19,7 @@
 		<filename>mod_simple_ical_block.xml</filename>
 		<filename>index.html</filename>
 		<!-- filename>joomla.asset.json</filename -->
+        <folder>rules</folder>
         <folder>sql</folder>
 		<folder>assets</folder>
 		<folder>language</folder>
@@ -61,9 +62,13 @@
 	</update>
 
 	<config>
-		<fields name="params"  addfieldprefix="Joomla\Module\Simpleicalblock\Site\Field"  >
+		<fields name="params"  
+		addrulepath="/modules/mod_simple_ical_block/rules">
+			  
+			 <!-- addruleprefix="WaasdorpSoekhan\Module\Simpleicalblock\Site\Rule"> werkt nog niet -->
+ >
 			<fieldset name="basic">
-			    <!-- Title unnecessary because ther is a module title -->
+			    <!-- Title unnecessary because there is a module title -->
 				<!-- field name="title" type="text" default="Events" label="MOD_SIMPLEICALBLOCK_TITLE" description="MOD_SIMPLEICALBLOCK_TITLE_DESC" /  replaced by module title -->
 				<field name="calendar_id" type="text" default="#example" label="MOD_SIMPLEICALBLOCK_CALENDAR_ID" description="MOD_SIMPLEICALBLOCK_CALENDAR_ID_DESC" />
 				<field name="event_count" type="number" min="0" max="100" default="10"  label="MOD_SIMPLEICALBLOCK_CNT_EVENTS" description="MOD_SIMPLEICALBLOCK_CNT_EVENTS_DESC" />
@@ -108,7 +113,8 @@
 					<option value="1">JYES</option>
 				</field>
 				<field name="clear_cache_now" type="radio" layout="joomla.form.field.radio.switcher"
-				class="switcher btn-group" default="0" label="MOD_SIMPLEICALBLOCK_CCN" description="MOD_SIMPLEICALBLOCK_CCN_DESC" >
+				class="switcher btn-group" default="0" validate="cleartransientnow"
+				label="MOD_SIMPLEICALBLOCK_CCN" description="MOD_SIMPLEICALBLOCK_CCN_DESC" >
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
