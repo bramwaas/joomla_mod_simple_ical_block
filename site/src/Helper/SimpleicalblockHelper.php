@@ -51,17 +51,17 @@ class SimpleicalblockHelper
     {
         $db    = Factory::getDbo();
         $query = $db->getQuery(true)
-        ->delete($db->quoteName('#__simpleicalblock', 'a'))
-        ->where($db->quoteName('a.transient_id') . " = '" . $transientId ."'");
+        ->delete($db->quoteName('#__simpleicalblock'))
+        ->where($db->quoteName('transient_id') . " = '" . $transientId ."'");
         $db->setQuery($query);
         try
         {
-            $found = FALSE;
-            if (!(NULL === $db->loadResult()))  $found = TRUE;
+           return $db->execute();
         }
         catch (\RuntimeException $e)
         {
-            Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ' 1: ' . $e->getMessage(), 'warning');
+            Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ' Delete: ' . $e->getMessage(), 'warning');
+            return FALSE;
         }
     }
     /**
@@ -86,8 +86,7 @@ class SimpleicalblockHelper
         }
         catch (\RuntimeException $e)
         {
-            Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
-            
+            Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ' Get:', 'error');
             return false;
         }
         return $transient_blob;
@@ -113,7 +112,6 @@ class SimpleicalblockHelper
             $transientDataS = base64_encode(serialize($transientData));
             $db    = Factory::getDbo();
             $query = $db->getQuery(true)
-//            ->select($db->quoteName(['a.id', 'a.transient_id', 'a.transient_blob', 'a.transient_expires']))
             ->select($db->quoteName(['a.id']))
             ->from($db->quoteName('#__simpleicalblock', 'a'))
             ->where($db->quoteName('a.transient_id') . " = '" . $transientId ."'");
@@ -125,7 +123,7 @@ class SimpleicalblockHelper
             }
             catch (\RuntimeException $e)
             {
-                Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ' 1: ' . $e->getMessage(), 'warning');
+                Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ' Set1: ' . $e->getMessage(), 'warning');
             }
             try {
                  $query->clear();
@@ -142,10 +140,8 @@ class SimpleicalblockHelper
                  return $db->execute();
              } catch (\RuntimeException $e) 
              {
-                 Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ' 2: ' . $e->getMessage(), 'error');
-                 
-                 return false;
-                 
+                 Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ' Set2: ' . $e->getMessage(), 'error');
+                  return false;
              }
         } else
         {
