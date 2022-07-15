@@ -76,7 +76,7 @@ try {
 }
 catch (\Exception $e)
 {
-    $app->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEAR_FAILED') . ", ID $transientid : " $e->getMessage(), 'error');
+    $app->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEAR_FAILED') . ", ID $transientid : " . $e->getMessage(), 'error');
  return false;
 }
 
