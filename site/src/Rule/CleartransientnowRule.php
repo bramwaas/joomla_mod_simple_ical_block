@@ -24,7 +24,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;   // voor vertalingen???
 use Joomla\CMS\Form\FormRule;
 use Joomla\CMS\Form\Form;
-
+use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 
  
 class CleartransientnowRule extends FormRule
@@ -58,30 +58,25 @@ class CleartransientnowRule extends FormRule
     public function test(\SimpleXMLElement $element, $value, $group = null,  $input = null, Form $form = null)
     
     {
-//$templatestyleid =  Uri::getInstance ()->getVar('id');
- $app = Factory::getApplication();
- $currentpath = realpath(__DIR__ ) ;
-$templatestyleid = $input->get('id');
-$home = $input->get('home');
-$params = $input->get('params'); // stdobject params are properties.
+$app = Factory::getApplication();
+$module_id = $input->get('id');
+$transientid = 'SimpleiCalBlock' . $module_id;
 
 
 if  (htmlspecialchars($value) == '1')
 
 { /* clear transient cache */
 
-$gplusProfile   = htmlspecialchars($params->gplusProfile);
 
 try { 
     /* start try */
-//    echo '<div>', print_r($input ,true), '</div>';
-    
-    $app->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEARED') . "... $templatestyleid ...", 'message');
+    $succes = SimpleicalblockHelper::delete_transient($transientId);
+    $app->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEARED') . ", ID $transientid .", 'message');
 /* end try */
 }
 catch (\Exception $e)
 {
-    $app->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEAR_FAILED') . $e->getMessage(), 'error');
+    $app->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEAR_FAILED') . ", ID $transientid : " $e->getMessage(), 'error');
  return false;
 }
 

@@ -27,19 +27,11 @@ defined('_JEXEC') or die ('Restricted access');
 use Joomla\CMS\Language\Text;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 $attributes = $params->toArray();
-// Include the syndicate functions it thea are not autoloaded only once
-if (!class_exists('WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper')) {
-//    echo '<!-- div>' . (dirname(__FILE__, 2).'/src/Helper/SimpleicalblockHelper.php') .'</div -->';
-    echo '<!-- div> -- class SimpleicalblockHelper not autoloaded </div -->';
-    require_once (dirname(__FILE__, 2). '/src/Helper/SimpleicalblockHelper.php');
-    class_alias('WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper', 'SimpleicalblockHelper');
-}
 
 $data = ['Red', 'Green \of' , 'Blue'];
 $transientId = 'SimpleiCalBlock' . $attributes['blockid'];
 //$helper = new SimpleicalblockHelper;
 
-if ($attributes['clear_cache_now']) SimpleicalblockHelper::delete_transient($transientId);
 if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR empty($data)) {
     $data = new \DateTime();
     if ($data) {
