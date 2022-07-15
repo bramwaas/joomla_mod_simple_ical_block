@@ -71,12 +71,12 @@ if  (htmlspecialchars($value) == '1')
 try { 
     /* start try */
     $succes = SimpleicalblockHelper::delete_transient($transientId);
-    $app->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEARED') . ", ID $transientId .", 'message');
+    $app->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEARED', $transientId), 'message');
 /* end try */
 }
 catch (\Exception $e)
 {
-    $app->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEAR_FAILED') . ", ID $transientId : " . $e->getMessage(), 'error');
+    $app->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEAR_FAILED', $transientId, $e->getMessage()), 'error');
  return false;
 }
 
