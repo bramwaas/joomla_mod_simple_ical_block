@@ -21,7 +21,7 @@ namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Rule;
 \defined('_JEXEC') or die('caught by _JEXEC');
 
 use Joomla\CMS\Factory;   
-//use Joomla\CMS\Language\Text;   // voor vertalingen???
+use Joomla\CMS\Language\Text;   // voor vertalingen???
 use Joomla\CMS\Form\FormRule;
 use Joomla\CMS\Form\Form;
 
@@ -68,25 +68,24 @@ $params = $input->get('params'); // stdobject params are properties.
 
 if  (htmlspecialchars($value) == '1')
 
-{ /* creeren en compileren */
+{ /* clear transient cache */
 
 $gplusProfile   = htmlspecialchars($params->gplusProfile);
 
 try { 
     /* start try */
-    /* einde les files compileren naar .css */
-    /* "Compileren LESS geslaagd." "COM_TEMPLATES_COMPILE_SUCCESS" */
-    $app->enqueueMessage("Compile SCSS succes..", 'message');
+//    echo '<div>', print_r($input ,true), '</div>';
     
+    $app->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEARED') . "... $templatestyleid ...", 'message');
 /* end try */
 }
 catch (\Exception $e)
 {
- $app->enqueueMessage('Scss compile failed ' . $e->getMessage(), 'error');
+    $app->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEAR_FAILED') . $e->getMessage(), 'error');
  return false;
 }
 
-/* end creeren en compileren */
+/* end clear transient cache */
 }
 
 
