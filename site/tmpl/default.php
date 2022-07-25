@@ -20,15 +20,22 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * 0.0.0 2022-07-10 first adjustments for J4 convert parameters to array $attributes.
+ * 0.0.1 2022-07-25 included display_block function from WP Plugin SimpleicalBlock
+ *   replaced $instamce by $attributes, wp_kses ($text, 'post')  by strip_tags  ($text, $allowed_tags)
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
 //use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
-$attributes = $params->toArray();
+use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
 
-$data = ['Red', 'Green \of' , 'Blue'];
+/*
+ * @var array allowed tags for summary
+ */
+static $allowed_tags = ['a', 'b', 'br','caption', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','hr', 'i','li','ol', 'p','q','small', 'span','strike', 'strong', 'u','ul'] ;
+
+$attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 $transientId = 'SimpleiCalBlock' . $attributes['blockid'];
 //$helper = new SimpleicalblockHelper;
 
@@ -46,4 +53,90 @@ if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR emp
 <div><?php print_r( $data); ?></div>
 
 </div>
+<?php
+/**
+  * Front-end display of block or module.
+  *
+  * @param array $attributes Saved attribute/option values from database.
+  * from static function display_block($attributes)
+  */
+    {
+        echo '<h3 class="widget-title block-title">' . $attributes['title'] . '</h3>';
+        $startwsum = (isset($attributes['startwsum'])) ? $attributes['startwsum'] : false ;
+        $dflg = (isset($attributes['dateformat_lg'])) ? $attributes['dateformat_lg'] : 'l jS \of F' ;
+        $dflgend = (isset($attributes['dateformat_lgend'])) ? $attributes['dateformat_lgend'] : '' ;
+        $dftsum = (isset($attributes['dateformat_tsum'])) ? $attributes['dateformat_tsum'] : 'G:i ' ;
+        $dftsend = (isset($attributes['dateformat_tsend'])) ? $attributes['dateformat_tsend'] : '' ;
+        $dftstart = (isset($attributes['dateformat_tstart'])) ? $attributes['dateformat_tstart'] : 'G:i' ;
+        $dftend = (isset($attributes['dateformat_tend'])) ? $attributes['dateformat_tend'] : ' - G:i ' ;
+        $excerptlength = (isset($attributes['excerptlength'])) ? $attributes['excerptlength'] : '' ;
+        $attributes['suffix_lg_class'] = strip_tags($attributes['suffix_lg_class'], $allowed_tags);
+        $sflgi = strip_tags($attributes['suffix_lgi_class'], $allowed_tags);
+        $sflgia = strip_tags($attributes['suffix_lgia_class'], $allowed_tags);
+        if (!in_array($attributes['tag_sum'], self::$allowed_tags_sum)) $attributes['tag_sum'] = 'a';
+        $attributes['anchorId'] = sanitize_html_class($attributes['anchorId'], $attributes['blockid']);
+        $data = IcsParser::getData($attributes);
+        if (!empty($data) && is_array($data)) {
+            date_default_timezone_set(get_option('timezone_string'));
+            echo '<ul class="list-group' .  $attributes['suffix_lg_class'] . ' simple-ical-widget">';
+            $curdate = '';
+            foreach($data as $e) {
+                $idlist = explode("@", esc_attr($e->uid) );
+                $itemid = $attributes['blockid'] . '_' . $idlist[0]; //TODO find correct block id when duplicate
+                $evdate = strip_tags(wp_date( $dflg, $e->start), $allowed_tags);
+                if (date('yz', $e->start) != date('yz', $e->end)) {
+                    $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags(wp_date( $dflgend, $e->end - 1) , $allowed_tags));
+                }
+                $evdtsum = (($e->startisdate === false) ? strip_tags(wp_date( $dftsum, $e->start) . wp_date( $dftsend, $e->end), $allowed_tags) : '');
+                echo '<li class="list-group-item' .  $sflgi . '">';
+                if (!$startwsum && $curdate != $evdate ) {
+                    $curdate =  $evdate;
+                    echo '<span class="ical-date">' . ucfirst($evdate) . '</span>' . (('a' == $attributes['tag_sum'] ) ? '<br>': '');
+                }
+                echo  '<' . $attributes['tag_sum'] . ' class="ical_summary' .  $sflgia . (('a' == $attributes['tag_sum'] ) ? '" data-toggle="collapse" data-bs-toggle="collapse" href="#'.
+                $itemid . '" aria-expanded="false" aria-controls="'.
+                $itemid . '">' : '">') ;
+                if (!$startwsum)	{
+                    echo $evdtsum;
+                }
+                if(!empty($e->summary)) {
+                    echo str_replace("\n", '<br>', strip_tags($e->summary,$allowed_tags));
+                }
+                echo	'</' . $attributes['tag_sum'] . '>' ;
+                if ($startwsum ) {
+                    echo '<span>', $evdate, $evdtsum, '</span>';
+                }
+                echo '<div class="ical_details' .  $sflgia . (('a' == $attributes['tag_sum'] ) ? ' collapse' : '') . '" id="',  $itemid, '">';
+                if(!empty($e->description) && trim($e->description) > '' && $excerptlength !== 0) {
+                    if ($excerptlength !== '' && strlen($e->description) > $excerptlength) {$e->description = substr($e->description, 0, $excerptlength + 1);
+                    if (rtrim($e->description) !== $e->description) {$e->description = substr($e->description, 0, $excerptlength);}
+                    else {if (strrpos($e->description, ' ', max(0,$excerptlength - 10))!== false OR strrpos($e->description, "\n", max(0,$excerptlength - 10))!== false )
+                    {$e->description = substr($e->description, 0, max(strrpos($e->description, "\n", max(0,$excerptlength - 10)),strrpos($e->description, ' ', max(0,$excerptlength - 10))));
+                    } else
+                    {$e->description = substr($e->description, 0, $excerptlength);}
+                    }
+                    }
+                    $e->description = str_replace("\n", '<br>', strip_tags($e->description,$allowed_tags) );
+                    echo   $e->description ,(strrpos($e->description, '<br>') == (strlen($e->description) - 4)) ? '' : '<br>';
+                }
+                if ($e->startisdate === false && date('yz', $e->start) === date('yz', $e->end))	{
+                    echo '<span class="time">', strip_tags(wp_date( $dftstart, $e->start ), $allowed_tags),
+                    '</span><span class="time">', strip_tags(wp_date( $dftend, $e->end ), $allowed_tags), '</span> ' ;
+                } else {
+                    echo '';
+                }
+                if(!empty($e->location)) {
+                    echo  '<span class="location">', str_replace("\n", '<br>', strip_tags($e->location,$allowed_tags)) , '</span>';
+                }
+                
+                
+                echo '</div></li>';
+            }
+            echo '</ul>';
+            date_default_timezone_set('UTC');
+        }
+        
+        echo '<br class="clear" />';
+    }
+    
 

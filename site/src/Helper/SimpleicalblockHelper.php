@@ -92,7 +92,7 @@ class SimpleicalblockHelper
         return $transient_blob;
         } else 
         {
-            Factory::getApplication()->enqueueMessage(Text::_('Transientid empty'), 'warning');
+            Factory::getApplication()->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENTID_EMPTY'), 'warning');
             return false;
         }
     }
@@ -145,9 +145,46 @@ class SimpleicalblockHelper
              }
         } else
         {
-            Factory::getApplication()->enqueueMessage(Text::_('Transientid or data is empty'), 'warning');
+            Factory::getApplication()->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENTID_OR_DATA_EMPTY'), 'warning'); 
             return false;
         }
+    }
+    
+    /**
+     * Merge block attributes with defaults to be sure they exist is necesary.
+     *
+     * @param array $block_attributes the module params object presented as array ($params->toArray())
+     * @return array attributes from parameters merged with default  attributes. 
+     */
+    static function render_attributes($block_attributes) {
+       return  array_merge(
+            array(
+                'blockid' => 'AZ',
+  //              'title' => Text::_('MOD_SIMPLEICALBLOCK_TITLE_DFT'),
+                'calendar_id' => '',
+                'event_count' => 10,
+                'event_period' => 92,
+                'transient_time' => 60,
+                'startwsum' => false,
+                'dateformat_lg' => 'l jS \of F',
+                'dateformat_lgend' => '',
+                'tag_sum' => 'a',
+                'dateformat_tsum' => 'G:i ',
+                'dateformat_tsend' => '',
+                'dateformat_tstart' => 'G:i',
+                'dateformat_tend' => ' - G:i ',
+                'excerptlength' => '',
+                'suffix_lg_class' => '',
+                'suffix_lgi_class' => ' py-0',
+                'suffix_lgia_class' => '',
+                'allowhtml' => false,
+                'clear_cache_now' => false,
+                //               'align'=>'',
+                'className'=>'',
+                'anchorId'=> '',
+            ),
+            $block_attributes
+            );
     }
     
 
