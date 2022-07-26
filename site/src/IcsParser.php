@@ -5,9 +5,15 @@
  * note that this class does not implement all ICS functionality.
  *   bw 20220630 copied from Wordpress simple-google-icalendar-widget version 2.0.3
  * Version: 0.0.1
+ *  replace WP transient_functions by  SimpleicalblockHelper::transien_functions ;
+ *  replace wp_remote_get by Http->get(), create Http object in var $http  construct and thus necesary to instantiate the class
  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
+
+use Joomla\CMS\Http\Http;
+
+use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 
 class IcsParser {
     
@@ -216,13 +222,21 @@ END:VCALENDAR';
      * @since  1.5.1 
      */
     protected $events = [];
+
     /**
-     * The start time fo parsing, set by parse function.
+     * The Http object to get the ical data (for Joomla
      *
      * @var    \DateTime
      * @since  1.5.1
      */
     protected $now = NULL;
+    /**
+     * The Http object to get the ical data (for Joomla
+     *
+     * @var   Joomla\CMS\Http\Http
+     * @since  0.0.1
+     */
+    protected $http = NULL;
     
     /**
      * Constructor.
@@ -235,6 +249,7 @@ END:VCALENDAR';
      */
     public function __construct()
     {
+        $this->http = new \Joomla\Http\Http();
     }
     /**
      * Parse ical string to individual events
@@ -774,12 +789,12 @@ END:VCALENDAR';
     static function getData($instance)
     {
         $transientId = 'SimpleicalBlock'  . $instance['blockid']   ;
-        if ($instance['clear_cache_now']) delete_transient($transientId);
-        if(false === ($data = get_transient($transientId))) {
-            $data =self::fetch(  $instance,  );
+        if ($instance['clear_cache_now']) SimpleicalblockHelper::delete_transient($transientId);
+        if(false === ($data = SimpleicalblockHelper::get_transient($transientId))) {
+            $data = $this->fetch(  $instance,  );
             // do not cache data if fetching failed
             if ($data) {
-                set_transient($transientId, $data, $instance['cache_time']*60);
+                SimpleicalblockHelper::set_transient($transientId, $data, $instance['cache_time']*60);
             }
         }
         return $data;
@@ -799,31 +814,32 @@ END:VCALENDAR';
     {
         $period = $instance['event_period'];
         if ('#example' == $instance['calendar_id']){
-            $httpData['body'] = self::$example_events;
+            $httpBody = self::$example_events;
         }
         else  {
             $url = self::getCalendarUrl($instance['calendar_id']);
-            $httpData = wp_remote_get($url);
-            if(is_wp_error($httpData)) {
+            $httpResponse =  $this->http($url);
+            if ($httpResponse->code != 200) {
                 echo '<!-- ' . $url . ' not found ' . 'fall back to https:// -->';
-                $httpData = wp_remote_get('https://' . explode('://', $url)[1]);
-                if(is_wp_error($httpData)) {
-                    echo 'Simple iCal Block: ', $httpData->get_error_message();
+                $httpResponse =  $this->http('https://' . explode('://', $url)[1]);
+                if ($httpResponse->code != 200) {
+                    echo 'Simple iCal Block: ', $httpResponse->code;
                     return false;
                 }
             }
+            $httpBody = $httpResponse->body;
         }
         
-        if(!is_array($httpData) || !array_key_exists('body', $httpData)) {
-            return false;
-        }
+//        if(!is_array($httpData) || !array_key_exists('body', $httpData)) {
+//            return false;
+//        }
         
         try {
             $penddate = strtotime("+$period day");
-            $parser = new IcsParser();
-            $parser->parse($httpData['body'], $penddate, $instance['event_count'],  $instance );
+//            $parser = new IcsParser(); // is already instantiated before getData call in Joomla
+            $this->parse($httpBody, $penddate, $instance['event_count'],  $instance );
             
-            $events = $parser->getFutureEvents($penddate);
+            $events = $this->getFutureEvents($penddate);
             return self::limitArray($events, $instance['event_count']);
         } catch(\Exception $e) {
             return null;

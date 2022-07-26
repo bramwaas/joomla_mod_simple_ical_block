@@ -81,7 +81,8 @@ if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR emp
         $sflgia = strip_tags($attributes['suffix_lgia_class'], $allowed_tags);
         if (!in_array($attributes['tag_sum'], self::$allowed_tags_sum)) $attributes['tag_sum'] = 'a';
         $attributes['anchorId'] = sanitize_html_class($attributes['anchorId'], $attributes['blockid']);
-        $data = IcsParser::getData($attributes);
+        $parser = new IcsParser();
+        $data = $parser->getData($attributes);
         if (!empty($data) && is_array($data)) {
             date_default_timezone_set(Factory::getApplication()->get('offset'));
             echo '<ul class="list-group' .  $attributes['suffix_lg_class'] . ' simple-ical-widget">';
