@@ -60,7 +60,7 @@ class CleartransientnowRule extends FormRule
     {
         $app = Factory::getApplication();
         $module_id = $input->get('id');
-        $transientId = 'SimpleiCalBlock' . $module_id;
+        $transientId = 'SimpleicalBlock' . $module_id;
         
         
         if  (htmlspecialchars($value) == '1')

@@ -801,7 +801,7 @@ END:VCALENDAR';
     function getData($instance)
     {
         $transientId = 'SimpleicalBlock'  . $instance['blockid']   ;
-        if ($instance['clear_cache_now']) SimpleicalblockHelper::delete_transient($transientId);
+//        if ($instance['clear_cache_now']) SimpleicalblockHelper::delete_transient($transientId);
         if(false === ($data = SimpleicalblockHelper::get_transient($transientId))) {
             $data = $this->fetch(  $instance,  );
             // do not cache data if fetching failed

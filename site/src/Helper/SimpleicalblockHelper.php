@@ -180,7 +180,8 @@ class SimpleicalblockHelper
      * @return array attributes from parameters merged with default  attributes. 
      */
     static function render_attributes($block_attributes) {
-       return  array_merge(
+        
+        $block_attributes =  array_merge(
             array(
                 'blockid' => 'AZ',
   //              'title' => Text::_('MOD_SIMPLEICALBLOCK_TITLE_DFT'),
@@ -208,6 +209,10 @@ class SimpleicalblockHelper
             ),
             $block_attributes
             );
+       $block_attributes['anchorId'] = self::sanitize_html_class($attributes['anchorId'], 'b' . $block_attributes['blockid']);
+       
+       return $block_attributes;
+       
     }
     
 

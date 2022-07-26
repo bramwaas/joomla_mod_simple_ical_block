@@ -48,15 +48,8 @@ static $allowed_tags = ['a','abbr', 'acronym', 'address','area','article', 'asid
  'i', 'img', 'li', 'label', 'legend', 'ol', 'p','q', 'section', 'small', 'span','strike', 'strong', 'u','ul'] ;
 $old_timezone = date_default_timezone_get();
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
-$transientId = 'SimpleiCalBlock' . $attributes['blockid'];
 //$helper = new SimpleicalblockHelper;
 
-if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR empty($data)) {
-    $data = new \DateTime();
-    if ($data) {
-        SimpleicalblockHelper::set_transient($transientId, $data , 60 * $attributes['transient_time']);
-     }
- }
 echo '<div id="' . $block_attributes['anchorId'] .'" class="' . $block_attributes['className'] . ((isset($block_attributes['align'])) ? (' align' . $block_attributes['align']) : ' ')   .  '" >';
  
 /**
@@ -80,7 +73,6 @@ echo '<div id="' . $block_attributes['anchorId'] .'" class="' . $block_attribute
         $sflgi = strip_tags($attributes['suffix_lgi_class'], $allowed_tags);
         $sflgia = strip_tags($attributes['suffix_lgia_class'], $allowed_tags);
         if (!in_array($attributes['tag_sum'], $allowed_tags_sum)) $attributes['tag_sum'] = 'a';
-        $attributes['anchorId'] = SimpleicalblockHelper::sanitize_html_class($attributes['anchorId'], $attributes['blockid']);
         $parser = new IcsParser();
         $data = $parser->getData($attributes);
         if (!empty($data) && is_array($data)) {
@@ -89,7 +81,7 @@ echo '<div id="' . $block_attributes['anchorId'] .'" class="' . $block_attribute
             $curdate = '';
             foreach($data as $e) {
                 $idlist = explode("@", $e->uid );
-                $itemid = $attributes['blockid'] . '_' . $idlist[0]; //TODO find correct block id when duplicate
+                $itemid = 'b' . $attributes['blockid'] . '_' . $idlist[0]; //TODO find correct block id when duplicate
                 $evdate = strip_tags(date( $dflg, $e->start), $allowed_tags);
                 if (date('yz', $e->start) != date('yz', $e->end)) {
                     $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags(date( $dflgend, $e->end - 1) , $allowed_tags));
