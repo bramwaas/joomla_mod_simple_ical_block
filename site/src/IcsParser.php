@@ -786,7 +786,7 @@ END:VCALENDAR';
      *
      * @return array event objects
      */
-    static function getData($instance)
+    function getData($instance)
     {
         $transientId = 'SimpleicalBlock'  . $instance['blockid']   ;
         if ($instance['clear_cache_now']) SimpleicalblockHelper::delete_transient($transientId);
@@ -810,7 +810,7 @@ END:VCALENDAR';
      *
      * @return array event objects
      */
-    static function fetch( $instance )
+    function fetch( $instance )
     {
         $period = $instance['event_period'];
         if ('#example' == $instance['calendar_id']){
