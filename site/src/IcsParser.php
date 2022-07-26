@@ -7,10 +7,12 @@
  * Version: 0.0.1
  *  replace WP transient_functions by  SimpleicalblockHelper::transien_functions ;
  *  replace wp_remote_get by Http->get(), create Http object in var $http  construct and thus necesary to instantiate the class
+ *  replace get_option('timezone_string') and wp_timezone by Factory::getApplication()->get('offset') and
  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\Http\Http;
 
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
@@ -237,6 +239,14 @@ END:VCALENDAR';
      * @since  0.0.1
      */
     protected $http = NULL;
+    /**
+     * The timezone string from the configuration.
+     *
+     * @var   string
+     * @since  0.0.1
+     */
+    protected $timezone_string = 'UTC';
+    
     
     /**
      * Constructor.
@@ -250,6 +260,7 @@ END:VCALENDAR';
     public function __construct()
     {
         $this->http = new \Joomla\Http\Http();
+        $this->timezone_string = Factory::getApplication()->get('offset');
     }
     /**
      * Parse ical string to individual events
@@ -303,7 +314,7 @@ END:VCALENDAR';
                      * FREQ=DAILY;COUNT=5;INTERVAL=7 Every 7 days,5 times
                      
                      */
-                    $timezone = new \DateTimeZone((isset($e->tzid)&& $e->tzid !== '') ? $e->tzid : get_option('timezone_string'));
+                    $timezone = new \DateTimeZone((isset($e->tzid)&& $e->tzid !== '') ? $e->tzid : $this->timezone_string);
                     $edtstart = new \DateTime('@' . $e->start);
                     $edtstart->setTimezone($timezone);
                     $edtstartmday = $edtstart->format('j');
@@ -531,7 +542,7 @@ END:VCALENDAR';
                                                                 $endtime = wp_date('His', $en->end, $timezone);
                                                                 if ('000000' < $endtime){
                                                                     if ('120000' < $endtime) $en->end = $en->end + 86400;
-                                                                    $enddate = \DateTime::createFromFormat('Y-m-d H:i:s', wp_date('Y-m-d 00:00:00', $en->end, $timezone), $timezone );
+                                                                    $enddate = \DateTime::createFromFormat('Y-m-d H:i:s', date('Y-m-d 00:00:00', $en->end, $timezone), $timezone );
                                                                     $en->end = $enddate->getTimestamp();
                                                                 }
                                                             }
@@ -649,7 +660,7 @@ END:VCALENDAR';
     private function parseIanaTimezoneid ($ptzid = '', $datetime = '') {
         if (8 < strlen($datetime) && 'Z'== $datetime[strlen($datetime) - 1]) $ptzid = 'UTC';
         try {
-            $timezone = (isset($ptzid)&& $ptzid !== '') ? new \DateTimeZone($ptzid) : wp_timezone();
+            $timezone = (isset($ptzid)&& $ptzid !== '') ? new \DateTimeZone($ptzid) : new \DateTimeZone($this->timezone_string);
         } catch (\Exception $exc) {}
         if (isset($timezone)) return $timezone;
         try {
@@ -657,7 +668,7 @@ END:VCALENDAR';
         } catch (\Exception $exc) {}
         if (isset($timezone)) return $timezone;
         try {
-            $timezone = wp_timezone();
+            $timezone = new \DateTimeZone($this->timezone_string);
         } catch (\Exception $exc) { }
         if (isset($timezone)) return $timezone;
         return new \DateTimeZone('UTC');
