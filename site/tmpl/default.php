@@ -22,11 +22,13 @@
  * 0.0.0 2022-07-10 first adjustments for J4 convert parameters to array $attributes.
  * 0.0.1 2022-07-25 included display_block function from WP Plugin SimpleicalBlock
  *   replaced $instamce by $attributes, wp_kses ($text, 'post')  by strip_tags  ($text, $allowed_tags)
+ *   changed wp_date in date (maybe date_default_timezone_set(<local timezone>) is needed but that is already in the code or use of Joomla\CMS\Date\Date ;
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
 //use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+// use Joomla\CMS\Date\Date;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
 
@@ -83,11 +85,11 @@ if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR emp
             foreach($data as $e) {
                 $idlist = explode("@", esc_attr($e->uid) );
                 $itemid = $attributes['blockid'] . '_' . $idlist[0]; //TODO find correct block id when duplicate
-                $evdate = strip_tags(wp_date( $dflg, $e->start), $allowed_tags);
+                $evdate = strip_tags(date( $dflg, $e->start), $allowed_tags);
                 if (date('yz', $e->start) != date('yz', $e->end)) {
-                    $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags(wp_date( $dflgend, $e->end - 1) , $allowed_tags));
+                    $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags(date( $dflgend, $e->end - 1) , $allowed_tags));
                 }
-                $evdtsum = (($e->startisdate === false) ? strip_tags(wp_date( $dftsum, $e->start) . wp_date( $dftsend, $e->end), $allowed_tags) : '');
+                $evdtsum = (($e->startisdate === false) ? strip_tags(date( $dftsum, $e->start) . date( $dftsend, $e->end), $allowed_tags) : '');
                 echo '<li class="list-group-item' .  $sflgi . '">';
                 if (!$startwsum && $curdate != $evdate ) {
                     $curdate =  $evdate;
@@ -120,8 +122,8 @@ if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR emp
                     echo   $e->description ,(strrpos($e->description, '<br>') == (strlen($e->description) - 4)) ? '' : '<br>';
                 }
                 if ($e->startisdate === false && date('yz', $e->start) === date('yz', $e->end))	{
-                    echo '<span class="time">', strip_tags(wp_date( $dftstart, $e->start ), $allowed_tags),
-                    '</span><span class="time">', strip_tags(wp_date( $dftend, $e->end ), $allowed_tags), '</span> ' ;
+                    echo '<span class="time">', strip_tags(date( $dftstart, $e->start ), $allowed_tags),
+                    '</span><span class="time">', strip_tags(date( $dftend, $e->end ), $allowed_tags), '</span> ' ;
                 } else {
                     echo '';
                 }
