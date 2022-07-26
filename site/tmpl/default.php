@@ -57,15 +57,7 @@ if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR emp
         SimpleicalblockHelper::set_transient($transientId, $data , 60 * $attributes['transient_time']);
      }
  }
- 
-?>
 
-<div id="simpleicalblock<?php echo  $attributes['blockid']; ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
-<!-- <?php  print_r($attributes); ?>  -->
-<div><?php print_r( $data); ?></div>
-
-</div>
-<?php
 /**
   * Front-end display of block or module.
   *
