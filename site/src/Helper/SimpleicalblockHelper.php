@@ -40,6 +40,11 @@ use Joomla\CMS\Language\Text;
  */
 class SimpleicalblockHelper
 {
+    /*
+     * @var array allowed tags for summary
+     */
+    private static $allowed_tags_sum = ['a', 'b', 'div', 'h4', 'h5', 'h6', 'i', 'span', 'strong', 'u'] ;
+    
     /**
      * Delete existing transient with transientId.
      *

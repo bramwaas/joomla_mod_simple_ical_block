@@ -36,6 +36,10 @@ use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
 /*
  * @var array allowed tags for summary
  */
+static $allowed_tags_sum = ['a', 'b', 'div', 'h4', 'h5', 'h6', 'i', 'span', 'strong', 'u'] ;
+/*
+ * @var array allowed tags for text-output
+ */
 static $allowed_tags = ['a','abbr', 'acronym', 'address','area','article', 'aside','audio',
  'b','big','blockquote', 'br','button', 'caption','cite','code','col',
  'details', 'div', 'em', 'fieldset', 'figcaption', 'figure', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','hr',
@@ -68,6 +72,7 @@ if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR emp
   */
     {
         echo '<h3 class="widget-title block-title">' . $attributes['title'] . '</h3>';
+        // TODO validation and fill defaults of attributes entirely to SimpleicalblockHelper::render_attributes
         $startwsum = (isset($attributes['startwsum'])) ? $attributes['startwsum'] : false ;
         $dflg = (isset($attributes['dateformat_lg'])) ? $attributes['dateformat_lg'] : 'l jS \of F' ;
         $dflgend = (isset($attributes['dateformat_lgend'])) ? $attributes['dateformat_lgend'] : '' ;
@@ -79,7 +84,7 @@ if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR emp
         $attributes['suffix_lg_class'] = strip_tags($attributes['suffix_lg_class'], $allowed_tags);
         $sflgi = strip_tags($attributes['suffix_lgi_class'], $allowed_tags);
         $sflgia = strip_tags($attributes['suffix_lgia_class'], $allowed_tags);
-        if (!in_array($attributes['tag_sum'], self::$allowed_tags_sum)) $attributes['tag_sum'] = 'a';
+        if (!in_array($attributes['tag_sum'], $allowed_tags_sum)) $attributes['tag_sum'] = 'a';
         $attributes['anchorId'] = sanitize_html_class($attributes['anchorId'], $attributes['blockid']);
         $parser = new IcsParser();
         $data = $parser->getData($attributes);
