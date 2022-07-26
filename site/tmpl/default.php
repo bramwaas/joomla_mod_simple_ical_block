@@ -24,6 +24,7 @@
  *   replaced $instamce by $attributes, wp_kses ($text, 'post')  by strip_tags  ($text, $allowed_tags)
  *   changed wp_date in date (maybe date_default_timezone_set(<local timezone> is needed but that is already in the code if not we can remove it);
  *   replaced wp get_option('timezone_string') by Factory::getApplication()->get('offset') or (deprecated) Factory::Getconfig()->offset 
+ *   replaced wp sanitize_html_class by copy in SimpleicalblockHelper
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -85,7 +86,7 @@ if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR emp
         $sflgi = strip_tags($attributes['suffix_lgi_class'], $allowed_tags);
         $sflgia = strip_tags($attributes['suffix_lgia_class'], $allowed_tags);
         if (!in_array($attributes['tag_sum'], $allowed_tags_sum)) $attributes['tag_sum'] = 'a';
-        $attributes['anchorId'] = sanitize_html_class($attributes['anchorId'], $attributes['blockid']);
+        $attributes['anchorId'] = SimpleicalblockHelper::sanitize_html_class($attributes['anchorId'], $attributes['blockid']);
         $parser = new IcsParser();
         $data = $parser->getData($attributes);
         if (!empty($data) && is_array($data)) {
