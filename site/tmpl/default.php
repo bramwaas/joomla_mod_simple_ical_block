@@ -3,7 +3,7 @@
  * @version $Id: default.php
  * @package simpleicalblock
  * @subpackage simpleicalblock Module
- * @copyright Copyright (C) 2022 -2022 wsacarousel, All rights reserved.
+ * @copyright Copyright (C) 2022 -2022 simpleicalblock, All rights reserved.
  * @license http://www.gnu.org/licenses GNU/GPL
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl
@@ -22,11 +22,12 @@
  * 0.0.0 2022-07-10 first adjustments for J4 convert parameters to array $attributes.
  * 0.0.1 2022-07-25 included display_block function from WP Plugin SimpleicalBlock
  *   replaced $instamce by $attributes, wp_kses ($text, 'post')  by strip_tags  ($text, $allowed_tags)
- *   changed wp_date in date (maybe date_default_timezone_set(<local timezone>) is needed but that is already in the code or use of Joomla\CMS\Date\Date ;
+ *   changed wp_date in date (maybe date_default_timezone_set(<local timezone> is needed but that is already in the code if not we can remove it);
+ *   replaced wp get_option('timezone_string') by Factory::getApplication()->get('offset') or (deprecated) Factory::Getconfig()->offset 
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
-//use Joomla\CMS\Factory;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 // use Joomla\CMS\Date\Date;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
@@ -35,8 +36,11 @@ use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
 /*
  * @var array allowed tags for summary
  */
-static $allowed_tags = ['a', 'b', 'br','caption', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','hr', 'i','li','ol', 'p','q','small', 'span','strike', 'strong', 'u','ul'] ;
-
+static $allowed_tags = ['a','abbr', 'acronym', 'address','area','article', 'aside','audio',
+ 'b','big','blockquote', 'br','button', 'caption','cite','code','col',
+ 'details', 'div', 'em', 'fieldset', 'figcaption', 'figure', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','hr',
+ 'i', 'img', 'li', 'label', 'legend', 'ol', 'p','q', 'section', 'small', 'span','strike', 'strong', 'u','ul'] ;
+$old_timezone = date_default_timezone_get();
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 $transientId = 'SimpleiCalBlock' . $attributes['blockid'];
 //$helper = new SimpleicalblockHelper;
@@ -79,7 +83,7 @@ if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR emp
         $attributes['anchorId'] = sanitize_html_class($attributes['anchorId'], $attributes['blockid']);
         $data = IcsParser::getData($attributes);
         if (!empty($data) && is_array($data)) {
-            date_default_timezone_set(get_option('timezone_string'));
+            date_default_timezone_set(Factory::getApplication()->get('offset'));
             echo '<ul class="list-group' .  $attributes['suffix_lg_class'] . ' simple-ical-widget">';
             $curdate = '';
             foreach($data as $e) {
@@ -135,7 +139,7 @@ if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR emp
                 echo '</div></li>';
             }
             echo '</ul>';
-            date_default_timezone_set('UTC');
+            date_default_timezone_set($old_timezone);
         }
         
         echo '<br class="clear" />';
