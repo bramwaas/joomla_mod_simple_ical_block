@@ -40,6 +40,11 @@ use Joomla\CMS\Language\Text;
  */
 class SimpleicalblockHelper
 {
+    /*
+     * @var array allowed tags for summary
+     */
+    private static $allowed_tags_sum = ['a', 'b', 'div', 'h4', 'h5', 'h6', 'i', 'span', 'strong', 'u'] ;
+    
     /**
      * Delete existing transient with transientId.
      *
@@ -92,7 +97,7 @@ class SimpleicalblockHelper
         return $transient_blob;
         } else 
         {
-            Factory::getApplication()->enqueueMessage(Text::_('Transientid empty'), 'warning');
+            Factory::getApplication()->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENTID_EMPTY'), 'warning');
             return false;
         }
     }
@@ -145,9 +150,64 @@ class SimpleicalblockHelper
              }
         } else
         {
-            Factory::getApplication()->enqueueMessage(Text::_('Transientid or data is empty'), 'warning');
+            Factory::getApplication()->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENTID_OR_DATA_EMPTY'), 'warning'); 
             return false;
         }
+    }
+    /**
+     * copied from WP
+     * Strips the string down to A-Z,a-z,0-9,_,-. If this results in an empty string then it will return the alternative value supplied.
+     * @param string $class
+     * @param string $fallback
+     * @return string sanitized class or fallback.
+     */
+    static function sanitize_html_class( $class, $fallback = '' ) {
+        // Strip out any %-encoded octets.
+        $sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', $class );
+        
+        // Limit to A-Z, a-z, 0-9, '_', '-'.
+        $sanitized = preg_replace( '/[^A-Za-z0-9_-]/', '', $sanitized );
+        
+        if ( '' === $sanitized && $fallback ) {
+            return  $fallback;
+        }
+        return $sanitized;
+    }
+    /**
+     * Merge block attributes with defaults to be sure they exist is necesary.
+     *
+     * @param array $block_attributes the module params object presented as array ($params->toArray())
+     * @return array attributes from parameters merged with default  attributes. 
+     */
+    static function render_attributes($block_attributes) {
+       return  array_merge(
+            array(
+                'blockid' => 'AZ',
+  //              'title' => Text::_('MOD_SIMPLEICALBLOCK_TITLE_DFT'),
+                'calendar_id' => '',
+                'event_count' => 10,
+                'event_period' => 92,
+                'transient_time' => 60,
+                'startwsum' => false,
+                'dateformat_lg' => Text::_('MOD_SIMPLEICALBLOCK_DF_DFT'),
+                'dateformat_lgend' => '',
+                'tag_sum' => 'a',
+                'dateformat_tsum' => Text::_('MOD_SIMPLEICALBLOCK_DF_TSUM_DFT'),
+                'dateformat_tsend' => '',
+                'dateformat_tstart' => Text::_('MOD_SIMPLEICALBLOCK_DF_TSTART_DFT'),
+                'dateformat_tend' => Text::_('MOD_SIMPLEICALBLOCK_DF_TEND_DFT'),
+                'excerptlength' => '',
+                'suffix_lg_class' => '',
+                'suffix_lgi_class' => ' py-0',
+                'suffix_lgia_class' => '',
+                'allowhtml' => false,
+                'clear_cache_now' => false,
+                //               'align'=>'',
+                'className'=>'',
+                'anchorId'=> '',
+            ),
+            $block_attributes
+            );
     }
     
 
