@@ -57,7 +57,8 @@ if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR emp
         SimpleicalblockHelper::set_transient($transientId, $data , 60 * $attributes['transient_time']);
      }
  }
-
+echo '<div id="' . $block_attributes['anchorId'] .'" class="' . $block_attributes['className'] . ((isset($block_attributes['align'])) ? (' align' . $block_attributes['align']) : ' ')   .  '" >';
+ 
 /**
   * Front-end display of block or module.
   *
@@ -141,8 +142,8 @@ if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR emp
             echo '</ul>';
             date_default_timezone_set($old_timezone);
         }
-        
+ 
         echo '<br class="clear" />';
     }
-    
+    echo '</div>';
 

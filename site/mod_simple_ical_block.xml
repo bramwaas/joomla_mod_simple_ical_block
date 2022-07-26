@@ -7,7 +7,7 @@
 	<license> http://www.gnu.org/licenses GNU/GPL</license>
 	<authorEmail>contact@waasdorpsoekhan.nl</authorEmail>
 	<authorUrl>http://www.waasdorpsoekhan.nl</authorUrl>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<description>Simple Google Calendar Outlook Events Module</description>
 	<namespace path="src">WaasdorpSoekhan\Module\Simpleicalblock</namespace>
 		<!-- Site Main File Copy Section -->
