@@ -7,7 +7,8 @@
  * Version: 0.0.1
  *  replace WP transient_functions by  SimpleicalblockHelper::transien_functions ;
  *  replace wp_remote_get by Http->get(), create Http object in var $http  construct and thus necesary to instantiate the class
- *  replace get_option('timezone_string') and wp_timezone by Factory::getApplication()->get('offset') and
+ *  replace get_option('timezone_string') and wp_timezone by Factory::getApplication()->get('offset') and ...
+ *  rplace wp_date( by date(
  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
@@ -539,7 +540,7 @@ END:VCALENDAR';
                                                             $en->start = $newstart->getTimestamp();
                                                             $en->end = $en->start + $edurationsecs;
                                                             if ($en->startisdate ){ //
-                                                                $endtime = wp_date('His', $en->end, $timezone);
+                                                                $endtime = date('His', $en->end, $timezone);
                                                                 if ('000000' < $endtime){
                                                                     if ('120000' < $endtime) $en->end = $en->end + 86400;
                                                                     $enddate = \DateTime::createFromFormat('Y-m-d H:i:s', date('Y-m-d 00:00:00', $en->end, $timezone), $timezone );
