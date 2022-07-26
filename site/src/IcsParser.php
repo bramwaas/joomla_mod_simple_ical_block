@@ -830,7 +830,7 @@ END:VCALENDAR';
         }
         else  {
             $url = self::getCalendarUrl($instance['calendar_id']);
-            $httpResponse =  $this->http($url);
+            $httpResponse =  $this->http->get($url);
             if ($httpResponse->code != 200) {
                 echo '<!-- ' . $url . ' not found ' . 'fall back to https:// -->';
                 $httpResponse =  $this->http('https://' . explode('://', $url)[1]);
