@@ -25,6 +25,7 @@
  *   changed wp_date in date (maybe date_default_timezone_set(<local timezone> is needed but that is already in the code if not we can remove it);
  *   replaced wp get_option('timezone_string') by Factory::getApplication()->get('offset') or (deprecated) Factory::Getconfig()->offset 
  *   replaced wp sanitize_html_class by copy in SimpleicalblockHelper
+ *   removed wp esc_attr from sanitizing $e->uid
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -94,7 +95,7 @@ if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR emp
             echo '<ul class="list-group' .  $attributes['suffix_lg_class'] . ' simple-ical-widget">';
             $curdate = '';
             foreach($data as $e) {
-                $idlist = explode("@", esc_attr($e->uid) );
+                $idlist = explode("@", $e->uid );
                 $itemid = $attributes['blockid'] . '_' . $idlist[0]; //TODO find correct block id when duplicate
                 $evdate = strip_tags(date( $dflg, $e->start), $allowed_tags);
                 if (date('yz', $e->start) != date('yz', $e->end)) {
