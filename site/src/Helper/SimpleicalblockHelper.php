@@ -22,8 +22,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with simpleicalblock. If not, see <http://www.gnu.org/licenses/>.
- * 0.0.7
- * 0.2.0 slide delay added.
+ * 0.0.3 replaced defaults for dateformats by "", because we also use empty format to skip the field.
+ *  Added space to sanitize html class because it it also used for more classes.
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
@@ -165,8 +165,8 @@ class SimpleicalblockHelper
         // Strip out any %-encoded octets.
         $sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', $class );
         
-        // Limit to A-Z, a-z, 0-9, '_', '-'.
-        $sanitized = preg_replace( '/[^A-Za-z0-9_-]/', '', $sanitized );
+        // Limit to A-Z, ' ', a-z, 0-9, '_', '-'.
+        $sanitized = preg_replace( '/[^A-Z a-z0-9_-]/', '', $sanitized );
         
         if ( '' === $sanitized && $fallback ) {
             return  $fallback;
@@ -190,13 +190,13 @@ class SimpleicalblockHelper
                 'event_period' => 92,
                 'transient_time' => 60,
                 'startwsum' => false,
-                'dateformat_lg' => Text::_('MOD_SIMPLEICALBLOCK_DF_DFT'),
+                'dateformat_lg' => '',
                 'dateformat_lgend' => '',
                 'tag_sum' => 'a',
-                'dateformat_tsum' => Text::_('MOD_SIMPLEICALBLOCK_DF_TSUM_DFT'),
+                'dateformat_tsum' => '',
                 'dateformat_tsend' => '',
-                'dateformat_tstart' => Text::_('MOD_SIMPLEICALBLOCK_DF_TSTART_DFT'),
-                'dateformat_tend' => Text::_('MOD_SIMPLEICALBLOCK_DF_TEND_DFT'),
+                'dateformat_tstart' => '',
+                'dateformat_tend' => '',
                 'excerptlength' => '',
                 'suffix_lg_class' => '',
                 'suffix_lgi_class' => ' py-0',
@@ -209,7 +209,12 @@ class SimpleicalblockHelper
             ),
             $block_attributes
             );
-       $block_attributes['anchorId'] = self::sanitize_html_class($attributes['anchorId'], 'b' . $block_attributes['blockid']);
+        if (!in_array($block_attributes['tag_sum'], self::$allowed_tags_sum)) $block_attributes['tag_sum'] = 'a';
+        $block_attributes['suffix_lg_class'] = self::sanitize_html_class($block_attributes['suffix_lg_class']);
+        $block_attributes['suffix_lgi_class'] = self::sanitize_html_class($block_attributes['suffix_lgi_class']);
+        $block_attributes['suffix_lgia_class'] = self::sanitize_html_class($block_attributes['suffix_lgia_class']);
+        $block_attributes['anchorId'] = self::sanitize_html_class($block_attributes['anchorId'], 'b' . $block_attributes['blockid']);
+        
        
        return $block_attributes;
        

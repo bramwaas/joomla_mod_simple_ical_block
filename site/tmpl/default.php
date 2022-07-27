@@ -26,6 +26,7 @@
  *   replaced wp get_option('timezone_string') by Factory::getApplication()->get('offset') or (deprecated) Factory::Getconfig()->offset 
  *   replaced wp sanitize_html_class by copy in SimpleicalblockHelper
  *   removed wp esc_attr from sanitizing $e->uid
+ *   removed checks isset on attributes because that is already done before.
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -35,10 +36,6 @@ use Joomla\CMS\Language\Text;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
 
-/*
- * @var array allowed tags for summary
- */
-static $allowed_tags_sum = ['a', 'b', 'div', 'h4', 'h5', 'h6', 'i', 'span', 'strong', 'u'] ;
 /*
  * @var array allowed tags for text-output
  */
@@ -61,18 +58,17 @@ echo '<div id="' . $block_attributes['anchorId'] .'" class="' . $block_attribute
     {
         echo '<h3 class="widget-title block-title">' . $attributes['title'] . '</h3>';
         // TODO validation and fill defaults of attributes entirely to SimpleicalblockHelper::render_attributes
-        $startwsum = (isset($attributes['startwsum'])) ? $attributes['startwsum'] : false ;
-        $dflg = (isset($attributes['dateformat_lg'])) ? $attributes['dateformat_lg'] : 'l jS \of F' ;
-        $dflgend = (isset($attributes['dateformat_lgend'])) ? $attributes['dateformat_lgend'] : '' ;
-        $dftsum = (isset($attributes['dateformat_tsum'])) ? $attributes['dateformat_tsum'] : 'G:i ' ;
-        $dftsend = (isset($attributes['dateformat_tsend'])) ? $attributes['dateformat_tsend'] : '' ;
-        $dftstart = (isset($attributes['dateformat_tstart'])) ? $attributes['dateformat_tstart'] : 'G:i' ;
-        $dftend = (isset($attributes['dateformat_tend'])) ? $attributes['dateformat_tend'] : ' - G:i ' ;
-        $excerptlength = (isset($attributes['excerptlength'])) ? $attributes['excerptlength'] : '' ;
+        $startwsum = $attributes['startwsum'];
+        $dflg = $attributes['dateformat_lg'];
+        $dflgend =$attributes['dateformat_lgend'];
+        $dftsum =$attributes['dateformat_tsum'];
+        $dftsend = $attributes['dateformat_tsend'];
+        $dftstart = $attributes['dateformat_tstart'];
+        $dftend = $attributes['dateformat_tend'];
+        $excerptlength = $attributes['excerptlength'];
         $attributes['suffix_lg_class'] = strip_tags($attributes['suffix_lg_class'], $allowed_tags);
         $sflgi = strip_tags($attributes['suffix_lgi_class'], $allowed_tags);
         $sflgia = strip_tags($attributes['suffix_lgia_class'], $allowed_tags);
-        if (!in_array($attributes['tag_sum'], $allowed_tags_sum)) $attributes['tag_sum'] = 'a';
         $parser = new IcsParser();
         $data = $parser->getData($attributes);
         if (!empty($data) && is_array($data)) {
