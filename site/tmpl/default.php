@@ -59,8 +59,7 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
   * from static function display_block($attributes)
   */
     {
-        echo '<h4 class="widget-title block-title">'. 'TZui:'  . $tzid_ui . 'Old:' . $old_timezone . '</h4>';
-        // TODO validation and fill defaults of attributes entirely to SimpleicalblockHelper::render_attributes
+//        echo '<h4 class="widget-title block-title">'. 'TZui:'  . $tzid_ui . 'Old:' . $old_timezone . '</h4>';
         $startwsum = $attributes['startwsum'];
         $dflg = $attributes['dateformat_lg'];
         $dflgend =$attributes['dateformat_lgend'];
