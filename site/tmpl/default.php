@@ -81,11 +81,11 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
                 $e_dtstart = new Jdate ($e->start);
                 $e_dtend = new Jdate ($e->end);
                 $e_dtend_1 = new Jdate ($e->end -1);
-                $evdate = strip_tags($e_dtstart->format($dflg, true, true) , $allowed_tags);
+                $evdate = strip_tags($e_dtstart->format($dflg) , $allowed_tags);
                 if (date('yz', $e->start) != date('yz', $e->end)) {
-                    $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags( $e_dtend_1->format($dflgend, true, true) , $allowed_tags));
+                    $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags( $e_dtend_1->format($dflgend) , $allowed_tags));
                 }
-                $evdtsum = (($e->startisdate === false) ? strip_tags($e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true), $allowed_tags) : '');
+                $evdtsum = (($e->startisdate === false) ? strip_tags($e_dtstart->format($dftsum) . $e_dtend->format($dftsend), $allowed_tags) : '');
                 echo '<li class="list-group-item' .  $sflgi . '">';
                 if (!$startwsum && $curdate != $evdate ) {
                     $curdate =  $evdate;
@@ -118,8 +118,8 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
                     echo   $e->description ,(strrpos($e->description, '<br>') == (strlen($e->description) - 4)) ? '' : '<br>';
                 }
                 if ($e->startisdate === false && date('yz', $e->start) === date('yz', $e->end))	{
-                    echo '<span class="time">', strip_tags($e_dtstart->format($dftstart, true, true), $allowed_tags),
-                    '</span><span class="time">', strip_tags($e_dtend->format($dftend, true, true) , $allowed_tags), '</span> ' ;
+                    echo '<span class="time">', strip_tags($e_dtstart->format($dftstart), $allowed_tags),
+                    '</span><span class="time">', strip_tags($e_dtend->format($dftend) , $allowed_tags), '</span> ' ;
                 } else {
                     echo '';
                 }
