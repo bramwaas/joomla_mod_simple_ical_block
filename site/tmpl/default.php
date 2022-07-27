@@ -47,7 +47,7 @@ $old_timezone = date_default_timezone_get();
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 //$helper = new SimpleicalblockHelper;
 
-echo '<div id="' . $block_attributes['anchorId'] .'" class="' . $block_attributes['className'] . ((isset($block_attributes['align'])) ? (' align' . $block_attributes['align']) : ' ')   .  '" >';
+echo '<div id="' . $attributes['anchorId']  . '" >';
  
 /**
   * Front-end display of block or module.
@@ -66,9 +66,8 @@ echo '<div id="' . $block_attributes['anchorId'] .'" class="' . $block_attribute
         $dftstart = $attributes['dateformat_tstart'];
         $dftend = $attributes['dateformat_tend'];
         $excerptlength = $attributes['excerptlength'];
-        $attributes['suffix_lg_class'] = strip_tags($attributes['suffix_lg_class'], $allowed_tags);
-        $sflgi = strip_tags($attributes['suffix_lgi_class'], $allowed_tags);
-        $sflgia = strip_tags($attributes['suffix_lgia_class'], $allowed_tags);
+        $sflgi = $attributes['suffix_lgi_class'];
+        $sflgia = $attributes['suffix_lgia_class'];
         $parser = new IcsParser();
         $data = $parser->getData($attributes);
         if (!empty($data) && is_array($data)) {
