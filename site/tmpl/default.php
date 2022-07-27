@@ -27,12 +27,13 @@
  *   replaced wp sanitize_html_class by copy in SimpleicalblockHelper
  *   removed wp esc_attr from sanitizing $e->uid
  *   removed checks isset on attributes because that is already done before.
+ *   replaced date( with Date()->format where translation is necessary.
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-// use Joomla\CMS\Date\Date;
+use Joomla\CMS\Date\Date as Jdate;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
 
@@ -77,11 +78,14 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
             foreach($data as $e) {
                 $idlist = explode("@", $e->uid );
                 $itemid = 'b' . $attributes['blockid'] . '_' . $idlist[0]; //TODO find correct block id when duplicate
-                $evdate = strip_tags(date( $dflg, $e->start), $allowed_tags);
+                $e_dtstart = new Jdate ($e->start);
+                $e_dtend = new Jdate ($e->end);
+                $e_dtend_1 = new Jdate ($e->end -1);
+                $evdate = strip_tags($e_dtstart->format($dflg, true, true) , $allowed_tags);
                 if (date('yz', $e->start) != date('yz', $e->end)) {
-                    $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags(date( $dflgend, $e->end - 1) , $allowed_tags));
+                    $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags( $e_dtend_1->format($dflgend, true, true) , $allowed_tags));
                 }
-                $evdtsum = (($e->startisdate === false) ? strip_tags(date( $dftsum, $e->start) . date( $dftsend, $e->end), $allowed_tags) : '');
+                $evdtsum = (($e->startisdate === false) ? strip_tags($e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true), $allowed_tags) : '');
                 echo '<li class="list-group-item' .  $sflgi . '">';
                 if (!$startwsum && $curdate != $evdate ) {
                     $curdate =  $evdate;
@@ -114,8 +118,8 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
                     echo   $e->description ,(strrpos($e->description, '<br>') == (strlen($e->description) - 4)) ? '' : '<br>';
                 }
                 if ($e->startisdate === false && date('yz', $e->start) === date('yz', $e->end))	{
-                    echo '<span class="time">', strip_tags(date( $dftstart, $e->start ), $allowed_tags),
-                    '</span><span class="time">', strip_tags(date( $dftend, $e->end ), $allowed_tags), '</span> ' ;
+                    echo '<span class="time">', strip_tags($e_dtstart->format($dftstart, true, true), $allowed_tags),
+                    '</span><span class="time">', strip_tags($e_dtend->format($dftend, true, true) , $allowed_tags), '</span> ' ;
                 } else {
                     echo '';
                 }
