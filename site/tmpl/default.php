@@ -46,6 +46,7 @@ static $allowed_tags = ['a','abbr', 'acronym', 'address','area','article', 'asid
  'i', 'img', 'li', 'label', 'legend', 'ol', 'p','q', 'section', 'small', 'span','strike', 'strong', 'u','ul'] ;
 $old_timezone = date_default_timezone_get();
 $tzid_ui = Factory::getApplication()->get('offset');
+$tz_ui = new \DateTimeZone(Factory::getApplication()->get('offset'));
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 //$helper = new SimpleicalblockHelper;
 
@@ -79,9 +80,12 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
             foreach($data as $e) {
                 $idlist = explode("@", $e->uid );
                 $itemid = 'b' . $attributes['blockid'] . '_' . $idlist[0]; //TODO find correct block id when duplicate
-                $e_dtstart = new Jdate ($e->start,$tzid_ui);
-                $e_dtend = new Jdate ($e->end, $tzid_ui);
-                $e_dtend_1 = new Jdate ($e->end -1, $tzid_ui);
+                $e_dtstart = new Jdate ($e->start);
+                $e_dtstart->setTimezone($tz_ui);
+                $e_dtend = new Jdate ($e->end);
+                $e_dtend->setTimezone($tz_ui);
+                $e_dtend_1 = new Jdate ($e->end -1);
+                $e_dtend_1->setTimezone($tz_ui);
                 $evdate = strip_tags($e_dtstart->format($dflg, true, true) , $allowed_tags);
                 if (date('yz', $e->start) != date('yz', $e->end)) {
                     $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags( $e_dtend_1->format($dflgend, true, true) , $allowed_tags));
