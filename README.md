@@ -27,8 +27,8 @@ These are great, but as soon as you want to make a few adjustments to the stylin
 * Fully adaptable to your website with CSS. Output in unordered list with Bootstrap 4 listgroup classes and toggle for details.
 * Choose date / time format in settings screen that best suits your website.
 * Displays per event DTSTART, DTEND, SUMMARY, LOCATION and DESCRIPTION. DTSTART is required other components are optional. 
-* Displays most common repeating events. Frequency Yearly, Monthly, Weekly, Dayly (not Hourly, Minutely and smaller periods)
-* In the screenshot below: Left the block with default settings and clicked on one summary. Right with some adjusted settings.   
+* Displays most common repeating events. Frequency Yearly, Monthly, Weekly, Dayly (not Hourly, Minutely and smaller periods)    
+
 Adjusted settings for start with summary:  
 Start with summary.: "true"  
 Date format first line: ".<\b\r>l jS \o\f  F"  
