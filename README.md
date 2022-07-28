@@ -180,5 +180,20 @@ This project is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-lic
 * works with Joomla 4 or higher.
 
 == Changelog ==
-* 2.0.3 Added initial values for new attributes in transform.
-* 0.0 imported V2.0.3 of my Wordpress plugin Simple Google Calendar Outlook Events Block Widget and made modifications to let it work with Joomla 4.
+* 0.0.0 imported V2.0.3 of my Wordpress plugin Simple Google Calendar Outlook Events Block Widget and made modifications to let it work with Joomla 4.
+* copied src/IcsParser.php with IcsParser class from WP includes/IcsParser.php; replaced wp specific functions like wp_date() wp_remote_get() and
+  get_option('timezone_string') by PHP or Joomla alternatives.
+* created transient functions in SimpleicalblockHelper based on functionality of WP transient functions. Used the new transient functions
+  in ICsParser.
+* copied most of content of default.php from WP display_block() in includes/SimpleicalBlock; replaced wp specific functions like wp_date() wp_remote_get() and
+  get_option('timezone_string') by PHP or Joomla alternatives. Because php date() has no translation like wp_date() more modifications made to
+  use Joomla Date object when output needs to be translated. 
+  Used strip_tags with allowed html for wp_kses(,'post') and copied most of the code of 
+  WP sanitize_html_class() to sanitize_html_class() in SimpleicalblockHelper.
+* copied $allowed_tags_sum and other functionality of render_block() in SimpleicalblockHelper from includes/SimpleicalBlock.php
+* created config/fields in mod_simpleical_block.xml based on WP edit elements in simple-ical-block.js 
+  and form() function in simple-google-icalendar-widget.php. Removed title as we already have a module title. Filled blockid with module.id.
+* created CleartransientnowRule to handle action on field clear_cache_now like it is done in the WP widget; 
+   i.e. deleting the transient when the parameters are saved and clear_cache_now = true.
+* 0.0.3 module works in Joomla 4, with #example, with file, and with requests from google or outlook. 
+  Output is comparable with output of WP block but more testing and clean up needs to be done.
