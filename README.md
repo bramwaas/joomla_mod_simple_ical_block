@@ -21,8 +21,7 @@ These are great, but as soon as you want to make a few adjustments to the stylin
 
 == Module Features ==
 
-* Calendar block or widget to display appointments/events of a public Google calendar or other iCal file.
-* Block gives live preview in the editor and is not constrained to widget area. Old widget will be displayed in legacy widget block only in widget area.
+* Calendar block module to display appointments/events of a public Google calendar or other iCal file.
 * Small footprint, uses only Google ID of the calendar, or ICS link for Outlook, or Url of iCal file, to get event information via iCal
 * Manage events in Google Calendar, or other iCalendar source.
 * Fully adaptable to your website with CSS. Output in unordered list with Bootstrap 4 listgroup classes and toggle for details.
@@ -40,22 +39,13 @@ Time format start time: ""
 Time format end time: ""  
 Tag for summary: "strong" 
   
- == Screenshots ==
-1. With theme Twenty Twenty-Two.
-2. With theme WP Bootstrap Starter (with bootstrap 4 css and js).
-3. Transform from Legacy widget block to Simple ical Block.
- 
 == Installation ==
 
-* Do the usual setup procedure... you know... downloading... unpacking... uploading... activating.   
-Or download the zip-file and upload it via Plugins Add new ... install and activate.    
-Or just install it through the wordpress plugin directory.       
-* For WP 5.9 and higher: As soon as you activated the plugin, you should see a new block 'Simple ical Block' in the (block) Editor in the category Widgets.       
-You can enter the block in a post or a page with the block-editor (eg. (+ sign)Toggle block inserter / WIDGETS).           
-If your theme has a widget area you can also enter the block as a widget in a widget area:          
- Appearance / Widgets / (+ sign)Toggle block inserter / WIDGETS. Just drag it into your sidebar.    
-* Alternative for WP 5.3 and higher: Select 'Simple Google Calendar Outlook Events Widget' or select the Legacy widget and choose 'Simple Google Calendar Outlook Events Widget'     
-  and drag it into the sidebar.
+* Do the usual setup procedure... you know... downloading from github system/install/extensions/Upload package file... activating.   
+Or find the url on github and use System/Install/Extensions/Install from URL
+* Then add the module on the desired position with Conten/Site modules/New or System/Mange/Sitemodules/New
+* If you want the block in the content area enable plugin Content - Load Modules in System/Manage/Plugins and first create a position in your article content   
+  as described in the plugin.
 * Fill out all the necessary configuration fields.
  In Calendar ID enter the calendar ID displayed by Google Calendar, or complete url of a  Google calendar or other iCal file.
  You can find Google calendar ID by going to Calendar Settings / Calendars, clicking on the appropriate calendar, scrolling all the way down to find the Calendar ID at the bottom under the Integrate Calendar section. There's your calendar id.
@@ -145,7 +135,7 @@ Of course the same effect is achieved when you schedule the events in UTC time d
 In these cases, a special effect can be seen of using the same times twice in the transition from DST to ST. If an event lasts less than an hour. If the event starts in the last hour of DST then it ends in the first hour of ST in between the local clocks are turned back one hour. According to the local clock, the end time is therefore before the start time. And the widget shows it like this too. The same also applies to Google and Outlook calendar.   
 Theoretically this could als happen with recurrent events in the same timezone with DST. In my test I have seen this with Google calendar but not with the widget. PHP and therefore the widget uses the second occurence if the result of the calculation is a time that is twice available (at least in the version of PHP I use), but using the first occurence like Google does is just as good.    
 
-Test results and comparison with Google and Outlook calendar have been uploaded as DayLightSavingTime test.xlsx.
+Test results and comparison with Google and Outlook calendar [with the wordpress plugin](https://wordpress.org/plugins/simple-google-icalendar-widget/) have been uploaded as DayLightSavingTime test.xlsx.
   
 === From the ical specifications ===
 ~~~
@@ -180,7 +170,7 @@ This project is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-lic
 * works with Joomla 4 or higher.
 
 == Changelog ==
-* 0.0.0 imported V2.0.3 of my Wordpress plugin Simple Google Calendar Outlook Events Block Widget and made modifications to let it work with Joomla 4.
+* 0.0.0 imported V2.0.3 of my Wordpress plugin [Simple Google Calendar Outlook Events Block Widget](https://wordpress.org/plugins/simple-google-icalendar-widget/) and made modifications to let it work with Joomla 4.
 * copied src/IcsParser.php with IcsParser class from WP includes/IcsParser.php; replaced wp specific functions like wp_date() wp_remote_get() and
   get_option('timezone_string') by PHP or Joomla alternatives.
 * created transient functions in SimpleicalblockHelper based on functionality of WP transient functions. Used the new transient functions
@@ -188,8 +178,8 @@ This project is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-lic
 * copied most of content of default.php from WP display_block() in includes/SimpleicalBlock; replaced wp specific functions like wp_date() wp_remote_get() and
   get_option('timezone_string') by PHP or Joomla alternatives. Because php date() has no translation like wp_date() more modifications made to
   use Joomla Date object when output needs to be translated. 
-  Used strip_tags with allowed html for wp_kses(,'post') and copied most of the code of 
-  WP sanitize_html_class() to sanitize_html_class() in SimpleicalblockHelper.
+  Used strip_tags with allowed html for wp_kses(,'post') and copied most of the code of WP sanitize_html_class() 
+  to sanitize_html_class() in SimpleicalblockHelper added space as valid character to accommodate more classes in one class attribute.
 * copied $allowed_tags_sum and other functionality of render_block() in SimpleicalblockHelper from includes/SimpleicalBlock.php
 * created config/fields in mod_simpleical_block.xml based on WP edit elements in simple-ical-block.js 
   and form() function in simple-google-icalendar-widget.php. Removed title as we already have a module title. Filled blockid with module.id.
