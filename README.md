@@ -180,7 +180,8 @@ This project is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-lic
   use Joomla Date object when output needs to be translated. 
   Used strip_tags with allowed html for wp_kses(,'post') and copied most of the code of WP sanitize_html_class() 
   to sanitize_html_class() in SimpleicalblockHelper added space as valid character to accommodate more classes in one class attribute.
-* copied $allowed_tags_sum and other functionality of render_block() in SimpleicalblockHelper from includes/SimpleicalBlock.php
+* copied $allowed_tags_sum and other preparation of parameters/attributes functionality of render_block() in SimpleicalblockHelper    
+  from includes/SimpleicalBlock.php
 * created config/fields in mod_simpleical_block.xml based on WP edit elements in simple-ical-block.js 
   and form() function in simple-google-icalendar-widget.php. Removed title as we already have a module title. Filled blockid with module.id.
 * created CleartransientnowRule to handle action on field clear_cache_now like it is done in the WP widget; 
