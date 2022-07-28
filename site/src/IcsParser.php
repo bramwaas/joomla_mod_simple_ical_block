@@ -8,7 +8,7 @@
  *  replace WP transient_functions by  SimpleicalblockHelper::transient_functions ;
  *  replace wp_remote_get by Http->get(), create Http object in var $http  construct and thus necesary to instantiate the class
  *  replace get_option('timezone_string') and wp_timezone by Factory::getApplication()->get('offset') and ...
- *  rplace wp_date( by date(
+ *  replace wp_date( by date(
  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
