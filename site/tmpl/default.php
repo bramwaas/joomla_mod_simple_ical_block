@@ -32,19 +32,20 @@ $attributes = $params->toArray();
 //$cachecontroller = Factory::getContainer()->get(CacheControllerFactoryInterface::class)->createCacheController('output', []);
 $options = array(
     'lifetime'     => (int) 60 * $attributes['transient_time'],
-    'caching'      => 1,
+    'caching'      => true,
+    'blockid'        => attributes('blockid'),
 );
 $cachecontroller = new OutputController($options);
-$cache = $cachecontroller->cache;
+
 
 $data = ['Red', 'Green \of' , 'Blue'];
 $transientId = 'SimpleiCalBlock' . $attributes['blockid'];
 //$helper = new SimpleicalblockHelper;
-
+if ($attributes('clear_cache_now')) $cachecontroller->cache->remove($transientId);
 if ( false === ( $transientData = $cachecontroller->get( $transientId, '' ) ) ) {
     // we are here, means there is no data in cache. so let's put something in cache
     
-//    $data = new \DateTime();;
+    $data = new \DateTime();;
     $transientData = $data;
     $cachecontroller->store($transientData, $transientId, '' ); //if cache stored
 }
