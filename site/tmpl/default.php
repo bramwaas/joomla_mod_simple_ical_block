@@ -33,7 +33,7 @@ $data = ['Red', 'Green \of' , 'Blue'];
 $transientId = 'SimpleiCalBlock' . $attributes['blockid'];
 //$cachecontroller = Factory::getContainer()->get(CacheControllerFactoryInterface::class)->createCacheController('output', []);
 $options = array(
-    'lifetime'     => (int) 60 * $attributes['transient_time'],
+    'lifetime'     => (int) 6 * $attributes['transient_time'], //(int) 60 * $attributes['transient_time'],
     'caching'      => true,
     'blockid'        => $attributes['blockid'],
 );
