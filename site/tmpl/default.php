@@ -33,7 +33,7 @@ $attributes = $params->toArray();
 $options = array(
     'lifetime'     => (int) 60 * $attributes['transient_time'],
     'caching'      => true,
-    'blockid'        => attributes('blockid'),
+    'blockid'        => $attributes('blockid'),
 );
 $cachecontroller = new OutputController($options);
 
