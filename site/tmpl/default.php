@@ -41,12 +41,13 @@ $data = ['Red', 'Green \of' , 'Blue'];
 $transientId = 'SimpleiCalBlock' . $attributes['blockid'];
 //$helper = new SimpleicalblockHelper;
 
-if ( false === ( $data = $cache->get( $transientId, '' ) ) ) {
+if ( false === ( $data = unserialize(base64_decode($cache->get( $transientId, '' ) ))) ) {
     // we are here, means there is no data in cache. so let's put something in cache
     
     $data = new \DateTime();;
+    $transientDataS = base64_encode(serialize($transientData));
     //now cache the data $cache_data
-    $cache->store($data, $transientId, '' ); //if cache stored
+    $cache->store($transientDataS, $transientId, '' ); //if cache stored
 }
 
 //$cache_data  is the data we get from cache
