@@ -41,13 +41,12 @@ $data = ['Red', 'Green \of' , 'Blue'];
 $transientId = 'SimpleiCalBlock' . $attributes['blockid'];
 //$helper = new SimpleicalblockHelper;
 
-if ( false === ( $data = $cachecontroller->get( $transientId, '' ) ) ) {
+if ( false === ( $transientData = $cachecontroller->get( $transientId, '' ) ) ) {
     // we are here, means there is no data in cache. so let's put something in cache
     
-    $data = new \DateTime();;
-    $transientDataS = (($transientData));
-    //now cache the data $cache_data
-    $cachecontroller->store($transientDataS, $transientId, '' ); //if cache stored
+//    $data = new \DateTime();;
+    $transientData = $data;
+    $cachecontroller->store($transientData, $transientId, '' ); //if cache stored
 }
 
 //$cache_data  is the data we get from cache
@@ -66,7 +65,7 @@ if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR emp
 
 <div id="simpleicalblock<?php echo  $attributes['blockid']; ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
 <!-- <?php  print_r($attributes); ?>  -->
-<div><?php print_r( $data); ?></div>
+<div><?php print_r( $transientData); ?></div>
 <div><?php print_r( $cachecontroller->cache); ?></div>
 
 </div>
