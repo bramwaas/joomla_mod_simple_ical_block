@@ -29,17 +29,17 @@ use Joomla\CMS\Language\Text;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 $attributes = $params->toArray();
 
+$data = ['Red', 'Green \of' , 'Blue'];
+$transientId = 'SimpleiCalBlock' . $attributes['blockid'];
 //$cachecontroller = Factory::getContainer()->get(CacheControllerFactoryInterface::class)->createCacheController('output', []);
 $options = array(
     'lifetime'     => (int) 60 * $attributes['transient_time'],
     'caching'      => true,
-    'blockid'        => $attributes('blockid'),
+    'blockid'        => $attributes['blockid'],
 );
 $cachecontroller = new OutputController($options);
 
 
-$data = ['Red', 'Green \of' , 'Blue'];
-$transientId = 'SimpleiCalBlock' . $attributes['blockid'];
 //$helper = new SimpleicalblockHelper;
 if ($attributes('clear_cache_now')) $cachecontroller->cache->remove($transientId);
 if ( false === ( $transientData = $cachecontroller->get( $transientId, '' ) ) ) {
