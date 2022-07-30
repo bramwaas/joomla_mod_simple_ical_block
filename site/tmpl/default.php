@@ -41,13 +41,13 @@ $cachecontroller = new OutputController($options);
 
 
 //$helper = new SimpleicalblockHelper;
-if ($attributes['clear_cache_now']) $cachecontroller->cache->remove($transientId);
-if ( false === ( $transientData = $cachecontroller->get( $transientId, '' ) ) ) {
+if ($attributes['clear_cache_now']) $cachecontroller->cache->remove($transientId, null);
+if ( false === ( $transientData = $cachecontroller->get( $transientId, null ) ) ) {
     // we are here, means there is no data in cache. so let's put something in cache
     
     $data = new \DateTime();;
     $transientData = $data;
-    $cachecontroller->store($transientData, $transientId, '' ); //if cache stored
+    $cachecontroller->store($transientData, $transientId, null ); //if cache stored
 }
 
 //$cache_data  is the data we get from cache
