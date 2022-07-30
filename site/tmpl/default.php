@@ -35,18 +35,32 @@ $options = array(
     'caching'      => 1,
 );
 $cachecontroller = new OutputController($options);
+$cache = $cachecontroller->cache;
 
 $data = ['Red', 'Green \of' , 'Blue'];
 $transientId = 'SimpleiCalBlock' . $attributes['blockid'];
 //$helper = new SimpleicalblockHelper;
 
+if ( false === ( $data = $cache->get( $transientId, '' ) ) ) {
+    // we are here, means there is no data in cache. so let's put something in cache
+    
+    $data = new \DateTime();;
+    //now cache the data $cache_data
+    $cache->store($data, $transientId, '' ); //if cache stored
+}
+
+//$cache_data  is the data we get from cache
+//var_dump($data);
+
+
+/*
 if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR empty($data)) {
     $data = new \DateTime();
     if ($data) {
         SimpleicalblockHelper::set_transient($transientId, $data , 60 * $attributes['transient_time']);
      }
  }
- 
+ */
 ?>
 
 <div id="simpleicalblock<?php echo  $attributes['blockid']; ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
