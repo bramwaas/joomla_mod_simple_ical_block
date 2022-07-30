@@ -23,10 +23,18 @@
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
-//use Joomla\CMS\Factory;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Cache\Controller\OutputController;
 use Joomla\CMS\Language\Text;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 $attributes = $params->toArray();
+
+//$cachecontroller = Factory::getContainer()->get(CacheControllerFactoryInterface::class)->createCacheController('output', []);
+$options = array(
+    'lifetime'     => (int) 60 * $attributes['transient_time'],
+    'caching'      => 1,
+);
+$cachecontroller = new OutputController($options);
 
 $data = ['Red', 'Green \of' , 'Blue'];
 $transientId = 'SimpleiCalBlock' . $attributes['blockid'];
