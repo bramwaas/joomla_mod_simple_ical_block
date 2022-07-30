@@ -7,7 +7,7 @@
 	<license> http://www.gnu.org/licenses GNU/GPL</license>
 	<authorEmail>contact@waasdorpsoekhan.nl</authorEmail>
 	<authorUrl>http://www.waasdorpsoekhan.nl</authorUrl>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<description>Simple Google Calendar Outlook Events Module</description>
 	<namespace path="src">WaasdorpSoekhan\Module\Simpleicalblock</namespace>
 		<!-- Site Main File Copy Section -->
@@ -74,19 +74,19 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="dateformat_lg" type="text" default="l jS \of F" label="MOD_SIMPLEICALBLOCK_DF_LG" description="MOD_SIMPLEICALBLOCK_DF_LG_DESC" hint="MOD_SIMPLEICALBLOCK_DF_DFT" />
-				<field name="dateformat_lgend" type="text" default="" label="MOD_SIMPLEICALBLOCK_DF_LGEND" description="MOD_SIMPLEICALBLOCK_DF_LGEND_DESC" />
+				<field name="dateformat_lg" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_LG" description="MOD_SIMPLEICALBLOCK_DF_LG_DESC" hint="MOD_SIMPLEICALBLOCK_DF_DFT" />
+				<field name="dateformat_lgend" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_LGEND" description="MOD_SIMPLEICALBLOCK_DF_LGEND_DESC" />
 
-				<field name="dateformat_tsum" type="text" default="G:i " label="MOD_SIMPLEICALBLOCK_DF_TSUM" description="MOD_SIMPLEICALBLOCK_DF_TSUM_DESC" hint="MOD_SIMPLEICALBLOCK_DF_TSUM_DFT" />
-				<field name="dateformat_tsend" type="text" default="" label="MOD_SIMPLEICALBLOCK_DF_TSUMEND" description="MOD_SIMPLEICALBLOCK_DF_TSUMEND_DESC" />
+				<field name="dateformat_tsum" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TSUM" description="MOD_SIMPLEICALBLOCK_DF_TSUM_DESC" hint="MOD_SIMPLEICALBLOCK_DF_TSUM_DFT" />
+				<field name="dateformat_tsend" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TSUMEND" description="MOD_SIMPLEICALBLOCK_DF_TSUMEND_DESC" />
 
-				<field name="dateformat_tstart" type="text" default="G:i" label="MOD_SIMPLEICALBLOCK_DF_TSTART" description="MOD_SIMPLEICALBLOCK_DF_TSTART_DESC" hint="MOD_SIMPLEICALBLOCK_DF_TSTART_DFT"  />
-				<field name="dateformat_tend" type="text" default=" - G:i " label="MOD_SIMPLEICALBLOCK_DF_TEND" description="MOD_SIMPLEICALBLOCK_DF_TEND_DESC" hint="MOD_SIMPLEICALBLOCK_DF_TEND_DFT" />
+				<field name="dateformat_tstart" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TSTART" description="MOD_SIMPLEICALBLOCK_DF_TSTART_DESC" hint="MOD_SIMPLEICALBLOCK_DF_TSTART_DFT"  />
+				<field name="dateformat_tend" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TEND" description="MOD_SIMPLEICALBLOCK_DF_TEND_DESC" hint="MOD_SIMPLEICALBLOCK_DF_TEND_DFT" />
 			</fieldset>
 			
 			
 			<fieldset name="advanced">
-				<field name="transient_time" type="number" min="2" max="1440" default="60"  label="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME" description="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME_DESC" />
+				<field name="transient_time" type="number" min="2" max="1440" default="60"  label="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME" description="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME_DESC" hint="60" />
 				<field name="excerptlength" type="text" default="" label="MOD_SIMPLEICALBLOCK_EXCERPTL" description="MOD_SIMPLEICALBLOCK_EXCERPTL_DESC" />
 				<field name="tag_sum" type="list" default="div" label="MOD_SIMPLEICALBLOCK_TAG_SUM" description="MOD_SIMPLEICALBLOCK_TAG_SUM_DESC">
 					<option value="a">MOD_SIMPLEICALBLOCK_TAG_SUM_A</option>

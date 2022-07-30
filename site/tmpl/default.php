@@ -26,19 +26,17 @@
  *   replaced wp get_option('timezone_string') by Factory::getApplication()->get('offset') or (deprecated) Factory::Getconfig()->offset 
  *   replaced wp sanitize_html_class by copy in SimpleicalblockHelper
  *   removed wp esc_attr from sanitizing $e->uid
+ *   removed checks isset on attributes because that is already done before.
+ *   replaced date( with Date()->format where translation is necessary.
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-// use Joomla\CMS\Date\Date;
+use Joomla\CMS\Date\Date as Jdate;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
 
-/*
- * @var array allowed tags for summary
- */
-static $allowed_tags_sum = ['a', 'b', 'div', 'h4', 'h5', 'h6', 'i', 'span', 'strong', 'u'] ;
 /*
  * @var array allowed tags for text-output
  */
@@ -47,17 +45,12 @@ static $allowed_tags = ['a','abbr', 'acronym', 'address','area','article', 'asid
  'details', 'div', 'em', 'fieldset', 'figcaption', 'figure', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','hr',
  'i', 'img', 'li', 'label', 'legend', 'ol', 'p','q', 'section', 'small', 'span','strike', 'strong', 'u','ul'] ;
 $old_timezone = date_default_timezone_get();
+$tzid_ui = Factory::getApplication()->get('offset');
+$tz_ui = new \DateTimeZone(Factory::getApplication()->get('offset'));
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
-$transientId = 'SimpleiCalBlock' . $attributes['blockid'];
 //$helper = new SimpleicalblockHelper;
 
-if(false === ($data = SimpleicalblockHelper::get_transient($transientId)) OR empty($data)) {
-    $data = new \DateTime();
-    if ($data) {
-        SimpleicalblockHelper::set_transient($transientId, $data , 60 * $attributes['transient_time']);
-     }
- }
-echo '<div id="' . $block_attributes['anchorId'] .'" class="' . $block_attributes['className'] . ((isset($block_attributes['align'])) ? (' align' . $block_attributes['align']) : ' ')   .  '" >';
+echo '<div id="' . $attributes['anchorId']  . '" >';
  
 /**
   * Front-end display of block or module.
@@ -66,35 +59,37 @@ echo '<div id="' . $block_attributes['anchorId'] .'" class="' . $block_attribute
   * from static function display_block($attributes)
   */
     {
-        echo '<h3 class="widget-title block-title">' . $attributes['title'] . '</h3>';
-        // TODO validation and fill defaults of attributes entirely to SimpleicalblockHelper::render_attributes
-        $startwsum = (isset($attributes['startwsum'])) ? $attributes['startwsum'] : false ;
-        $dflg = (isset($attributes['dateformat_lg'])) ? $attributes['dateformat_lg'] : 'l jS \of F' ;
-        $dflgend = (isset($attributes['dateformat_lgend'])) ? $attributes['dateformat_lgend'] : '' ;
-        $dftsum = (isset($attributes['dateformat_tsum'])) ? $attributes['dateformat_tsum'] : 'G:i ' ;
-        $dftsend = (isset($attributes['dateformat_tsend'])) ? $attributes['dateformat_tsend'] : '' ;
-        $dftstart = (isset($attributes['dateformat_tstart'])) ? $attributes['dateformat_tstart'] : 'G:i' ;
-        $dftend = (isset($attributes['dateformat_tend'])) ? $attributes['dateformat_tend'] : ' - G:i ' ;
-        $excerptlength = (isset($attributes['excerptlength'])) ? $attributes['excerptlength'] : '' ;
-        $attributes['suffix_lg_class'] = strip_tags($attributes['suffix_lg_class'], $allowed_tags);
-        $sflgi = strip_tags($attributes['suffix_lgi_class'], $allowed_tags);
-        $sflgia = strip_tags($attributes['suffix_lgia_class'], $allowed_tags);
-        if (!in_array($attributes['tag_sum'], $allowed_tags_sum)) $attributes['tag_sum'] = 'a';
-        $attributes['anchorId'] = SimpleicalblockHelper::sanitize_html_class($attributes['anchorId'], $attributes['blockid']);
+//        echo '<h4 class="widget-title block-title">'. 'TZui:'  . $tzid_ui . 'Old:' . $old_timezone . '</h4>';
+        $startwsum = $attributes['startwsum'];
+        $dflg = $attributes['dateformat_lg'];
+        $dflgend =$attributes['dateformat_lgend'];
+        $dftsum =$attributes['dateformat_tsum'];
+        $dftsend = $attributes['dateformat_tsend'];
+        $dftstart = $attributes['dateformat_tstart'];
+        $dftend = $attributes['dateformat_tend'];
+        $excerptlength = $attributes['excerptlength'];
+        $sflgi = $attributes['suffix_lgi_class'];
+        $sflgia = $attributes['suffix_lgia_class'];
         $parser = new IcsParser();
         $data = $parser->getData($attributes);
         if (!empty($data) && is_array($data)) {
-            date_default_timezone_set(Factory::getApplication()->get('offset'));
+            date_default_timezone_set($tzid_ui);
             echo '<ul class="list-group' .  $attributes['suffix_lg_class'] . ' simple-ical-widget">';
             $curdate = '';
             foreach($data as $e) {
                 $idlist = explode("@", $e->uid );
-                $itemid = $attributes['blockid'] . '_' . $idlist[0]; //TODO find correct block id when duplicate
-                $evdate = strip_tags(date( $dflg, $e->start), $allowed_tags);
+                $itemid = 'b' . $attributes['blockid'] . '_' . $idlist[0]; //TODO find correct block id when duplicate
+                $e_dtstart = new Jdate ($e->start);
+                $e_dtstart->setTimezone($tz_ui);
+                $e_dtend = new Jdate ($e->end);
+                $e_dtend->setTimezone($tz_ui);
+                $e_dtend_1 = new Jdate ($e->end -1);
+                $e_dtend_1->setTimezone($tz_ui);
+                $evdate = strip_tags($e_dtstart->format($dflg, true, true) , $allowed_tags);
                 if (date('yz', $e->start) != date('yz', $e->end)) {
-                    $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags(date( $dflgend, $e->end - 1) , $allowed_tags));
+                    $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags( $e_dtend_1->format($dflgend, true, true) , $allowed_tags));
                 }
-                $evdtsum = (($e->startisdate === false) ? strip_tags(date( $dftsum, $e->start) . date( $dftsend, $e->end), $allowed_tags) : '');
+                $evdtsum = (($e->startisdate === false) ? strip_tags($e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true), $allowed_tags) : '');
                 echo '<li class="list-group-item' .  $sflgi . '">';
                 if (!$startwsum && $curdate != $evdate ) {
                     $curdate =  $evdate;
@@ -127,8 +122,8 @@ echo '<div id="' . $block_attributes['anchorId'] .'" class="' . $block_attribute
                     echo   $e->description ,(strrpos($e->description, '<br>') == (strlen($e->description) - 4)) ? '' : '<br>';
                 }
                 if ($e->startisdate === false && date('yz', $e->start) === date('yz', $e->end))	{
-                    echo '<span class="time">', strip_tags(date( $dftstart, $e->start ), $allowed_tags),
-                    '</span><span class="time">', strip_tags(date( $dftend, $e->end ), $allowed_tags), '</span> ' ;
+                    echo '<span class="time">', strip_tags($e_dtstart->format($dftstart, true, true), $allowed_tags),
+                    '</span><span class="time">', strip_tags($e_dtend->format($dftend, true, true) , $allowed_tags), '</span> ' ;
                 } else {
                     echo '';
                 }

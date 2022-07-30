@@ -5,10 +5,10 @@
  * note that this class does not implement all ICS functionality.
  *   bw 20220630 copied from Wordpress simple-google-icalendar-widget version 2.0.3
  * Version: 0.0.1
- *  replace WP transient_functions by  SimpleicalblockHelper::transien_functions ;
+ *  replace WP transient_functions by  SimpleicalblockHelper::transient_functions ;
  *  replace wp_remote_get by Http->get(), create Http object in var $http  construct and thus necesary to instantiate the class
  *  replace get_option('timezone_string') and wp_timezone by Factory::getApplication()->get('offset') and ...
- *  rplace wp_date( by date(
+ *  replace wp_date( by date(
  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
@@ -801,7 +801,7 @@ END:VCALENDAR';
     function getData($instance)
     {
         $transientId = 'SimpleicalBlock'  . $instance['blockid']   ;
-        if ($instance['clear_cache_now']) SimpleicalblockHelper::delete_transient($transientId);
+//        if ($instance['clear_cache_now']) SimpleicalblockHelper::delete_transient($transientId);
         if(false === ($data = SimpleicalblockHelper::get_transient($transientId))) {
             $data = $this->fetch(  $instance,  );
             // do not cache data if fetching failed
@@ -830,7 +830,7 @@ END:VCALENDAR';
         }
         else  {
             $url = self::getCalendarUrl($instance['calendar_id']);
-            $httpResponse =  $this->http($url);
+            $httpResponse =  $this->http->get($url);
             if ($httpResponse->code != 200) {
                 echo '<!-- ' . $url . ' not found ' . 'fall back to https:// -->';
                 $httpResponse =  $this->http('https://' . explode('://', $url)[1]);
