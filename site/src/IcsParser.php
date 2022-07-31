@@ -16,7 +16,7 @@ namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 
 use Joomla\CMS\Cache\Controller\OutputController;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Http\Http;
+use Joomla\Http\Http;
 
 // use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 
@@ -238,7 +238,7 @@ END:VCALENDAR';
     /**
      * The Http object to get the ical data (for Joomla
      *
-     * @var   Joomla\CMS\Http\Http
+     * @var   Joomla\Http\Http
      * @since  0.0.1
      */
     protected $http = NULL;
@@ -262,7 +262,7 @@ END:VCALENDAR';
      */
     public function __construct()
     {
-        $this->http = new \Joomla\Http\Http();
+        $this->http = new Http();
         $this->timezone_string = Factory::getApplication()->get('offset');
     }
     /**
