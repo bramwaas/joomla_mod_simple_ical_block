@@ -4,19 +4,21 @@
  *
  * note that this class does not implement all ICS functionality.
  *   bw 20220630 copied from Wordpress simple-google-icalendar-widget version 2.0.3
- * Version: 0.0.1
+ * Version: 0.0.4
  *  replace WP transient_functions by  SimpleicalblockHelper::transient_functions ;
  *  replace wp_remote_get by Http->get(), create Http object in var $http  construct and thus necesary to instantiate the class
  *  replace get_option('timezone_string') and wp_timezone by Factory::getApplication()->get('offset') and ...
  *  replace wp_date( by date(
+ *  replace transient by cache type 'output'
  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 
+use Joomla\CMS\Cache\Controller\OutputController;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Http\Http;
 
-use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
+// use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 
 class IcsParser {
     
@@ -801,12 +803,22 @@ END:VCALENDAR';
     function getData($instance)
     {
         $transientId = 'SimpleicalBlock'  . $instance['blockid']   ;
-//        if ($instance['clear_cache_now']) SimpleicalblockHelper::delete_transient($transientId);
-        if(false === ($data = SimpleicalblockHelper::get_transient($transientId))) {
+        //$cachecontroller = Factory::getContainer()->get(CacheControllerFactoryInterface::class)->createCacheController('output', []);
+        $options = array(
+            'lifetime'     => (int) $instance['transient_time'], //(int) 60 * $attributes['transient_time'], // seems to be minutes already, not saved, evaluated on get
+            'caching'      => true,
+            'language'     => 'en-GB',
+            'application'  => 'site',
+            'blockid'        => $instance['blockid'],
+        );
+        $cachecontroller = new OutputController($options);
+        
+        //        if ($instance['clear_cache_now']) $cachecontroller->cache->remove($transientId, null);
+        if(false === ( $data = $cachecontroller->get( $transientId, null ) ) ) {
             $data = $this->fetch(  $instance,  );
             // do not cache data if fetching failed
             if ($data) {
-                SimpleicalblockHelper::set_transient($transientId, $data, $instance['cache_time']*60);
+                $cachecontroller->store($data, $transientId, null );
             }
         }
         return $data;
