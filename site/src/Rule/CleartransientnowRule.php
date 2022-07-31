@@ -20,6 +20,7 @@ namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Rule;
 
 \defined('_JEXEC') or die('caught by _JEXEC');
 
+use Joomla\CMS\Cache\Controller\OutputController;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;   // voor vertalingen???
 use Joomla\CMS\Form\FormRule;
@@ -61,6 +62,11 @@ class CleartransientnowRule extends FormRule
         $app = Factory::getApplication();
         $module_id = $input->get('id');
         $transientId = 'SimpleicalBlock' . $module_id;
+        $options = array(
+            'lifetime'     => 1,
+            'caching'      => true,
+         );
+        $cachecontroller = new OutputController($options);
         
         
         if  (htmlspecialchars($value) == '1')
@@ -70,7 +76,7 @@ class CleartransientnowRule extends FormRule
             
             try {
                 /* start try */
-                $succes = SimpleicalblockHelper::delete_transient($transientId);
+                $succes = $cachecontroller->cache->remove($transientId, null);
                 $app->enqueueMessage(Text::sprintf('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEARED', $transientId), 'message');
                 /* end try */
             }

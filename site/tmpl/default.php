@@ -33,7 +33,7 @@ $data = ['Red', 'Green \of' , 'Blue'];
 $transientId = 'SimpleiCalBlock' . $attributes['blockid'];
 //$cachecontroller = Factory::getContainer()->get(CacheControllerFactoryInterface::class)->createCacheController('output', []);
 $options = array(
-    'lifetime'     => (int) $attributes['transient_time'], //(int) 60 * $attributes['transient_time'], // seems to be minutes already
+    'lifetime'     => (int) $attributes['transient_time'], //(int) 60 * $attributes['transient_time'], // seems to be minutes already, not saved, evaluated on get
     'caching'      => true,
     'blockid'        => $attributes['blockid'],
 );
@@ -41,7 +41,7 @@ $cachecontroller = new OutputController($options);
 
 
 //$helper = new SimpleicalblockHelper;
-if ($attributes['clear_cache_now']) $cachecontroller->cache->remove($transientId, null);
+
 if ( false === ( $transientData = $cachecontroller->get( $transientId, null ) ) ) {
     // we are here, means there is no data in cache. so let's put something in cache
     
