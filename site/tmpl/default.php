@@ -35,6 +35,7 @@ $transientId = 'SimpleiCalBlock' . $attributes['blockid'];
 $options = array(
     'lifetime'     => (int) $attributes['transient_time'], //(int) 60 * $attributes['transient_time'], // seems to be minutes already, not saved, evaluated on get
     'caching'      => true,
+    'language'     => 'en-GB',
     'blockid'        => $attributes['blockid'],
 );
 $cachecontroller = new OutputController($options);
