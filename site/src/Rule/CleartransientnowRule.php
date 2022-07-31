@@ -66,6 +66,7 @@ class CleartransientnowRule extends FormRule
             'lifetime'     => 1,
             'caching'      => true,
             'language'     => 'en-GB',
+            'application'  => 'site',
         );
         $cachecontroller = new OutputController($options);
         
