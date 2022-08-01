@@ -118,7 +118,7 @@
 		</fields>
 	</config>
     <!-- updateservers>
-	<server type="extension" priority="1" name="WsaCarousel Slider / Carousel Module"><![CDATA[https://www.waasdorpsoekhan.nl/update/wsacarousel/mod_wsacarousel-update.xml]]></server>
+	<server type="extension" priority="1" name="Module Simple iCal Block"><![CDATA[https://www.waasdorpsoekhan.nl/update/simpleicalblock/mod_simple_ical_block-update.xml]]></server>
     </updateservers  -->
 	
 </extension>
