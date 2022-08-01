@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module"   client="site" method="upgrade">
 	<name>Simple iCal Block</name>
-	<creationDate>26-7-2022</creationDate>	
+	<creationDate>1-8-2022</creationDate>	
 	<author>A.H.C. Waasdorp</author>
 	<copyright>Copyright (C) 2022 - 2022 A.H.C. Waasdorp, All rights reserved.</copyright>
 	<license> http://www.gnu.org/licenses GNU/GPL</license>
 	<authorEmail>contact@waasdorpsoekhan.nl</authorEmail>
 	<authorUrl>http://www.waasdorpsoekhan.nl</authorUrl>
-	<version>0.0.3</version>
+	<version>0.0.4</version>
 	<description>Simple Google Calendar Outlook Events Module</description>
 	<namespace path="src">WaasdorpSoekhan\Module\Simpleicalblock</namespace>
 		<!-- Site Main File Copy Section -->
@@ -19,46 +19,14 @@
 		<filename>mod_simple_ical_block.xml</filename>
 		<filename>index.html</filename>
 		<!-- filename>joomla.asset.json</filename -->
-        <folder>sql</folder>
-		<folder>assets</folder>
 		<folder>language</folder>
 		<folder>src</folder>
 		<folder>tmpl</folder>
 	</files>
-	<!-- media destination="mod_simple_ical_block" folder="assets">
-		<folder>css</folder>
-		<folder>js</folder>
-	</media -->
-	<!--languages folder="site/language/">
-		<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.ini</language>
-		<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.sys.ini</language>
-	</languages -->
-		<!-- Administration Module Menu Section -->
-	<!--  administration>
-		<languages folder="admin/language/">
-			<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.ini</language>
-			<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.sys.ini</language>
-		</languages>
-	</administration -->
-	
 	
 	<!-- scriptfile>mod_simple_ical_block.script.php</scriptfile -->
 
- 	<install><!-- Runs on install -->
- 		<sql>
-			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
-		</sql>
-	</install>
-	<uninstall><!-- Runs on uninstall -->
- 		<sql>
-			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
-		</sql>
-	</uninstall>
-	<update><!-- Runs on update -->
- 		<schemas>
-			<schemapath type="mysql">sql/updates/mysql</schemapath>
-		</schemas>
-	</update>
+
 
 	<config>
 		<fields name="params"  

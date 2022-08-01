@@ -6,7 +6,7 @@
  * @copyright Copyright (C) 2016 - 2022 Bram Waasdorp. All rights reserved.
  * @license GNU General Public License version 2 or later; see LICENSE.txt
  * 30-1-2022 //TODO namespace will work net earlier than Joomla v4.2 and maybe Administrator and Site must be distinguised.
- * 31-7-2022 0.0.4 replace transient by cache type 'output'
+ * 31-7-2022 0.0.4 replace transient by cache type 'output'; split transientId in cahegroup and cacheID to distinguish the group in system clear cache
  */
 /* regel voor validatie type compiler, bedoeld om samenstellen en compileren Less bestanden uit te voeren vlak voor
  de save
@@ -57,7 +57,8 @@ class CleartransientnowRule extends FormRule
     {
         $app = Factory::getApplication();
         $module_id = $input->get('id');
-        $transientId = 'SimpleicalBlock' . $module_id;
+        $cacheId =  $module_id;
+        $cachegroup = 'SimpleicalBlock';
         $options = array(
             'lifetime'     => 1,
             'caching'      => true,
@@ -74,7 +75,7 @@ class CleartransientnowRule extends FormRule
             
             try {
                 /* start try */
-                $succes = $cachecontroller->cache->remove($transientId, null);
+                $succes = $cachecontroller->cache->remove($cacheId, $cachegroup);
                 $app->enqueueMessage(Text::sprintf('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEARED', $transientId), 'message');
                 /* end try */
             }

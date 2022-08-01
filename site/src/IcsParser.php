@@ -9,7 +9,7 @@
  *  replace wp_remote_get by Http->get(), create Http object in var $http  construct and thus necesary to instantiate the class
  *  replace get_option('timezone_string') and wp_timezone by Factory::getApplication()->get('offset') and ...
  *  replace wp_date( by date(
- *  replace transient by cache type 'output'
+ *  replace transient by cache type 'output'; split transientId in cahegroup and cacheID to distinguish the group in system clear cache
  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
@@ -802,23 +802,23 @@ END:VCALENDAR';
      */
     function getData($instance)
     {
-        $transientId = 'SimpleicalBlock'  . $instance['blockid']   ;
+        $cacheId =  $instance['blockid']   ;
+        $cachegroup = 'SimpleicalBlock';
         //$cachecontroller = Factory::getContainer()->get(CacheControllerFactoryInterface::class)->createCacheController('output', []);
         $options = array(
             'lifetime'     => (int) $instance['transient_time'], //(int) 60 * $attributes['transient_time'], // seems to be minutes already, not saved, evaluated on get
             'caching'      => true,
             'language'     => 'en-GB',
             'application'  => 'site',
-            'blockid'        => $instance['blockid'],
         );
         $cachecontroller = new OutputController($options);
         
         //        if ($instance['clear_cache_now']) $cachecontroller->cache->remove($transientId, null);
-        if(false === ( $data = $cachecontroller->get( $transientId, null ) ) ) {
+        if(false === ( $data = $cachecontroller->get( $cacheId, $cachegroup ) ) ) {
             $data = $this->fetch(  $instance,  );
             // do not cache data if fetching failed
             if ($data) {
-                $cachecontroller->store($data, $transientId, null );
+                $cachecontroller->store($data, $cacheId, $cachegroup );
             }
         }
         return $data;
