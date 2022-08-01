@@ -56,9 +56,9 @@ class CleartransientnowRule extends FormRule
     
     {
         $app = Factory::getApplication();
-        $module_id = $input->get('id');
-        $cacheId =  $module_id;
+        $cacheId =  $input->get('id'); // = moduleid = blockid.
         $cachegroup = 'SimpleicalBlock';
+        $transientId = $cachegroup . $cacheId;
         $options = array(
             'lifetime'     => 1,
             'caching'      => true,
@@ -66,33 +66,20 @@ class CleartransientnowRule extends FormRule
             'application'  => 'site',
         );
         $cachecontroller = new OutputController($options);
-        
-        
         if  (htmlspecialchars($value) == '1')
-        
         { /* clear transient cache */
-            
-            
             try {
-                /* start try */
                 $succes = $cachecontroller->cache->remove($cacheId, $cachegroup);
                 $app->enqueueMessage(Text::sprintf('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEARED', $transientId), 'message');
-                /* end try */
             }
             catch (\Exception $e)
             {
                 $app->enqueueMessage(Text::sprintf('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEAR_FAILED', $transientId, $e->getMessage()), 'error');
                 return false;
             }
-            
             /* end clear transient cache */
         }
-        
-        
         return true;
-        /* eind test */
     }
-    /* eind WsaFormRuleCompiler */
 }
-
 ?>
