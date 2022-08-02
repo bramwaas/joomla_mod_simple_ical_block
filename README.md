@@ -188,3 +188,4 @@ This project is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-lic
    i.e. deleting the transient when the parameters are saved and clear_cache_now = true.
 * 0.0.3 module works in Joomla 4, with #example, with file, and with requests from google or outlook. 
   Output is comparable with output of WP block but more testing and clean up needs to be done.
+* 0.0.4 replace transient by cache type 'output'; split transientId in cachegroup and cacheID to distinguish the group in a.o. System/Clear cache
