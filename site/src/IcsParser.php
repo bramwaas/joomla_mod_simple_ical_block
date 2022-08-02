@@ -792,9 +792,10 @@ END:VCALENDAR';
      * Gets data from calender or transient cache
      *
      * @param array $instance the block attributes
-     *    ['blockid']      to create transientid
-     *    ['calendar_id']  id or url of the calender to fetch data
-     *    ['event_count']  max number of events to return
+     *    ['blockid'] to create transientid
+     *    ['transient_time'] time the transient cache is valid in minutes.
+     *    ['calendar_id'] id or url of the calender to fetch data
+     *    ['event_count'] max number of events to return
      *    ['event_period'] max number of days after now to fetch events.
      *    ['allowhtml'] allow html in output.
      *
@@ -804,17 +805,16 @@ END:VCALENDAR';
     {
         $cacheId =  $instance['blockid']   ;
         $cachegroup = 'SimpleicalBlock';
-        //$cachecontroller = Factory::getContainer()->get(CacheControllerFactoryInterface::class)->createCacheController('output', []);
         $options = array(
-            'lifetime'     => (int) $instance['transient_time'], //(int) 60 * $attributes['transient_time'], // seems to be minutes already, not saved, evaluated on get
+            'lifetime'     => (int) $instance['transient_time'], // seems to be minutes already, not saved, evaluated on get
             'caching'      => true,
             'language'     => 'en-GB',
             'application'  => 'site',
         );
         $cachecontroller = new OutputController($options);
         
-        //        if ($instance['clear_cache_now']) $cachecontroller->cache->remove($transientId, null);
-        if(false === ( $data = $cachecontroller->get( $cacheId, $cachegroup ) ) ) {
+        //        if ($instance['clear_cache_now']) $cachecontroller->cache->remove($cacheId, $cachegroup);
+        if(false === ( $data = $cachecontroller->get( $cacheId, $cachegroup))) {
             $data = $this->fetch(  $instance,  );
             // do not cache data if fetching failed
             if ($data) {
