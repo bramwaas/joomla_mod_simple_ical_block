@@ -118,7 +118,7 @@
 				<field name="basic_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_BASIC_HELP_LB"
  					 />
-				<field name="calendar_id_help"  type="spacer" hr="false" class="span-12"
+				<field name="calendar_id_help"  type="note" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_CALENDAR_ID_HELP_LB"
 					description="MOD_SIMPLEICALBLOCK_CALENDAR_ID_HELP"
  					 />
