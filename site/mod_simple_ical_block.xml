@@ -114,77 +114,77 @@
 					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
 				
 			</fieldset>
-			<fieldset name="Documentation" >
-				<field name="calendar_id_help"  type="spacer" hr="false" class="form-field"
+			<fieldset name="Documentation" style=".control-label { width: 100%;}">
+				<field name="calendar_id_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_CALENDAR_ID_HELP"
  					 />
-				<field name="event_count_help"  type="spacer" hr="false" class="form-field"
+				<field name="event_count_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_EVENT_COUNT_HELP"
  					 />
-				<field name="event_period_help"  type="spacer" hr="false" class="form-field"
+				<field name="event_period_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_EVENT_PERIOD_HELP"
  					 />
-				<field name="startwsum_help"  type="spacer" hr="false" class="form-field"
+				<field name="startwsum_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_STARTWSUM_HELP"
  					 />
-				<field name="dateformat_lg_help"  type="spacer" hr="false" class="form-field"
+				<field name="dateformat_lg_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_LG_HELP"
  					 />
-				<field name="dateformat_lgendhelp"  type="spacer" hr="false" class="form-field"
+				<field name="dateformat_lgendhelp"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_LGEND_HELP"
  					 />
-				<field name="dateformat_tsum_help"  type="spacer" hr="false" class="form-field"
+				<field name="dateformat_tsum_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSUM_HELP"
  					 />
-				<field name="dateformat_tsend_help"  type="spacer" hr="false" class="form-field"
+				<field name="dateformat_tsend_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSEND_HELP"
  					 />
-				<field name="dateformat_tstart_help"  type="spacer" hr="false" class="form-field"
+				<field name="dateformat_tstart_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSTART_HELP"
  					 />
-				<field name="dateformat_tend_help"  type="spacer" hr="false" class="form-field"
+				<field name="dateformat_tend_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TEND_HELP"
  					 />
-				<field name="advanced"  type="spacer" hr="false" class="form-field"
+				<field name="advanced"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_ADVANCED_HELP"
  					 />
-				<field name="transient_time_help"  type="spacer" hr="false" class="form-field"
+				<field name="transient_time_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME_HELP"
  					 />
-				<field name="excerptlength_help"  type="spacer" hr="false" class="form-field"
+				<field name="excerptlength_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_EXCERPTLENGTH_HELP"
  					 />
-				<field name="tag_sum_help"  type="spacer" hr="false" class="form-field"
+				<field name="tag_sum_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_TAG_SUM_HELP"
  					 />
-				<field name="suffix_lg_class_help"  type="spacer" hr="false" class="form-field"
+				<field name="suffix_lg_class_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_SUFFIX_LG_CLASS_HELP"
  					 />
-				<field name="suffix_lgi_class_help"  type="spacer" hr="false" class="form-field"
+				<field name="suffix_lgi_class_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_SUFFIX_LGI_CLASS_HELP"
  					 />
-				<field name="suffix_lgia_class_help"  type="spacer" hr="false" class="form-field"
+				<field name="suffix_lgia_class_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_SUFFIX_LGIA_CLASS_HELP"
  					 />
-				<field name="allowhtml_help"  type="spacer" hr="false" class="form-field"
+				<field name="allowhtml_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_ALLOWHTML_HELP"
  					 />
-				<field name="clear_cache_now_help"  type="spacer" hr="false" class="form-field"
+				<field name="clear_cache_now_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_CLEAR_CACHE_NOW_HELP"
  					 />
-				<field name="anchorId_help"  type="spacer" hr="false" class="form-field"
+				<field name="anchorId_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_ANCHORID_HELP"
  					 />
-				<field name="layout_help"  type="spacer" hr="false" class="form-field"
+				<field name="layout_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_LAYOUT_HELP"
  					 />
-				<field name="moduleclass_sfx_help"  type="spacer" hr="false" class="form-field"
+				<field name="moduleclass_sfx_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_MODULECLASS_SFX_HELP"
  					 />
-				<field name="cache_help"  type="spacer" hr="false" class="form-field"
+				<field name="cache_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_CACHE_HELP"
  					 />
-				<field name="cache_time_help"  type="spacer" hr="false" class="form-field"
+				<field name="cache_time_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_CACHE_TIME_HELP"
  					 />
 			</fieldset>
