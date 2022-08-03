@@ -119,98 +119,98 @@
 					label="MOD_SIMPLEICALBLOCK_BASIC_HELP_LB"
  					 />
 				<field name="calendar_id_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_CALENDAR_ID_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_CALENDAR_ID"
 					description="MOD_SIMPLEICALBLOCK_CALENDAR_ID_HELP"
  					 />
 				<field name="event_count_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_EVENT_COUNT_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_EVENT_COUNT"
 					description="MOD_SIMPLEICALBLOCK_EVENT_COUNT_HELP"
  					 />
 				<field name="event_period_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_EVENT_PERIOD_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_EVENT_PERIOD"
 					description="MOD_SIMPLEICALBLOCK_EVENT_PERIOD_HELP"
  					 />
 				<field name="startwsum_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_STARTWSUM_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_STARTWSUM"
 					description="MOD_SIMPLEICALBLOCK_STARTWSUM_HELP"
  					 />
 				<field name="dateformat_lg_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_LG_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_LG"
 					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_LG_HELP"
  					 />
 				<field name="dateformat_lgendhelp"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_LGEND_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_LGEND"
 					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_LGEND_HELP"
  					 />
 				<field name="dateformat_tsum_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSUM_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSUM"
 					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSUM_HELP"
  					 />
 				<field name="dateformat_tsend_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSEND_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSEND"
 					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSEND_HELP"
  					 />
 				<field name="dateformat_tstart_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSTART_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSTART"
 					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSTART_HELP"
  					 />
 				<field name="dateformat_tend_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TEND_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TEND"
 					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_TEND_HELP"
  					 />
 				<field name="advanced_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_ADVANCED_HELP_LB"
  					 />
 				<field name="transient_time_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME"
 					description="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME_HELP"
  					 />
 				<field name="excerptlength_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_EXCERPTLENGTH_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_EXCERPTLENGTH"
 					description="MOD_SIMPLEICALBLOCK_EXCERPTLENGTH_HELP"
  					 />
 				<field name="tag_sum_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_TAG_SUM_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_TAG_SUM"
 					description="MOD_SIMPLEICALBLOCK_TAG_SUM_HELP"
  					 />
 				<field name="suffix_lg_class_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_SUFFIX_LG_CLASS_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_SUFFIX_LG_CLASS"
 					description="MOD_SIMPLEICALBLOCK_SUFFIX_LG_CLASS_HELP"
  					 />
 				<field name="suffix_lgi_class_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_SUFFIX_LGI_CLASS_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_SUFFIX_LGI_CLASS"
 					description="MOD_SIMPLEICALBLOCK_SUFFIX_LGI_CLASS_HELP"
  					 />
 				<field name="suffix_lgia_class_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_SUFFIX_LGIA_CLASS_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_SUFFIX_LGIA_CLASS"
 					description="MOD_SIMPLEICALBLOCK_SUFFIX_LGIA_CLASS_HELP"
  					 />
 				<field name="allowhtml_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_ALLOWHTML_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_ALLOWHTML"
 					description="MOD_SIMPLEICALBLOCK_ALLOWHTML_HELP"
  					 />
 				<field name="clear_cache_now_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_CLEAR_CACHE_NOW_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_CLEAR_CACHE_NOW"
 					description="MOD_SIMPLEICALBLOCK_CLEAR_CACHE_NOW_HELP"
  					 />
 				<field name="anchorId_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_ANCHORID_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_ANCHORID"
 					description="MOD_SIMPLEICALBLOCK_ANCHORID_HELP"
  					 />
 				<field name="layout_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_LAYOUT_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_LAYOUT"
 					description="MOD_SIMPLEICALBLOCK_LAYOUT_HELP"
  					 />
 				<field name="moduleclass_sfx_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_MODULECLASS_SFX_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_MODULECLASS_SFX"
 					description="MOD_SIMPLEICALBLOCK_MODULECLASS_SFX_HELP"
  					 />
 				<field name="cache_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_CACHE_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_CACHE"
 					description="MOD_SIMPLEICALBLOCK_CACHE_HELP"
  					 />
 				<field name="cache_time_help"  type="note" hr="false" class="span-12"
-					label="MOD_SIMPLEICALBLOCK_CACHE_TIME_HELP_LB"
+					label="MOD_SIMPLEICALBLOCK_CACHE_TIME"
 					description="MOD_SIMPLEICALBLOCK_CACHE_TIME_HELP"
  					 />
 			</fieldset>
