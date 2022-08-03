@@ -115,6 +115,9 @@
 				
 			</fieldset>
 			<fieldset name="Documentation" style=".control-label { width: 100%;}">
+				<field name="basic_help"  type="spacer" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_BASIC_HELP"
+ 					 />
 				<field name="calendar_id_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_CALENDAR_ID_HELP"
  					 />
@@ -145,7 +148,7 @@
 				<field name="dateformat_tend_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TEND_HELP"
  					 />
-				<field name="advanced"  type="spacer" hr="false" class="span-12"
+				<field name="advanced_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_ADVANCED_HELP"
  					 />
 				<field name="transient_time_help"  type="spacer" hr="false" class="span-12"
