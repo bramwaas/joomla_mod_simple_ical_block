@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module"   client="site" method="upgrade">
 	<name>Simple iCal Block</name>
-	<creationDate>1-8-2022</creationDate>	
+	<creationDate>3-8-2022</creationDate>	
 	<author>A.H.C. Waasdorp</author>
 	<copyright>Copyright (C) 2022 - 2022 A.H.C. Waasdorp, All rights reserved.</copyright>
 	<license> http://www.gnu.org/licenses GNU/GPL</license>
 	<authorEmail>contact@waasdorpsoekhan.nl</authorEmail>
 	<authorUrl>http://www.waasdorpsoekhan.nl</authorUrl>
-	<version>0.0.4</version>
+	<version>0.0.5</version>
 	<description>Simple Google Calendar Outlook Events Module</description>
 	<namespace path="src">WaasdorpSoekhan\Module\Simpleicalblock</namespace>
 		<!-- Site Main File Copy Section -->
@@ -113,6 +113,80 @@
 					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
 					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
 				
+			</fieldset>
+			<fieldset name="Documentation" >
+				<field name="calendar_id_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_CALENDAR_ID_HELP"
+ 					 />
+				<field name="event_count_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_EVENT_COUNT_HELP"
+ 					 />
+				<field name="event_period_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_EVENT_PERIOD_HELP"
+ 					 />
+				<field name="startwsum_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_STARTWSUM_HELP"
+ 					 />
+				<field name="dateformat_lg_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_LG_HELP"
+ 					 />
+				<field name="dateformat_lgendhelp"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_LGEND_HELP"
+ 					 />
+				<field name="dateformat_tsum_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSUM_HELP"
+ 					 />
+				<field name="dateformat_tsend_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSEND_HELP"
+ 					 />
+				<field name="dateformat_tstart_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSTART_HELP"
+ 					 />
+				<field name="dateformat_tend_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_DATEFORMAT_TEND_HELP"
+ 					 />
+				<field name="advanced"  type="spacer" hr="true"
+					label="MOD_SIMPLEICALBLOCK_ADVANCED_HELP"
+ 					 />
+				<field name="transient_time_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME_HELP"
+ 					 />
+				<field name="excerptlength_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_EXCERPTLENGTH_HELP"
+ 					 />
+				<field name="tag_sum_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_TAG_SUM_HELP"
+ 					 />
+				<field name="suffix_lg_class_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_SUFFIX_LG_CLASS_HELP"
+ 					 />
+				<field name="suffix_lgi_class_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_SUFFIX_LGI_CLASS_HELP"
+ 					 />
+				<field name="suffix_lgia_class_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_SUFFIX_LGIA_CLASS_HELP"
+ 					 />
+				<field name="allowhtml_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_ALLOWHTML_HELP"
+ 					 />
+				<field name="clear_cache_now_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_CLEAR_CACHE_NOW_HELP"
+ 					 />
+				<field name="anchorId_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_ANCHORID_HELP"
+ 					 />
+				<field name="layout_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_LAYOUT_HELP"
+ 					 />
+				<field name="moduleclass_sfx_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_MODULECLASS_SFX_HELP"
+ 					 />
+				<field name="cache_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_CACHE_HELP"
+ 					 />
+				<field name="cache_time_help"  type="spacer" hr="false"
+					label="MOD_SIMPLEICALBLOCK_CACHE_TIME_HELP"
+ 					 />
 			</fieldset>
 			
 		</fields>
