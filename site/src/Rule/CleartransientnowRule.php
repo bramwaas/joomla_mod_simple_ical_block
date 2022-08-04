@@ -5,12 +5,8 @@
  *
  * @copyright Copyright (C) 2016 - 2022 Bram Waasdorp. All rights reserved.
  * @license GNU General Public License version 2 or later; see LICENSE.txt
- * 10-9-2020
- * 14-9-2020 removed most references to TWBS 3 SASS files and the files itself.
- * 31-12-2021 restored most references to TWBS 3 SASS files and the files itself.
- * 2-1-2022 node ... containers verplaatst en daarna verwijderd omdat deze niet compatible is met BS3.
- *   most warnings of undefined variables resolved by commenting those statements.
  * 30-1-2022 //TODO namespace will work net earlier than Joomla v4.2 and maybe Administrator and Site must be distinguised.
+ * 31-7-2022 0.0.4 replace transient by cache type 'output'; split transientId in cahegroup and cacheID to distinguish the group in system clear cache
  */
 /* regel voor validatie type compiler, bedoeld om samenstellen en compileren Less bestanden uit te voeren vlak voor
  de save
@@ -20,11 +16,12 @@ namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Rule;
 
 \defined('_JEXEC') or die('caught by _JEXEC');
 
+use Joomla\CMS\Cache\Controller\OutputController;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;   // voor vertalingen???
 use Joomla\CMS\Form\FormRule;
 use Joomla\CMS\Form\Form;
-use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
+// use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 
 
 class CleartransientnowRule extends FormRule
@@ -59,35 +56,30 @@ class CleartransientnowRule extends FormRule
     
     {
         $app = Factory::getApplication();
-        $module_id = $input->get('id');
-        $transientId = 'SimpleicalBlock' . $module_id;
-        
-        
+        $cacheId =  $input->get('id'); // = moduleid = blockid.
+        $cachegroup = 'SimpleicalBlock';
+        $transientId = $cachegroup . $cacheId;
+        $options = array(
+            'lifetime'     => 1,
+            'caching'      => true,
+            'language'     => 'en-GB',
+            'application'  => 'site',
+        );
+        $cachecontroller = new OutputController($options);
         if  (htmlspecialchars($value) == '1')
-        
         { /* clear transient cache */
-            
-            
             try {
-                /* start try */
-                $succes = SimpleicalblockHelper::delete_transient($transientId);
+                $succes = $cachecontroller->cache->remove($cacheId, $cachegroup);
                 $app->enqueueMessage(Text::sprintf('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEARED', $transientId), 'message');
-                /* end try */
             }
             catch (\Exception $e)
             {
                 $app->enqueueMessage(Text::sprintf('MOD_SIMPLEICALBLOCK_TRANSIENT_CLEAR_FAILED', $transientId, $e->getMessage()), 'error');
                 return false;
             }
-            
             /* end clear transient cache */
         }
-        
-        
         return true;
-        /* eind test */
     }
-    /* eind WsaFormRuleCompiler */
 }
-
 ?>

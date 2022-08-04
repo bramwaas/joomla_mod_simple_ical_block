@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module"   client="site" method="upgrade">
 	<name>Simple iCal Block</name>
-	<creationDate>26-7-2022</creationDate>	
+	<creationDate>3-8-2022</creationDate>	
 	<author>A.H.C. Waasdorp</author>
 	<copyright>Copyright (C) 2022 - 2022 A.H.C. Waasdorp, All rights reserved.</copyright>
 	<license> http://www.gnu.org/licenses GNU/GPL</license>
 	<authorEmail>contact@waasdorpsoekhan.nl</authorEmail>
 	<authorUrl>http://www.waasdorpsoekhan.nl</authorUrl>
-	<version>0.0.3</version>
-	<description>Simple Google Calendar Outlook Events Module</description>
+	<version>0.0.5</version>
+	<description><![CDATA[<style type="text/css">.sib-info {color: #3f48cc;} .sib-img {display: inline-block; width: 2em; height:auto; margin-right: 1em;} </style>
+	<div class="sib-info"><p><img class="sib-img" src="../modules/mod_simple_ical_block/assets/simpleicalicon128x128.svg" />Simple Google Calendar Outlook Events Module</p></div>
+	]]></description>
 	<namespace path="src">WaasdorpSoekhan\Module\Simpleicalblock</namespace>
 		<!-- Site Main File Copy Section -->
 	<!-- Note the folder attribute: This attribute describes the folder
@@ -19,46 +21,15 @@
 		<filename>mod_simple_ical_block.xml</filename>
 		<filename>index.html</filename>
 		<!-- filename>joomla.asset.json</filename -->
-        <folder>sql</folder>
 		<folder>assets</folder>
 		<folder>language</folder>
 		<folder>src</folder>
 		<folder>tmpl</folder>
 	</files>
-	<!-- media destination="mod_simple_ical_block" folder="assets">
-		<folder>css</folder>
-		<folder>js</folder>
-	</media -->
-	<!--languages folder="site/language/">
-		<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.ini</language>
-		<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.sys.ini</language>
-	</languages -->
-		<!-- Administration Module Menu Section -->
-	<!--  administration>
-		<languages folder="admin/language/">
-			<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.ini</language>
-			<language tag="en-GB">en-GB/en-GB.mod_simple_ical_block.sys.ini</language>
-		</languages>
-	</administration -->
-	
 	
 	<!-- scriptfile>mod_simple_ical_block.script.php</scriptfile -->
 
- 	<install><!-- Runs on install -->
- 		<sql>
-			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
-		</sql>
-	</install>
-	<uninstall><!-- Runs on uninstall -->
- 		<sql>
-			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
-		</sql>
-	</uninstall>
-	<update><!-- Runs on update -->
- 		<schemas>
-			<schemapath type="mysql">sql/updates/mysql</schemapath>
-		</schemas>
-	</update>
+
 
 	<config>
 		<fields name="params"  
@@ -146,11 +117,111 @@
 					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
 				
 			</fieldset>
+			<fieldset name="Documentation" style=".control-label { width: 100%;}">
+				<field name="basic_help"  type="spacer" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_BASIC_HELP_LB"
+ 					 />
+				<field name="calendar_id_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_CALENDAR_ID"
+					description="MOD_SIMPLEICALBLOCK_CALENDAR_ID_HELP"
+ 					 />
+				<field name="event_count_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_CNT_EVENTS"
+					description="MOD_SIMPLEICALBLOCK_EVENT_COUNT_HELP"
+ 					 />
+				<field name="event_period_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_PR_EVENTS"
+					description="MOD_SIMPLEICALBLOCK_EVENT_PERIOD_HELP"
+ 					 />
+				<field name="startwsum_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_STARTWSUM"
+					description="MOD_SIMPLEICALBLOCK_STARTWSUM_HELP"
+ 					 />
+				<field name="dateformat_lg_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_DF_LG"
+					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_LG_HELP"
+ 					 />
+				<field name="dateformat_lgendhelp"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_DF_LGEND"
+					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_LGEND_HELP"
+ 					 />
+				<field name="dateformat_tsum_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_DF_TSUM"
+					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSUM_HELP"
+ 					 />
+				<field name="dateformat_tsend_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_DF_TSUMEND"
+					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSEND_HELP"
+ 					 />
+				<field name="dateformat_tstart_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_DF_TSTART"
+					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSTART_HELP"
+ 					 />
+				<field name="dateformat_tend_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_DF_TEND"
+					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_TEND_HELP"
+ 					 />
+				<field name="advanced_help"  type="spacer" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_ADVANCED_HELP_LB"
+ 					 />
+				<field name="transient_time_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME"
+					description="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME_HELP"
+ 					 />
+				<field name="excerptlength_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_EXCERPTL"
+					description="MOD_SIMPLEICALBLOCK_EXCERPTLENGTH_HELP"
+ 					 />
+				<field name="tag_sum_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_TAG_SUM"
+					description="MOD_SIMPLEICALBLOCK_TAG_SUM_HELP"
+ 					 />
+				<field name="suffix_lg_class_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_SFLG"
+					description="MOD_SIMPLEICALBLOCK_SUFFIX_LG_CLASS_HELP"
+ 					 />
+				<field name="suffix_lgi_class_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_SFLGI"
+					description="MOD_SIMPLEICALBLOCK_SUFFIX_LGI_CLASS_HELP"
+ 					 />
+				<field name="suffix_lgia_class_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_SFLGIA"
+					description="MOD_SIMPLEICALBLOCK_SUFFIX_LGIA_CLASS_HELP"
+ 					 />
+				<field name="allowhtml_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_ALLOWHTML"
+					description="MOD_SIMPLEICALBLOCK_ALLOWHTML_HELP"
+ 					 />
+				<field name="clear_cache_now_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_CCN"
+					description="MOD_SIMPLEICALBLOCK_CLEAR_CACHE_NOW_HELP"
+ 					 />
+				<field name="anchorId_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_ANCHORID"
+					description="MOD_SIMPLEICALBLOCK_ANCHORID_HELP"
+ 					 />
+				<field name="layout_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_LAYOUT_HELP_LB"
+					description="MOD_SIMPLEICALBLOCK_LAYOUT_HELP"
+ 					 />
+				<field name="moduleclass_sfx_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_MODULECLASS_SFX_HELP_LB"
+					description="MOD_SIMPLEICALBLOCK_MODULECLASS_SFX_HELP"
+ 					 />
+				<field name="cache_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_CACHE_HELP_LB"
+					description="MOD_SIMPLEICALBLOCK_CACHE_HELP"
+ 					 />
+				<field name="cache_time_help"  type="note" hr="false" class="span-12"
+					label="MOD_SIMPLEICALBLOCK_CACHE_TIME_HELP_LB"
+					description="MOD_SIMPLEICALBLOCK_CACHE_TIME_HELP"
+ 					 />
+			</fieldset>
 			
 		</fields>
 	</config>
-    <!-- updateservers>
-	<server type="extension" priority="1" name="WsaCarousel Slider / Carousel Module"><![CDATA[https://www.waasdorpsoekhan.nl/update/wsacarousel/mod_wsacarousel-update.xml]]></server>
-    </updateservers  -->
+    <updateservers>
+	<server type="extension" priority="1" name="Module Simple iCal Block"><![CDATA[https://www.waasdorpsoekhan.nl/update/simpleicalblock/mod_simple_ical_block-update.xml]]></server>
+    </updateservers>
 	
 </extension>

@@ -24,6 +24,7 @@
  * along with simpleicalblock. If not, see <http://www.gnu.org/licenses/>.
  * 0.0.3 replaced defaults for dateformats by "", because we also use empty format to skip the field.
  *  Added space to sanitize html class because it it also used for more classes.
+ * 0.0.4 removed selfmade transient functions because we now use Joomla standard cache type output to replace wp_transient. 
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
@@ -52,111 +53,10 @@ class SimpleicalblockHelper
      *
      * @return void 
      */
-    static function delete_transient($transientId)
-    {
-        $db    = Factory::getDbo();
-        $query = $db->getQuery(true)
-        ->delete($db->quoteName('#__simpleicalblock'))
-        ->where($db->quoteName('transient_id') . " = '" . $transientId ."'");
-        $db->setQuery($query);
-        try
-        {
-           return $db->execute();
-        }
-        catch (\RuntimeException $e)
-        {
-            Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ' Delete: ' . $e->getMessage(), 'warning');
-            return FALSE;
-        }
-    }
     /**
-     * Retrieves transient data stored with transientId and still valid.
-     *
-     * @param string  $transientId    Id for the transient ( $transientId = 'SimpleicalBlock'  . $instance['blockid']   ;)
-     *
-     * @return        $data or false when transient with transientId doesn't exist or is not valid. 
-     */
-    static function get_transient($transientId)
-    {
-        if (isset($transientId) && ' ' < $transientId) {
-        $db    = Factory::getDbo();
-        $query = $db->getQuery(true)
-        ->select($db->quoteName(['a.transient_blob', 'a.transient_expires']))
-        ->from($db->quoteName('#__simpleicalblock', 'a'))
-        ->where($db->quoteName('a.transient_id') . " = '" . $transientId . "' and " . $db->quoteName('a.transient_expires') . ' > ' . time());
-        $db->setQuery($query);
-        try
-        {
-            $transient_blob = unserialize(base64_decode($db->loadResult()));
-        }
-        catch (\RuntimeException $e)
-        {
-            Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ' Get:', 'error');
-            return false;
-        }
-        return $transient_blob;
-        } else 
-        {
-            Factory::getApplication()->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENTID_EMPTY'), 'warning');
-            return false;
-        }
-    }
-    /**
-     * Creates or updates transient data to store (cache) data that are valid for a period of time.
-     *
-     * @param string  $transientId    Id for the transient
-     *                $transientData  data to store serialized to store objects, base64endoced to prevent issues with backslash or other escape chars. 
-     *        integer $transientTime  time in seconds that the stored data is valid. 
-     *
-     * @return boolean true on succes.
-     */
-    static function set_transient($transientId, $transientData, $transientTime)
-    {
-        if ((isset($transientId) && ' ' < $transientId) && isset($transientData)) {
-            $transientExpiresTS = time() + ((isset($transientTime) && 0 < intval($transientTime)) ? intval($transientTime) : 0 );
-            $transientDataS = base64_encode(serialize($transientData));
-            $db    = Factory::getDbo();
-            $query = $db->getQuery(true)
-            ->select($db->quoteName(['a.id']))
-            ->from($db->quoteName('#__simpleicalblock', 'a'))
-            ->where($db->quoteName('a.transient_id') . " = '" . $transientId ."'");
-            $db->setQuery($query);
-            try
-            {
-                $found = FALSE;
-                if (!(NULL === $db->loadResult()))  $found = TRUE;
-            }
-            catch (\RuntimeException $e)
-            {
-                Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ' Set1: ' . $e->getMessage(), 'warning');
-            }
-            try {
-                 $query->clear();
-                 if ($found){
-                     $query->update($db->quoteName('#__simpleicalblock', 'a'))
-                     ->set([$db->quoteName('transient_blob') . " = '" . $transientDataS . "'", $db->quoteName('transient_expires') . " = " . $transientExpiresTS ])
-                     ->where($db->quoteName('a.transient_id') . " = '" . $transientId ."'");
-                 } else {
-                     $query->insert($db->quoteName('#__simpleicalblock'), true)
-                     ->columns($db->quoteName(['transient_id', 'transient_blob', 'transient_expires']))
-                     ->values("'" . $transientId . "', '" . $transientDataS . "', " . $transientExpiresTS );
-                 }
-                 $db->setQuery($query);
-                 return $db->execute();
-             } catch (\RuntimeException $e) 
-             {
-                 Factory::getApplication()->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED') . ' Set2: ' . $e->getMessage(), 'error');
-                  return false;
-             }
-        } else
-        {
-            Factory::getApplication()->enqueueMessage(Text::_('MOD_SIMPLEICALBLOCK_TRANSIENTID_OR_DATA_EMPTY'), 'warning'); 
-            return false;
-        }
-    }
-    /**
-     * copied from WP
+     * copied from WP sanitize_html_class, and added space as allowed character to accomadate multiple classes in one string.
      * Strips the string down to A-Z,a-z,0-9,_,-. If this results in an empty string then it will return the alternative value supplied.
+     * 
      * @param string $class
      * @param string $fallback
      * @return string sanitized class or fallback.

@@ -4,19 +4,21 @@
  *
  * note that this class does not implement all ICS functionality.
  *   bw 20220630 copied from Wordpress simple-google-icalendar-widget version 2.0.3
- * Version: 0.0.1
+ * Version: 0.0.4
  *  replace WP transient_functions by  SimpleicalblockHelper::transient_functions ;
  *  replace wp_remote_get by Http->get(), create Http object in var $http  construct and thus necesary to instantiate the class
  *  replace get_option('timezone_string') and wp_timezone by Factory::getApplication()->get('offset') and ...
  *  replace wp_date( by date(
+ *  replace transient by cache type 'output'; split transientId in cahegroup and cacheID to distinguish the group in system clear cache
  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 
+use Joomla\CMS\Cache\Controller\OutputController;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Http\Http;
+use Joomla\Http\Http;
 
-use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
+// use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 
 class IcsParser {
     
@@ -236,7 +238,7 @@ END:VCALENDAR';
     /**
      * The Http object to get the ical data (for Joomla
      *
-     * @var   Joomla\CMS\Http\Http
+     * @var   Joomla\Http\Http
      * @since  0.0.1
      */
     protected $http = NULL;
@@ -260,7 +262,7 @@ END:VCALENDAR';
      */
     public function __construct()
     {
-        $this->http = new \Joomla\Http\Http();
+        $this->http = new Http();
         $this->timezone_string = Factory::getApplication()->get('offset');
     }
     /**
@@ -790,9 +792,10 @@ END:VCALENDAR';
      * Gets data from calender or transient cache
      *
      * @param array $instance the block attributes
-     *    ['blockid']      to create transientid
-     *    ['calendar_id']  id or url of the calender to fetch data
-     *    ['event_count']  max number of events to return
+     *    ['blockid'] to create transientid
+     *    ['transient_time'] time the transient cache is valid in minutes.
+     *    ['calendar_id'] id or url of the calender to fetch data
+     *    ['event_count'] max number of events to return
      *    ['event_period'] max number of days after now to fetch events.
      *    ['allowhtml'] allow html in output.
      *
@@ -800,13 +803,22 @@ END:VCALENDAR';
      */
     function getData($instance)
     {
-        $transientId = 'SimpleicalBlock'  . $instance['blockid']   ;
-//        if ($instance['clear_cache_now']) SimpleicalblockHelper::delete_transient($transientId);
-        if(false === ($data = SimpleicalblockHelper::get_transient($transientId))) {
+        $cacheId =  $instance['blockid']   ;
+        $cachegroup = 'SimpleicalBlock';
+        $options = array(
+            'lifetime'     => (int) $instance['transient_time'], // seems to be minutes already, not saved, evaluated on get
+            'caching'      => true,
+            'language'     => 'en-GB',
+            'application'  => 'site',
+        );
+        $cachecontroller = new OutputController($options);
+        
+        //        if ($instance['clear_cache_now']) $cachecontroller->cache->remove($cacheId, $cachegroup);
+        if(false === ( $data = $cachecontroller->get( $cacheId, $cachegroup))) {
             $data = $this->fetch(  $instance,  );
             // do not cache data if fetching failed
             if ($data) {
-                SimpleicalblockHelper::set_transient($transientId, $data, $instance['cache_time']*60);
+                $cachecontroller->store($data, $cacheId, $cachegroup );
             }
         }
         return $data;
