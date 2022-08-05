@@ -15,7 +15,7 @@ Block module that displays events from a public google calendar or iCal file.
 
 Simple block to display events from a public google calendar, microsoft office outlook calendar or an other iCal file, in the style of your website.
 
-This simple widget fetches events from a public google calendar (or other calendar in iCal format) and displays them in simple list allowing you to fully adapt to your website by applying all kinds of CSS. 
+This simple block fetches events from a public google calendar (or other calendar in iCal format) and displays them in simple list allowing you to fully adapt to your website by applying all kinds of CSS. 
 Google offers some HTML snippets to embed your public Google Calendar into your website.
 These are great, but as soon as you want to make a few adjustments to the styling, that goes beyond changing some colors, they're not enough.
 
@@ -79,11 +79,11 @@ In case you have all kinds of HTML in your appointments a plugin that uses the A
 = How to use Microsoft Office Outlook Calendar? =
 
 First you have to share your calendar to make it public available, or to create and share a public calendar. Private calendars cannot be accessed by this plugin.
-Then publish it as  an ICS link and use this link address. (something like https://outlook.live.com/owa/calendar/00000000-0000-0000-0000-000000000000/.../cid-.../calendar.ics) (works from version 1.3.1 of this widget)
+Then publish it as  an ICS link and use this link address. (something like https://outlook.live.com/owa/calendar/00000000-0000-0000-0000-000000000000/.../cid-.../calendar.ics) 
 [More details on Microsoft Office support](https://support.office.com/en-us/article/share-your-calendar-in-outlook-on-the-web-7ecef8ae-139c-40d9-bae2-a23977ee58d5)
 
 = How to use Apple Calendar (iCloud Mac/ios)? =
-Choose the calendar you want to share. On the line of that calendar click on the radio symbol (a dot with three quart circles) right in that line. In the pop up Calendar Sharing check the box Public Calendar. You see the url below something like webcal://p99-caldav.icloud.com/published/2/MTQxNzk0NDA2NjE0MTc5AAAAAXt2Dy6XXXXXPXXxuZnTLDV9xr6A6_m4r_GU83Qj. Click on Copy Link and OK. Paste that in the "Calendar ID, or iCal URL" field of the widget.   
+Choose the calendar you want to share. On the line of that calendar click on the radio symbol (a dot with three quart circles) right in that line. In the pop up Calendar Sharing check the box Public Calendar. You see the url below something like webcal://p99-caldav.icloud.com/published/2/MTQxNzk0NDA2NjE0MTc5AAAAAXt2Dy6XXXXXPXXxuZnTLDV9xr6A6_m4r_GU83Qj. Click on Copy Link and OK. Paste that in the "Calendar ID, or iCal URL" field of the block.   
 [More details on the MacObserver](https://www.macobserver.com/tips/quick-tip/icloud-configure-public-calendar)
 
 = Error: cURL error 28: Operation timed out after 5000 milliseconds with 0 bytes received =
@@ -93,8 +93,7 @@ Probably the calendar is not public (yet), you can copy the link before the agen
 = I only see the headline of the calendar, but no events =
 
 There are no events found within the selection. Test e.g. with an appointment for the next day and refresh the cache or wait till the cache is refreshed.
-Check if you can download the ics file you have designated in the widget with a browser. At least if it is a text file with the first line "BEGIN:VCALENDAR" and further lines "BEGIN:VEVENT" and lines "END:VEVENT". If you cannot resolve it, you can of course report an error / question in our
-[community support forum](https://wordpress.org/support/plugin/simple-google-icalendar-widget)
+Check if you can download the ics file you have designated in the block with a browser. At least if it is a text file with the first line "BEGIN:VCALENDAR" and further lines "BEGIN:VEVENT" and lines "END:VEVENT".   
 
 = Can I use an event calendar that only uses days, not times, like a holiday calendar? =
 
@@ -111,21 +110,21 @@ Check if you can download the ics file you have designated in the widget with a 
 * Exclude events on EXDATE from repeat 
 * By day month or by monthday (BYDAY, BYMONTH, BYMONTHDAY) no other by
   (not parsed: BYYEARDAY, BYSETPOS, BYHOUR, BYMINUTE, WKST)
-* Respects Timezone and Day Light Saving time. Build and tested with Iana timezones as used in php, Google, and Apple now also tested with Microsoft timezones and unknown timezones. For unknown timezone-names using the default timezone of Wordpress (probably the local timezone).  
+* Respects Timezone and Day Light Saving time. Build and tested with Iana timezones as used in php, Google, and Apple now also tested with Microsoft timezones and unknown timezones. For unknown timezone-names using the default timezone of te site  (probably the local timezone set in Joomla administration).  
 
 === Recurrent events, Timezone,  Daylight Saving Time ===
 
-Most users don't worry about time zones. The timezonesettings for the Wordpress installation, the calendar application and the events are all the same local time.   
-In that case this widget displays all the recurrent events with the same local times. The widget uses the properties of the starttime and duration (in seconds) of the first event to calculate the repeated events. Only when a calculated time is removed during the transition from ST (standard time, wintertime) to DST (daylight saving time, summertime) by turning the clock forward one hour, both the times of the event (in case the starttime is in the transition period) or only the endtime (in case only the endtime is in the transition period)  of the event are pushed forward with that same amount.    
+Most users don't worry about time zones. The timezonesettings for the Joomla installation, the calendar application and the events are all the same local time.   
+In that case this block displays all the recurrent events with the same local times. The block uses the properties of the starttime and duration (in seconds) of the first event to calculate the repeated events. Only when a calculated time is removed during the transition from ST (standard time, wintertime) to DST (daylight saving time, summertime) by turning the clock forward one hour, both the times of the event (in case the starttime is in the transition period) or only the endtime (in case only the endtime is in the transition period)  of the event are pushed forward with that same amount.    
 But because the transition period is usually very early in the morning, few events will be affected by it.   
 If a calculated day does not exist (i.e. February 30), the event will not be displayed.
 
-For users in countries that span more time zones, or users with international events the calendar applications can add a timezone to the event times. So users in other timezones will see the event in the local time in there timezone (as set in timezone settings of Wordpress) corresponding with the time.    
-The widget uses the starttime, the timezone of the starttime and the duration in seconds of the starting event as starting point for the calculation of repeating events. So if the events startime timezone does'not use daylight savings time and and timezone of the widget (i.e. the WP timezone setting) does. During DST the events are placed an hour later than during ST. (more precisely shift with the local time shift). Similar the events will be shift earlier when the timezone of the starttime has DST and the timezone of the widget not.   
+For users in countries that span more time zones, or users with international events the calendar applications can add a timezone to the event times. So users in other timezones will see the event in the local time in there timezone (as set in timezone settings of Joomla) corresponding with the time.    
+The block uses the starttime, the timezone of the starttime and the duration in seconds of the starting event as starting point for the calculation of repeating events. So if the events startime timezone does'not use daylight savings time and and timezone of the block (i.e. the Joomla timezone setting) does. During DST the events are placed an hour later than during ST. (more precisely shift with the local time shift). Similar the events will be shift earlier when the timezone of the starttime has DST and the timezone of the block not.   
 
 Of course the same effect is achieved when you schedule the events in UTC time despite using local time DST in your standard calendar.     
-In these cases, a special effect can be seen of using the same times twice in the transition from DST to ST. If an event lasts less than an hour. If the event starts in the last hour of DST then it ends in the first hour of ST in between the local clocks are turned back one hour. According to the local clock, the end time is therefore before the start time. And the widget shows it like this too. The same also applies to Google and Outlook calendar.   
-Theoretically this could als happen with recurrent events in the same timezone with DST. In my test I have seen this with Google calendar but not with the widget. PHP and therefore the widget uses the second occurence if the result of the calculation is a time that is twice available (at least in the version of PHP I use), but using the first occurence like Google does is just as good.    
+In these cases, a special effect can be seen of using the same times twice in the transition from DST to ST. If an event lasts less than an hour. If the event starts in the last hour of DST then it ends in the first hour of ST in between the local clocks are turned back one hour. According to the local clock, the end time is therefore before the start time. And the block shows it like this too. The same also applies to Google and Outlook calendar.   
+Theoretically this could als happen with recurrent events in the same timezone with DST. In my test I have seen this with Google calendar but not with the block. PHP and therefore the block uses the second occurence if the result of the calculation is a time that is twice available (at least in the version of PHP I use), but using the first occurence like Google does is just as good.    
 
 Test results and comparison with Google and Outlook calendar [with the wordpress plugin](https://wordpress.org/plugins/simple-google-icalendar-widget/) have been uploaded as DayLightSavingTime test.xlsx.
   
