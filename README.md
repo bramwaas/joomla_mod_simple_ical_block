@@ -1,13 +1,13 @@
 === Simple Google Calendar Outlook Events Block Module ===
-Plugin name: Simple Google Calendar Outlook Events Block Widget
+Plugin name: Simple Google Calendar Outlook Events Block
 Contributors: bramwaas
 Tags: Event Calendar, Google Calendar, iCal, Events, Block, Calendar, iCalendar, Outlook, iCloud
 Requires at least: 4.0.0
 Tested up to: 4.1
 Requires PHP: 5.3.0
 Stable tag: trunk
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License: GPLv3 or later
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
  
 Block module that displays events from a public google calendar or iCal file.
  
@@ -24,7 +24,7 @@ These are great, but as soon as you want to make a few adjustments to the stylin
 * Calendar block module to display appointments/events of a public Google calendar or other iCal file.
 * Small footprint, uses only Google ID of the calendar, or ICS link for Outlook, or Url of iCal file, to get event information via iCal
 * Manage events in Google Calendar, or other iCalendar source.
-* Fully adaptable to your website with CSS. Output in unordered list with Bootstrap 4 listgroup classes and toggle for details.
+* Fully adaptable to your website with CSS. Output in unordered list with Bootstrap 4 or 5 listgroup classes and toggle for collapsed details.
 * Choose date / time format in settings screen that best suits your website.
 * Displays per event DTSTART, DTEND, SUMMARY, LOCATION and DESCRIPTION. DTSTART is required other components are optional. 
 * Displays most common repeating events. Frequency Yearly, Monthly, Weekly, Dayly (not Hourly, Minutely and smaller periods)    
@@ -70,7 +70,7 @@ You can use HTML in the most Calendars, but the result in the plugin may not be 
 First: The original iCalendar standard allowed only plain text as part of an event description. Thus probably most calendars will only give the plain text in the Description in the iCal output.   
 Secondly: For security reasons  this plugin filters the HTML to convert characters that have special significance in HTML to the corresponding HTML-entities.
   
-But from version 1.5.0 of this widget if you trust the output of the calendar application you can set a checkbox to allow safe html in the output. So if you manage to get the HTML in the Description and you set the checkbox to allow safe html you can get that html in the output, with exception of the tags that are not considered safe like SCRIPT and unknown tags.          
+But in this module if you trust the output of the calendar application you can set a checkbox to allow safe html in the output. So if you manage to get the HTML in the Description and you set the checkbox to allow safe html you can get that html in the output, with exception of the tags that are not considered safe like SCRIPT and unknown tags.          
 And with the current version  of Google Calendar you can put some HTML in the Description output. (April 2022) I saw the  &lt;a&gt; (link),  &lt;b&gt; (bold text),  &lt;i&gt; (italic text),  &lt;u&gt; (underlined text) and  &lt;br&gt; (linebreak) tags in a iCal description. They will all come through with "Allow safe html" checkbox on. Probably even more is possible, but Google can also decide to comply more to the standard.   
 With Microsoft Outlook the HTML tags were filtered away and did not reach the iCal description         
 
@@ -83,7 +83,7 @@ Then publish it as  an ICS link and use this link address. (something like https
 [More details on Microsoft Office support](https://support.office.com/en-us/article/share-your-calendar-in-outlook-on-the-web-7ecef8ae-139c-40d9-bae2-a23977ee58d5)
 
 = How to use Apple Calendar (iCloud Mac/ios)? =
-Choose the calendar you want to share. On the line of that calendar click on the radio symbol (a dot with three quart circles) right in that line. In the pop up Calendar Sharing check the box Public Calendar. You see the url below something like webcal://p59-caldav.icloud.com/published/2/MTQxNzk0NDA2NjE0MTc5AAAAAXt2Dy6XXXXXPXXxuZnTLDV9xr6A6_m3r_GU33Qj. Click on Copy Link and OK. Paste that in the "Calendar ID, or iCal URL" field of the widget (before version 1.3.1 you have to change webcal in https)
+Choose the calendar you want to share. On the line of that calendar click on the radio symbol (a dot with three quart circles) right in that line. In the pop up Calendar Sharing check the box Public Calendar. You see the url below something like webcal://p99-caldav.icloud.com/published/2/MTQxNzk0NDA2NjE0MTc5AAAAAXt2Dy6XXXXXPXXxuZnTLDV9xr6A6_m4r_GU83Qj. Click on Copy Link and OK. Paste that in the "Calendar ID, or iCal URL" field of the widget.   
 [More details on the MacObserver](https://www.macobserver.com/tips/quick-tip/icloud-configure-public-calendar)
 
 = Error: cURL error 28: Operation timed out after 5000 milliseconds with 0 bytes received =
@@ -98,15 +98,7 @@ Check if you can download the ics file you have designated in the widget with a 
 
 = Can I use an event calendar that only uses days, not times, like a holiday calendar? =
 
- Yes you can, since v1.2.0, I have tested with [https://p24-calendars.icloud.com/holiday/NL_nl.ics](https://p24-calendars.icloud.com/holiday/NL_nl.ics) .
-
-= How do I contribute to Simple Google Calendar Outlook Events Widget? =
-
-We'd love your help! Here's a few things you can do:
-
-* [Rate our plugin](https://wordpress.org/support/view/plugin-reviews/simple-google-icalendar-widget?postform#postform) and help spread the word!
-* report bugs or help answer questions in our [community support forum](https://wordpress.org/support/plugin/simple-google-icalendar-widget).
-* Help add or update a [plugin translation](https://translate.wordpress.org/projects/wp-plugins/simple-google-icalendar-widget).
+ Yes you can,  I have tested this with [https://p24-calendars.icloud.com/holiday/NL_nl.ics](https://p24-calendars.icloud.com/holiday/NL_nl.ics) .
 
 == Documentation ==
 
@@ -162,8 +154,8 @@ see http://www.ietf.org/rfc/rfc5545.txt for specification of te ical format.
 
 == Copyright and License ==
 
-This project is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html), version 2 or later.
-2017&thinsp;&ndash;&thinsp;2022 &copy; [Bram Waasdorp](http://www.waasdorpsoekhan.nl).
+This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.0.html), version 3 or later.
+2022&thinsp;&ndash;&thinsp;2022 &copy; [Bram Waasdorp](http://www.waasdorpsoekhan.nl).
 
 == Upgrade Notice ==
 
@@ -189,3 +181,4 @@ This project is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-lic
 * 0.0.3 module works in Joomla 4, with #example, with file, and with requests from google or outlook. 
   Output is comparable with output of WP block but more testing and clean up needs to be done.
 * 0.0.4 replace transient by cache type 'output'; split transientId in cachegroup and cacheID to distinguish the group in a.o. System/Clear cache
+* 0.0.5 added documentation tab in settings form.
