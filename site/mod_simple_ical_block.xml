@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module"   client="site" method="upgrade">
 	<name>Simple iCal Block</name>
-	<creationDate>3-8-2022</creationDate>	
+	<creationDate>6-8-2022</creationDate>	
 	<author>A.H.C. Waasdorp</author>
 	<copyright>Copyright (C) 2022 - 2022 A.H.C. Waasdorp, All rights reserved.</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
@@ -9,7 +9,7 @@
 	<authorUrl>http://www.waasdorpsoekhan.nl</authorUrl>
 	<version>0.0.5</version>
 	<description><![CDATA[<style type="text/css">.sib-info {color: #3f48cc;} .sib-img {display: inline-block; width: 2em; height:auto; margin-right: 1em;} </style>
-	<div class="sib-info"><p><img class="sib-img" src="../modules/mod_simple_ical_block/assets/simpleicalicon128x128.svg" />Simple Google Calendar Outlook Events Module</p></div>
+	<div class="sib-info"><p><img class="sib-img" src="../modules/mod_simple_ical_block/assets/simpleicalicon128x128.svg" />Simple iCal Block</p></div>
 	]]></description>
 	<namespace path="src">WaasdorpSoekhan\Module\Simpleicalblock</namespace>
 		<!-- Site Main File Copy Section -->
