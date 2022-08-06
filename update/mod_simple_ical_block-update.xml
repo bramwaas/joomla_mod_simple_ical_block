@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <updates>
 	<update>
-		<name>Module Simple iCal Block</name>
-		<description>Module Simple iCal Block Update</description>
+		<name>Simple iCal Block</name>
+		<description>Simple iCal Block Module Update</description>
 		<element>mod_simple_ical_block</element>
 		<type>module</type>
-		<version>0.0.5</version>
-		<infourl title="Module Simple iCal Block">https://github.com/bramwaas/joomla_mod_simple_ical_block/blob/main/README.md</infourl>
+		<version>0.0.6</version>
+		<infourl title="Simple iCal Block Module">https://github.com/bramwaas/joomla_mod_simple_ical_block/blob/main/README.md</infourl>
 		<downloads>
 			<downloadurl type="full" format="zip">https://github.com/bramwaas/joomla_mod_simple_ical_block/archive/refs/tags/v0.0.5.zip</downloadurl>
 		</downloads>

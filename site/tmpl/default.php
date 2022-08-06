@@ -4,7 +4,7 @@
  * @package simpleicalblock
  * @subpackage simpleicalblock Module
  * @copyright Copyright (C) 2022 -2022 simpleicalblock, All rights reserved.
- * @license http://www.gnu.org/licenses GNU/GPL
+ * @license GNU General Public License version 3 or later
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl
  * @developer A.H.C. Waasdorp

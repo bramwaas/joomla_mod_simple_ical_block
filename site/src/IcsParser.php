@@ -1,6 +1,8 @@
 <?php
 /**
  * a simple ICS parser.
+ * @copyright Copyright (C) 2022 - 2022 Bram Waasdorp. All rights reserved.
+ * @license GNU General Public License version 3 or later
  *
  * note that this class does not implement all ICS functionality.
  *   bw 20220630 copied from Wordpress simple-google-icalendar-widget version 2.0.3
@@ -13,12 +15,12 @@
  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
+// no direct access
+defined('_JEXEC') or die ('Restricted access');
 
 use Joomla\CMS\Cache\Controller\OutputController;
 use Joomla\CMS\Factory;
 use Joomla\Http\Http;
-
-// use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 
 class IcsParser {
     
