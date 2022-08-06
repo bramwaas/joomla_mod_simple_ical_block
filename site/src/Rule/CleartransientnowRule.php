@@ -4,7 +4,7 @@
  * @subpackage Templates.dna
  *
  * @copyright Copyright (C) 2022 - 2022 Bram Waasdorp. All rights reserved.
- * @license GNU General Public License version 2 or later; see LICENSE.txt
+ * @license GNU General Public License version 3 or later
  * used to Clear calendar cache before save when asked for.
  * 31-7-2022 0.0.4 replace transient by cache type 'output'; split transientId in cahegroup and cacheID to distinguish the group in system clear cache
  */

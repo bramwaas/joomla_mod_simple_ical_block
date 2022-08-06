@@ -3,7 +3,7 @@
  * @package     simple_ical_block
  * @subpackage  mod_simple_ical_block  Module
  * @copyright Copyright (C) 2022 - 2022 AHC Waasdorp, All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @license     GNU General Public License version 3 or later
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl
  * @developer AHC Waasdorp
