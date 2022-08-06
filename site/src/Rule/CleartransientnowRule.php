@@ -3,15 +3,12 @@
  * @package Joomla.Site
  * @subpackage Templates.dna
  *
- * @copyright Copyright (C) 2016 - 2022 Bram Waasdorp. All rights reserved.
+ * @copyright Copyright (C) 2022 - 2022 Bram Waasdorp. All rights reserved.
  * @license GNU General Public License version 2 or later; see LICENSE.txt
- * 30-1-2022 //TODO namespace will work net earlier than Joomla v4.2 and maybe Administrator and Site must be distinguised.
+ * used to Clear calendar cache before save when asked for.
  * 31-7-2022 0.0.4 replace transient by cache type 'output'; split transientId in cahegroup and cacheID to distinguish the group in system clear cache
  */
-/* regel voor validatie type compiler, bedoeld om samenstellen en compileren Less bestanden uit te voeren vlak voor
- de save
- 
- */
+
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Rule;
 
 \defined('_JEXEC') or die('caught by _JEXEC');

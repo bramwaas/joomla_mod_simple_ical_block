@@ -1,5 +1,5 @@
-=== Simple Google Calendar Outlook Events Block Module ===
-Plugin name: Simple Google Calendar Outlook Events Block
+=== Simple iCal Block ===
+Plugin name: Simple iCal Block
 Contributors: bramwaas
 Tags: Event Calendar, Google Calendar, iCal, Events, Block, Calendar, iCalendar, Outlook, iCloud
 Requires at least: 4.0.0
