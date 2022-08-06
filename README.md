@@ -181,3 +181,4 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
   Output is comparable with output of WP block but more testing and clean up needs to be done.
 * 0.0.4 replace transient by cache type 'output'; split transientId in cachegroup and cacheID to distinguish the group in a.o. System/Clear cache
 * 0.0.5 added documentation tab in settings form.
+* 0.0.6 added translations and adjustments to comply with JED checker.
