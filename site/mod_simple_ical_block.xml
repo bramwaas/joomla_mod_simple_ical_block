@@ -12,23 +12,15 @@
 	]]></description>
 	<namespace path="src">WaasdorpSoekhan\Module\Simpleicalblock</namespace>
 		<!-- Site Main File Copy Section -->
-	<!-- Note the folder attribute: This attribute describes the folder
-		to copy FROM in the package to install therefore files copied
-		in this section are copied from /site/ in the package -->
  	<files>
 		<filename module="mod_simple_ical_block">mod_simple_ical_block.php</filename>
 		<filename>mod_simple_ical_block.xml</filename>
 		<filename>index.html</filename>
-		<!-- filename>joomla.asset.json</filename -->
 		<folder>assets</folder>
 		<folder>language</folder>
 		<folder>src</folder>
 		<folder>tmpl</folder>
 	</files>
-	
-	<!-- scriptfile>mod_simple_ical_block.script.php</scriptfile -->
-
-
 
 	<config>
 		<fields name="params"  
@@ -53,8 +45,6 @@
 				<field name="dateformat_tstart" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TSTART" description="MOD_SIMPLEICALBLOCK_DF_TSTART_DESC" hint="MOD_SIMPLEICALBLOCK_DF_TSTART_DFT"  />
 				<field name="dateformat_tend" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TEND" description="MOD_SIMPLEICALBLOCK_DF_TEND_DESC" hint="MOD_SIMPLEICALBLOCK_DF_TEND_DFT" />
 			</fieldset>
-			
-			
 			<fieldset name="advanced">
 				<field name="transient_time" type="number" min="2" max="1440" default="60"  label="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME" description="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME_DESC" hint="60" />
 				<field name="excerptlength" type="text" default="" label="MOD_SIMPLEICALBLOCK_EXCERPTL" description="MOD_SIMPLEICALBLOCK_EXCERPTL_DESC" />
@@ -85,7 +75,6 @@
 					<option value="1">JYES</option>
 				</field>
 				<field name="anchorId" type="text" default="" label="MOD_SIMPLEICALBLOCK_ANCHORID" description="MOD_SIMPLEICALBLOCK_ANCHORID_DESC" />
-
 				<field
 					name="layout"
 					type="modulelayout"
@@ -216,11 +205,10 @@
 					description="MOD_SIMPLEICALBLOCK_CACHE_TIME_HELP"
  					 />
 			</fieldset>
-			
 		</fields>
 	</config>
     <updateservers>
-	<server type="extension" priority="1" name="Module Simple iCal Block"><![CDATA[https://www.waasdorpsoekhan.nl/update/simpleicalblock/mod_simple_ical_block-update.xml]]></server>
+		<server type="extension" priority="1" name="Module Simple iCal Block"><![CDATA[https://www.waasdorpsoekhan.nl/update/simpleicalblock/mod_simple_ical_block-update.xml]]></server>
     </updateservers>
 	
 </extension>
