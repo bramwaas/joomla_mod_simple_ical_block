@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module"   client="site" method="upgrade">
 	<name>Simple iCal Block</name>
-	<creationDate>7-8-2022</creationDate>	
+	<creationDate>8-8-2022</creationDate>	
 	<author>A.H.C. Waasdorp</author>
 	<copyright>Copyright (C) 2022 - 2022 A.H.C. Waasdorp, All rights reserved.</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
@@ -36,14 +36,14 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="dateformat_lg" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_LG" description="MOD_SIMPLEICALBLOCK_DF_LG_DESC" hint="MOD_SIMPLEICALBLOCK_DF_DFT" />
+				<field name="dateformat_lg" type="text" default="l jS \of F" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_LG" description="MOD_SIMPLEICALBLOCK_DF_LG_DESC" />
 				<field name="dateformat_lgend" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_LGEND" description="MOD_SIMPLEICALBLOCK_DF_LGEND_DESC" />
 
-				<field name="dateformat_tsum" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TSUM" description="MOD_SIMPLEICALBLOCK_DF_TSUM_DESC" hint="MOD_SIMPLEICALBLOCK_DF_TSUM_DFT" />
+				<field name="dateformat_tsum" type="text" default="G:i " filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TSUM" description="MOD_SIMPLEICALBLOCK_DF_TSUM_DESC" />
 				<field name="dateformat_tsend" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TSUMEND" description="MOD_SIMPLEICALBLOCK_DF_TSUMEND_DESC" />
 
-				<field name="dateformat_tstart" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TSTART" description="MOD_SIMPLEICALBLOCK_DF_TSTART_DESC" hint="MOD_SIMPLEICALBLOCK_DF_TSTART_DFT"  />
-				<field name="dateformat_tend" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TEND" description="MOD_SIMPLEICALBLOCK_DF_TEND_DESC" hint="MOD_SIMPLEICALBLOCK_DF_TEND_DFT" />
+				<field name="dateformat_tstart" type="text" default="G:i" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TSTART" description="MOD_SIMPLEICALBLOCK_DF_TSTART_DESC" />
+				<field name="dateformat_tend" type="text" default=" - G:i " filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TEND" description="MOD_SIMPLEICALBLOCK_DF_TEND_DESC" />
 			</fieldset>
 			<fieldset name="advanced">
 				<field name="transient_time" type="number" min="2" max="1440" default="60"  label="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME" description="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME_DESC" hint="60" />
