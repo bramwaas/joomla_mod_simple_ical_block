@@ -36,7 +36,10 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="dateformat_lg" type="text" default="l jS \of F" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_LG" description="MOD_SIMPLEICALBLOCK_DF_LG_DESC" />
+				<field name="dateformat_lg" type="combo" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_LG" description="MOD_SIMPLEICALBLOCK_DF_LG_DESC" >
+					<option value=""></option>
+					<option value="2">MOD_SIMPLEICALBLOCK_DF_DFT</option>
+				</field>
 				<field name="dateformat_lgend" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_LGEND" description="MOD_SIMPLEICALBLOCK_DF_LGEND_DESC" />
 
 				<field name="dateformat_tsum" type="text" default="G:i " filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TSUM" description="MOD_SIMPLEICALBLOCK_DF_TSUM_DESC" />
