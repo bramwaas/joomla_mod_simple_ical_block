@@ -845,31 +845,34 @@ END:VCALENDAR';
             $httpBody = self::$example_events;
         }
         else  {
-            try {
             $url = self::getCalendarUrl($instance['calendar_id']);
-            $httpResponse =  $this->http->get($url);
+            try {
+                $httpResponse =  $this->http->get($url);
+            } catch(\Exception $e) {
+//                echo '<!-- 1 error http->get(' . $url . '): message:' . $e->getMessage(). ' -->';
+                return false;
+            }
             if (200 != $httpResponse->code) {
                 echo '<!-- ' . $url . ' not found ' . 'fall back to https:// -->';
-                $httpResponse =  $this->http->get('https://' . explode('://', $url)[1]);
-                if (200 != $httpResponse->code) {
+                try {
+                    $httpResponse =  $this->http->get('https://' . explode('://', $url)[1]);
+                    if (200 != $httpResponse->code) {
 //                    echo '<!-- Simple iCal Block: ', $httpResponse->code, ' -->';
+                    return false;
+                }
+                } catch(\Exception $e) {
+//                echo '<!-- 2 error http->get(' . $url . '): message:' . $e->getMessage(). ' -->';
                     return false;
                 }
             }
             $httpBody = $httpResponse->body;
-            } catch(\Exception $e) {
-                echo '<!-- error http->get(' . $url . '): message:' . $e->getMessage(). ' -->';
-                return false;
-            }
         }
-        
        
         try {
             $penddate = strtotime("+$period day");
 //            $parser = new IcsParser(); // is already instantiated before getData call in Joomla
             $this->parse($httpBody, $penddate, $instance['event_count'],  $instance );
-            
-            $events = $this->getFutureEvents($penddate);
+             $events = $this->getFutureEvents($penddate);
             return self::limitArray($events, $instance['event_count']);
         } catch(\Exception $e) {
             return null;
