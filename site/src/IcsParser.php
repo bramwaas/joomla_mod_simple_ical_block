@@ -866,6 +866,10 @@ END:VCALENDAR';
                 }
             }
             $httpBody = $httpResponse->body;
+            if (!empty($httpResponse->headers['Content-Encoding']) ) {
+                if ('gzip' == $httpResponse->headers['Content-Encoding'][0]) $httpBody = gzdecode($httpBody);
+                if ('deflate' == $httpResponse->headers['Content-Encoding'][0]) $httpBody = gzinflate($httpBody);
+            }
         }
        
         try {
