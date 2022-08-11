@@ -846,10 +846,10 @@ END:VCALENDAR';
             try {
             $url = self::getCalendarUrl($instance['calendar_id']);
             $httpResponse =  $this->http->get($url);
-            if ($httpResponse->code != 200) {
+            if (200 != $httpResponse->code) {
                 echo '<!-- ' . $url . ' not found ' . 'fall back to https:// -->';
                 $httpResponse =  $this->http('https://' . explode('://', $url)[1]);
-                if ($httpResponse->code != 200) {
+                if (200 != $httpResponse->code) {
                     echo 'Simple iCal Block: ', $httpResponse->code;
                     return false;
                 }
