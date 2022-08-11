@@ -880,8 +880,8 @@ END:VCALENDAR';
     private static function getCalendarUrl($calId)
     {
         $protocol = strtolower(explode('://', $calId)[0]);
-        if (array_search($protocol, array('http', 'https', 'webcal')))
         echo '<b>', $protocol , '</b>';
+        if (array_search($protocol, array('http', 'https', 'webcal')))
         { if ('webcal' == $protocol) $calid = 'http://' . explode('://', $calId)[1];
             return $calId; }
         else
