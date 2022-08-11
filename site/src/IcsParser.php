@@ -848,7 +848,7 @@ END:VCALENDAR';
             $httpResponse =  $this->http->get($url);
             if (200 != $httpResponse->code) {
                 echo '<!-- ' . $url . ' not found ' . 'fall back to https:// -->';
-                $httpResponse =  $this->http('https://' . explode('://', $url)[1]);
+                $httpResponse =  $this->http->get('https://' . explode('://', $url)[1]);
                 if (200 != $httpResponse->code) {
                     echo 'Simple iCal Block: ', $httpResponse->code;
                     return false;
