@@ -12,7 +12,9 @@
  *  replace get_option('timezone_string') and wp_timezone by Factory::getApplication()->get('offset') and ...
  *  replace wp_date( by date(
  *  replace transient by cache type 'output'; split transientId in cahegroup and cacheID to distinguish the group in system clear cache
- 
+ * 0.0.6 11-8-2022 added try around $this->http->get($url) 
+ *   added start index 1 to array protocols to prevent 0 as incorrect fals result of array_search to 'http'. 
+ *   replaced webcal:// by http:// before http->get() to prevent curl protocol error.  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -850,7 +852,7 @@ END:VCALENDAR';
                 echo '<!-- ' . $url . ' not found ' . 'fall back to https:// -->';
                 $httpResponse =  $this->http->get('https://' . explode('://', $url)[1]);
                 if (200 != $httpResponse->code) {
-                    echo 'Simple iCal Block: ', $httpResponse->code;
+//                    echo '<!-- Simple iCal Block: ', $httpResponse->code, ' -->';
                     return false;
                 }
             }
@@ -861,10 +863,7 @@ END:VCALENDAR';
             }
         }
         
-//        if(!is_array($httpData) || !array_key_exists('body', $httpData)) {
-//            return false;
-//        }
-        
+       
         try {
             $penddate = strtotime("+$period day");
 //            $parser = new IcsParser(); // is already instantiated before getData call in Joomla
@@ -880,11 +879,11 @@ END:VCALENDAR';
     private static function getCalendarUrl($calId)
     {
         $protocol = strtolower(explode('://', $calId)[0]);
-        if (false === array_search($protocol, array('http', 'https', 'webcal')))
-        { return 'https://www.google.com/calendar/ical/'.$calId.'/public/basic.ics'; }
+        if (array_search($protocol, array(1 => 'http', 'https', 'webcal')))
+        { if ('webcal' == $protocol) $calId = 'http://' . explode('://', $calId)[1];
+           return $calId; }
         else
-        { if ('webcal' == $protocol) $calid = 'http://' . explode('://', $calId)[1];
-            return $calId; }
+        { return 'https://www.google.com/calendar/ical/'.$calId.'/public/basic.ics'; }
     }
     
     private static function limitArray($arr, $limit)
