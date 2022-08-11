@@ -881,7 +881,8 @@ END:VCALENDAR';
     {
         $protocol = strtolower(explode('://', $calId)[0]);
         if (array_search($protocol, array('http', 'https', 'webcal')))
-        { return $calId; }
+        { if ('webcal' == $protocol) $calid = 'http://' . explode('://', $url)[1];
+            return $calId; }
         else
         { return 'https://www.google.com/calendar/ical/'.$calId.'/public/basic.ics'; }
     }
