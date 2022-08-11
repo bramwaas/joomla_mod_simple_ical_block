@@ -880,12 +880,11 @@ END:VCALENDAR';
     private static function getCalendarUrl($calId)
     {
         $protocol = strtolower(explode('://', $calId)[0]);
-        echo '<b>', $protocol , '</b>';
-        if (array_search($protocol, array('http', 'https', 'webcal')))
+        if (false === array_search($protocol, array('http', 'https', 'webcal')))
+        { return 'https://www.google.com/calendar/ical/'.$calId.'/public/basic.ics'; }
+        else
         { if ('webcal' == $protocol) $calid = 'http://' . explode('://', $calId)[1];
             return $calId; }
-        else
-        { return 'https://www.google.com/calendar/ical/'.$calId.'/public/basic.ics'; }
     }
     
     private static function limitArray($arr, $limit)
