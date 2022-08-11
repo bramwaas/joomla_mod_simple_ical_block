@@ -843,6 +843,7 @@ END:VCALENDAR';
             $httpBody = self::$example_events;
         }
         else  {
+            try {
             $url = self::getCalendarUrl($instance['calendar_id']);
             $httpResponse =  $this->http->get($url);
             if ($httpResponse->code != 200) {
@@ -854,6 +855,10 @@ END:VCALENDAR';
                 }
             }
             $httpBody = $httpResponse->body;
+            } catch(\Exception $e) {
+                echo '<!-- error http->get(' . $url . '): message:' . $e->getMessage(). ' -->';
+                return false;
+            }
         }
         
 //        if(!is_array($httpData) || !array_key_exists('body', $httpData)) {
