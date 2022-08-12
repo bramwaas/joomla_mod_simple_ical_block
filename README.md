@@ -182,3 +182,4 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 * 0.0.4 replace transient by cache type 'output'; split transientId in cachegroup and cacheID to distinguish the group in a.o. System/Clear cache
 * 0.0.5 added documentation tab in settings form.
 * 0.0.6 added translations and adjustments to comply with JED checker.
+* 0.0.7 added Accept-Encoding: '' to http request to tell curl to handle compressed results (known by the server) correct.

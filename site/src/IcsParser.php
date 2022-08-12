@@ -14,7 +14,10 @@
  *  replace transient by cache type 'output'; split transientId in cahegroup and cacheID to distinguish the group in system clear cache
  * 0.0.6 11-8-2022 added try around $this->http->get($url) 
  *   added start index 1 to array protocols to prevent 0 as incorrect fals result of array_search to 'http'. 
- *   replaced webcal:// by http:// before http->get() to prevent curl protocol error.  
+ *   replaced webcal:// by http:// before http->get() to prevent curl protocol error.
+ * 0.0.7 moved instantiating http to fetch() because it is only local used.
+ *   Added header Accept-Encoding: '' (['headers' => ['Accept-Encoding' => ['']]]); to let curl accepts all known encoding and decode them.
+ *   Then removed decoding based on Content-Encoding header because body is already decoded by curl.  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -240,21 +243,12 @@ END:VCALENDAR';
      */
     protected $now = NULL;
     /**
-     * The Http object to get the ical data (for Joomla
-     *
-     * @var   Joomla\Http\Http
-     * @since  0.0.1
-     */
-    protected $http = NULL;
-    /**
      * The timezone string from the configuration.
      *
      * @var   string
      * @since  0.0.1
      */
     protected $timezone_string = 'UTC';
-    
-    
     /**
      * Constructor.
      *
@@ -266,7 +260,6 @@ END:VCALENDAR';
      */
     public function __construct()
     {
-        $this->http = new Http();
         $this->timezone_string = Factory::getApplication()->get('offset');
     }
     /**
@@ -846,8 +839,9 @@ END:VCALENDAR';
         }
         else  {
             $url = self::getCalendarUrl($instance['calendar_id']);
+            $http = new Http(['headers' => ['Accept-Encoding' => ['']]]); //accepts known encoding and decodes.
             try {
-                $httpResponse =  $this->http->get($url);
+                $httpResponse =  $http->get($url);
             } catch(\Exception $e) {
 //                echo '<!-- 1 error http->get(' . $url . '): message:' . $e->getMessage(). ' -->';
                 return false;
@@ -855,7 +849,7 @@ END:VCALENDAR';
             if (200 != $httpResponse->code) {
                 echo '<!-- ' . $url . ' not found ' . 'fall back to https:// -->';
                 try {
-                    $httpResponse =  $this->http->get('https://' . explode('://', $url)[1]);
+                    $httpResponse =  $http->get('https://' . explode('://', $url)[1]);
                     if (200 != $httpResponse->code) {
 //                    echo '<!-- Simple iCal Block: ', $httpResponse->code, ' -->';
                     return false;
@@ -866,10 +860,6 @@ END:VCALENDAR';
                 }
             }
             $httpBody = $httpResponse->body;
-            if (!empty($httpResponse->headers['Content-Encoding']) ) {
-                if ('gzip' == $httpResponse->headers['Content-Encoding'][0]) $httpBody = gzdecode($httpBody);
-                if ('deflate' == $httpResponse->headers['Content-Encoding'][0]) $httpBody = gzinflate($httpBody);
-            }
         }
        
         try {
