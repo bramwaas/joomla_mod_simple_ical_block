@@ -12,7 +12,12 @@
  *  replace get_option('timezone_string') and wp_timezone by Factory::getApplication()->get('offset') and ...
  *  replace wp_date( by date(
  *  replace transient by cache type 'output'; split transientId in cahegroup and cacheID to distinguish the group in system clear cache
- 
+ * 0.0.6 11-8-2022 added try around $this->http->get($url) 
+ *   added start index 1 to array protocols to prevent 0 as incorrect fals result of array_search to 'http'. 
+ *   replaced webcal:// by http:// before http->get() to prevent curl protocol error.
+ * 0.0.7 moved instantiating http to fetch() because it is only local used.
+ *   Added header Accept-Encoding: '' (['headers' => ['Accept-Encoding' => ['']]]); to let curl accepts all known encoding and decode them.
+ *   Then removed decoding based on Content-Encoding header because body is already decoded by curl.  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -238,21 +243,12 @@ END:VCALENDAR';
      */
     protected $now = NULL;
     /**
-     * The Http object to get the ical data (for Joomla
-     *
-     * @var   Joomla\Http\Http
-     * @since  0.0.1
-     */
-    protected $http = NULL;
-    /**
      * The timezone string from the configuration.
      *
      * @var   string
      * @since  0.0.1
      */
     protected $timezone_string = 'UTC';
-    
-    
     /**
      * Constructor.
      *
@@ -264,7 +260,6 @@ END:VCALENDAR';
      */
     public function __construct()
     {
-        $this->http = new Http();
         $this->timezone_string = Factory::getApplication()->get('offset');
     }
     /**
@@ -844,28 +839,34 @@ END:VCALENDAR';
         }
         else  {
             $url = self::getCalendarUrl($instance['calendar_id']);
-            $httpResponse =  $this->http->get($url);
-            if ($httpResponse->code != 200) {
+            $http = new Http(['headers' => ['Accept-Encoding' => ['']]]); //accepts known encoding and decodes.
+            try {
+                $httpResponse =  $http->get($url);
+            } catch(\Exception $e) {
+//                echo '<!-- 1 error http->get(' . $url . '): message:' . $e->getMessage(). ' -->';
+                return false;
+            }
+            if (200 != $httpResponse->code) {
                 echo '<!-- ' . $url . ' not found ' . 'fall back to https:// -->';
-                $httpResponse =  $this->http('https://' . explode('://', $url)[1]);
-                if ($httpResponse->code != 200) {
-                    echo 'Simple iCal Block: ', $httpResponse->code;
+                try {
+                    $httpResponse =  $http->get('https://' . explode('://', $url)[1]);
+                    if (200 != $httpResponse->code) {
+//                    echo '<!-- Simple iCal Block: ', $httpResponse->code, ' -->';
+                    return false;
+                }
+                } catch(\Exception $e) {
+//                echo '<!-- 2 error http->get(' . $url . '): message:' . $e->getMessage(). ' -->';
                     return false;
                 }
             }
             $httpBody = $httpResponse->body;
         }
-        
-//        if(!is_array($httpData) || !array_key_exists('body', $httpData)) {
-//            return false;
-//        }
-        
+       
         try {
             $penddate = strtotime("+$period day");
 //            $parser = new IcsParser(); // is already instantiated before getData call in Joomla
             $this->parse($httpBody, $penddate, $instance['event_count'],  $instance );
-            
-            $events = $this->getFutureEvents($penddate);
+             $events = $this->getFutureEvents($penddate);
             return self::limitArray($events, $instance['event_count']);
         } catch(\Exception $e) {
             return null;
@@ -875,8 +876,9 @@ END:VCALENDAR';
     private static function getCalendarUrl($calId)
     {
         $protocol = strtolower(explode('://', $calId)[0]);
-        if (array_search($protocol, array('http', 'https', 'webcal')))
-        { return $calId; }
+        if (array_search($protocol, array(1 => 'http', 'https', 'webcal')))
+        { if ('webcal' == $protocol) $calId = 'http://' . explode('://', $calId)[1];
+           return $calId; }
         else
         { return 'https://www.google.com/calendar/ical/'.$calId.'/public/basic.ics'; }
     }

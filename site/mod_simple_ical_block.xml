@@ -1,35 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module"   client="site" method="upgrade">
 	<name>Simple iCal Block</name>
-	<creationDate>6-8-2022</creationDate>	
+	<creationDate>13-8-2022</creationDate>	
 	<author>A.H.C. Waasdorp</author>
 	<copyright>Copyright (C) 2022 - 2022 A.H.C. Waasdorp, All rights reserved.</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<authorEmail>contact@waasdorpsoekhan.nl</authorEmail>
 	<authorUrl>http://www.waasdorpsoekhan.nl</authorUrl>
-	<version>0.0.6</version>
-	<description><![CDATA[<style type="text/css">.sib-info {color: #3f48cc;} .sib-img {display: inline-block; width: 2em; height:auto; margin-right: 1em;} </style>
-	<div class="sib-info"><p><img class="sib-img" src="../modules/mod_simple_ical_block/assets/simpleicalicon128x128.svg" />Simple iCal Block</p></div>
+	<version>2.0.0</version>
+	<description><![CDATA[<div class="sib-info" style="color: #3f48cc;"><p><img class="sib-img" src="../modules/mod_simple_ical_block/assets/simpleicalicon128x128.svg" style="display: inline-block; width: 2em; height:auto; margin-right: 0.5em;"/>Simple iCal Calendar Events Block</p></div>
 	]]></description>
 	<namespace path="src">WaasdorpSoekhan\Module\Simpleicalblock</namespace>
 		<!-- Site Main File Copy Section -->
-	<!-- Note the folder attribute: This attribute describes the folder
-		to copy FROM in the package to install therefore files copied
-		in this section are copied from /site/ in the package -->
  	<files>
 		<filename module="mod_simple_ical_block">mod_simple_ical_block.php</filename>
 		<filename>mod_simple_ical_block.xml</filename>
 		<filename>index.html</filename>
-		<!-- filename>joomla.asset.json</filename -->
 		<folder>assets</folder>
 		<folder>language</folder>
 		<folder>src</folder>
 		<folder>tmpl</folder>
 	</files>
-	
-	<!-- scriptfile>mod_simple_ical_block.script.php</scriptfile -->
-
-
 
 	<config>
 		<fields name="params"  
@@ -45,17 +36,15 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="dateformat_lg" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_LG" description="MOD_SIMPLEICALBLOCK_DF_LG_DESC" hint="MOD_SIMPLEICALBLOCK_DF_DFT" />
+				<field name="dateformat_lg" type="text" default="l jS \of F" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_LG" description="MOD_SIMPLEICALBLOCK_DF_LG_DESC" />
 				<field name="dateformat_lgend" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_LGEND" description="MOD_SIMPLEICALBLOCK_DF_LGEND_DESC" />
 
-				<field name="dateformat_tsum" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TSUM" description="MOD_SIMPLEICALBLOCK_DF_TSUM_DESC" hint="MOD_SIMPLEICALBLOCK_DF_TSUM_DFT" />
+				<field name="dateformat_tsum" type="text" default="G:i " filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TSUM" description="MOD_SIMPLEICALBLOCK_DF_TSUM_DESC" />
 				<field name="dateformat_tsend" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TSUMEND" description="MOD_SIMPLEICALBLOCK_DF_TSUMEND_DESC" />
 
-				<field name="dateformat_tstart" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TSTART" description="MOD_SIMPLEICALBLOCK_DF_TSTART_DESC" hint="MOD_SIMPLEICALBLOCK_DF_TSTART_DFT"  />
-				<field name="dateformat_tend" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TEND" description="MOD_SIMPLEICALBLOCK_DF_TEND_DESC" hint="MOD_SIMPLEICALBLOCK_DF_TEND_DFT" />
+				<field name="dateformat_tstart" type="text" default="G:i" filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TSTART" description="MOD_SIMPLEICALBLOCK_DF_TSTART_DESC" />
+				<field name="dateformat_tend" type="text" default=" - G:i " filter="raw" label="MOD_SIMPLEICALBLOCK_DF_TEND" description="MOD_SIMPLEICALBLOCK_DF_TEND_DESC" />
 			</fieldset>
-			
-			
 			<fieldset name="advanced">
 				<field name="transient_time" type="number" min="2" max="1440" default="60"  label="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME" description="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME_DESC" hint="60" />
 				<field name="excerptlength" type="text" default="" label="MOD_SIMPLEICALBLOCK_EXCERPTL" description="MOD_SIMPLEICALBLOCK_EXCERPTL_DESC" />
@@ -86,7 +75,6 @@
 					<option value="1">JYES</option>
 				</field>
 				<field name="anchorId" type="text" default="" label="MOD_SIMPLEICALBLOCK_ANCHORID" description="MOD_SIMPLEICALBLOCK_ANCHORID_DESC" />
-
 				<field
 					name="layout"
 					type="modulelayout"
@@ -121,107 +109,106 @@
 				<field name="basic_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_BASIC_HELP_LB"
  					 />
-				<field name="calendar_id_help"  type="note" hr="false" class="span-12"
+				<field name="calendar_id_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_CALENDAR_ID"
 					description="MOD_SIMPLEICALBLOCK_CALENDAR_ID_HELP"
  					 />
-				<field name="event_count_help"  type="note" hr="false" class="span-12"
+				<field name="event_count_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_CNT_EVENTS"
 					description="MOD_SIMPLEICALBLOCK_EVENT_COUNT_HELP"
  					 />
-				<field name="event_period_help"  type="note" hr="false" class="span-12"
+				<field name="event_period_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_PR_EVENTS"
 					description="MOD_SIMPLEICALBLOCK_EVENT_PERIOD_HELP"
  					 />
-				<field name="startwsum_help"  type="note" hr="false" class="span-12"
+				<field name="startwsum_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_STARTWSUM"
 					description="MOD_SIMPLEICALBLOCK_STARTWSUM_HELP"
  					 />
-				<field name="dateformat_lg_help"  type="note" hr="false" class="span-12"
+				<field name="dateformat_lg_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_DF_LG"
 					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_LG_HELP"
  					 />
-				<field name="dateformat_lgendhelp"  type="note" hr="false" class="span-12"
+				<field name="dateformat_lgendhelp"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_DF_LGEND"
 					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_LGEND_HELP"
  					 />
-				<field name="dateformat_tsum_help"  type="note" hr="false" class="span-12"
+				<field name="dateformat_tsum_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_DF_TSUM"
 					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSUM_HELP"
  					 />
-				<field name="dateformat_tsend_help"  type="note" hr="false" class="span-12"
+				<field name="dateformat_tsend_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_DF_TSUMEND"
 					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSEND_HELP"
  					 />
-				<field name="dateformat_tstart_help"  type="note" hr="false" class="span-12"
+				<field name="dateformat_tstart_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_DF_TSTART"
 					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_TSTART_HELP"
  					 />
-				<field name="dateformat_tend_help"  type="note" hr="false" class="span-12"
+				<field name="dateformat_tend_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_DF_TEND"
 					description="MOD_SIMPLEICALBLOCK_DATEFORMAT_TEND_HELP"
  					 />
 				<field name="advanced_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_ADVANCED_HELP_LB"
  					 />
-				<field name="transient_time_help"  type="note" hr="false" class="span-12"
+				<field name="transient_time_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME"
 					description="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME_HELP"
  					 />
-				<field name="excerptlength_help"  type="note" hr="false" class="span-12"
+				<field name="excerptlength_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_EXCERPTL"
 					description="MOD_SIMPLEICALBLOCK_EXCERPTLENGTH_HELP"
  					 />
-				<field name="tag_sum_help"  type="note" hr="false" class="span-12"
+				<field name="tag_sum_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_TAG_SUM"
 					description="MOD_SIMPLEICALBLOCK_TAG_SUM_HELP"
  					 />
-				<field name="suffix_lg_class_help"  type="note" hr="false" class="span-12"
+				<field name="suffix_lg_class_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_SFLG"
 					description="MOD_SIMPLEICALBLOCK_SUFFIX_LG_CLASS_HELP"
  					 />
-				<field name="suffix_lgi_class_help"  type="note" hr="false" class="span-12"
+				<field name="suffix_lgi_class_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_SFLGI"
 					description="MOD_SIMPLEICALBLOCK_SUFFIX_LGI_CLASS_HELP"
  					 />
-				<field name="suffix_lgia_class_help"  type="note" hr="false" class="span-12"
+				<field name="suffix_lgia_class_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_SFLGIA"
 					description="MOD_SIMPLEICALBLOCK_SUFFIX_LGIA_CLASS_HELP"
  					 />
-				<field name="allowhtml_help"  type="note" hr="false" class="span-12"
+				<field name="allowhtml_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_ALLOWHTML"
 					description="MOD_SIMPLEICALBLOCK_ALLOWHTML_HELP"
  					 />
-				<field name="clear_cache_now_help"  type="note" hr="false" class="span-12"
+				<field name="clear_cache_now_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_CCN"
 					description="MOD_SIMPLEICALBLOCK_CLEAR_CACHE_NOW_HELP"
  					 />
-				<field name="anchorId_help"  type="note" hr="false" class="span-12"
+				<field name="anchorId_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_ANCHORID"
 					description="MOD_SIMPLEICALBLOCK_ANCHORID_HELP"
  					 />
-				<field name="layout_help"  type="note" hr="false" class="span-12"
+				<field name="layout_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_LAYOUT_HELP_LB"
 					description="MOD_SIMPLEICALBLOCK_LAYOUT_HELP"
  					 />
-				<field name="moduleclass_sfx_help"  type="note" hr="false" class="span-12"
+				<field name="moduleclass_sfx_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_MODULECLASS_SFX_HELP_LB"
 					description="MOD_SIMPLEICALBLOCK_MODULECLASS_SFX_HELP"
  					 />
-				<field name="cache_help"  type="note" hr="false" class="span-12"
+				<field name="cache_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_CACHE_HELP_LB"
 					description="MOD_SIMPLEICALBLOCK_CACHE_HELP"
  					 />
-				<field name="cache_time_help"  type="note" hr="false" class="span-12"
+				<field name="cache_time_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_CACHE_TIME_HELP_LB"
 					description="MOD_SIMPLEICALBLOCK_CACHE_TIME_HELP"
  					 />
 			</fieldset>
-			
 		</fields>
 	</config>
     <updateservers>
-	<server type="extension" priority="1" name="Module Simple iCal Block"><![CDATA[https://www.waasdorpsoekhan.nl/update/simpleicalblock/mod_simple_ical_block-update.xml]]></server>
+		<server type="extension" priority="1" name="Module Simple iCal Block"><![CDATA[https://www.waasdorpsoekhan.nl/update/simpleicalblock/mod_simple_ical_block-update.xml]]></server>
     </updateservers>
 	
 </extension>
