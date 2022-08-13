@@ -183,3 +183,4 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 * 0.0.5 added documentation tab in settings form.
 * 0.0.6 added translations and adjustments to comply with JED checker.
 * 0.0.7 added Accept-Encoding: '' to http request to tell curl to handle compressed results (known by the server) correct.
+* 2.0.0 major and minor vesion number aligned with those of Wordpress block with the same functionality and the same code for the IcsParser block apart from CMS specific functions (get_option('timezone_string') / Factory::getApplication()->get('offset'), wp_transient / cache type 'output' and wp_remote_get / Joomla\Http\Http->get()) and temporary wp_date() / date().
