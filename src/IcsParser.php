@@ -17,7 +17,8 @@
  *   replaced webcal:// by http:// before http->get() to prevent curl protocol error.
  * 0.0.7 moved instantiating http to fetch() because it is only local used.
  *   Added header Accept-Encoding: '' (['headers' => ['Accept-Encoding' => ['']]]); to let curl accepts all known encoding and decode them.
- *   Then removed decoding based on Content-Encoding header because body is already decoded by curl.  
+ *   Then removed decoding based on Content-Encoding header because body is already decoded by curl. 
+ * 2.0.1 back to static functions getData() and fetch() only instantiate object in fetch when parsing must be done (like it always was in WP)   
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -611,7 +612,6 @@ END:VCALENDAR';
     * @param  string $ptzid (timezone ID)
     * @return \DateTimeZone object
     */
-    
     private function parseIcsDateTime($datetime, $tzid = '') {
         if (strlen($datetime) < 8) {
             return -1;
@@ -798,7 +798,7 @@ END:VCALENDAR';
      *
      * @return array event objects
      */
-    function getData($instance)
+    static function getData($instance)
     {
         $cacheId =  $instance['blockid']   ;
         $cachegroup = 'SimpleicalBlock';
@@ -812,7 +812,7 @@ END:VCALENDAR';
         
         //        if ($instance['clear_cache_now']) $cachecontroller->cache->remove($cacheId, $cachegroup);
         if(false === ( $data = $cachecontroller->get( $cacheId, $cachegroup))) {
-            $data = $this->fetch(  $instance,  );
+            $data = self::fetch(  $instance,  );
             // do not cache data if fetching failed
             if ($data) {
                 $cachecontroller->store($data, $cacheId, $cachegroup );
@@ -831,7 +831,7 @@ END:VCALENDAR';
      *
      * @return array event objects
      */
-    function fetch( $instance )
+    static function fetch( $instance )
     {
         $period = $instance['event_period'];
         if ('#example' == $instance['calendar_id']){
@@ -864,9 +864,9 @@ END:VCALENDAR';
        
         try {
             $penddate = strtotime("+$period day");
-//            $parser = new IcsParser(); // is already instantiated before getData call in Joomla
-            $this->parse($httpBody, $penddate, $instance['event_count'],  $instance );
-             $events = $this->getFutureEvents($penddate);
+            $parser = new IcsParser(); 
+            $parser->parse($httpBody, $penddate, $instance['event_count'],  $instance );
+            $events = $parser->getFutureEvents($penddate);
             return self::limitArray($events, $instance['event_count']);
         } catch(\Exception $e) {
             return null;

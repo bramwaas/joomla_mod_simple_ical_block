@@ -28,6 +28,7 @@
  *   removed wp esc_attr from sanitizing $e->uid
  *   removed checks isset on attributes because that is already done before.
  *   replaced date( with Date()->format where translation is necessary.
+ * 2.0.1 back to static functions getData() and fetch() only instantiate object in fetch when parsing must be done (like it always was in WP)   
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -70,8 +71,7 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
         $excerptlength = $attributes['excerptlength'];
         $sflgi = $attributes['suffix_lgi_class'];
         $sflgia = $attributes['suffix_lgia_class'];
-        $parser = new IcsParser();
-        $data = $parser->getData($attributes);
+        $data = IcsParser::getData($attributes);
         if (!empty($data) && is_array($data)) {
             date_default_timezone_set($tzid_ui);
             echo '<ul class="list-group' .  $attributes['suffix_lg_class'] . ' simple-ical-widget">';
