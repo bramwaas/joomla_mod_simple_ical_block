@@ -834,43 +834,48 @@ END:VCALENDAR';
     static function fetch( $instance )
     {
         $period = $instance['event_period'];
-        if ('#example' == $instance['calendar_id']){
-            $httpBody = self::$example_events;
-        }
-        else  {
-            $url = self::getCalendarUrl($instance['calendar_id']);
-            $http = new Http(['headers' => ['Accept-Encoding' => ['']]]); //accepts known encoding and decodes.
-            try {
-                $httpResponse =  $http->get($url);
-            } catch(\Exception $e) {
-//                echo '<!-- 1 error http->get(' . $url . '): message:' . $e->getMessage(). ' -->';
-                return false;
+        $penddate = strtotime("+$period day");
+        $parser = new IcsParser();
+        foreach (explode(',', $instance['calendar_id']) as $cal)
+        {
+            list($cal_id, $cal_class) = explode(';', $cal, 2);
+        
+            if ('#example' == $cal_id){
+                $httpBody = self::$example_events;
             }
-            if (200 != $httpResponse->code) {
-                echo '<!-- ' . $url . ' not found ' . 'fall back to https:// -->';
+            else  {
+                $url = self::getCalendarUrl($cal_id);
+                $http = new Http(['headers' => ['Accept-Encoding' => ['']]]); //accepts known encoding and decodes.
                 try {
-                    $httpResponse =  $http->get('https://' . explode('://', $url)[1]);
-                    if (200 != $httpResponse->code) {
-//                    echo '<!-- Simple iCal Block: ', $httpResponse->code, ' -->';
-                    return false;
-                }
+                    $httpResponse =  $http->get($url);
                 } catch(\Exception $e) {
-//                echo '<!-- 2 error http->get(' . $url . '): message:' . $e->getMessage(). ' -->';
+    //                echo '<!-- 1 error http->get(' . $url . '): message:' . $e->getMessage(). ' -->';
                     return false;
                 }
+                if (200 != $httpResponse->code) {
+                    echo '<!-- ' . $url . ' not found ' . 'fall back to https:// -->';
+                    try {
+                        $httpResponse =  $http->get('https://' . explode('://', $url)[1]);
+                        if (200 != $httpResponse->code) {
+    //                    echo '<!-- Simple iCal Block: ', $httpResponse->code, ' -->';
+                        return false;
+                    }
+                    } catch(\Exception $e) {
+    //                echo '<!-- 2 error http->get(' . $url . '): message:' . $e->getMessage(). ' -->';
+                        return false;
+                    }
+                }
+                $httpBody = $httpResponse->body;
             }
-            $httpBody = $httpResponse->body;
-        }
-       
-        try {
-            $penddate = strtotime("+$period day");
-            $parser = new IcsParser(); 
-            $parser->parse($httpBody, $penddate, $instance['event_count'],  $instance );
-            $events = $parser->getFutureEvents($penddate);
-            return self::limitArray($events, $instance['event_count']);
-        } catch(\Exception $e) {
-            return null;
-        }
+           
+            try {
+                $parser->parse($httpBody, $penddate, $instance['event_count'],  $instance );
+            } catch(\Exception $e) {
+                return null;
+            }
+        } // end foreach
+        $events = $parser->getFutureEvents($penddate);
+        return self::limitArray($events, $instance['event_count']);
     }
     
     private static function getCalendarUrl($calId)
