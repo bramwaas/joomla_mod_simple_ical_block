@@ -873,7 +873,7 @@ END:VCALENDAR';
             }
         } // end foreach
 
-        usort($this->events, array($this, "eventSortComparer"));
+        usort($parser->events, array($parser, "eventSortComparer"));
         $events = $parser->getFutureEvents($penddate);
         return self::limitArray($events, $instance['event_count']);
     }
