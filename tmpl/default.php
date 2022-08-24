@@ -28,7 +28,8 @@
  *   removed wp esc_attr from sanitizing $e->uid
  *   removed checks isset on attributes because that is already done before.
  *   replaced date( with Date()->format where translation is necessary.
- * 2.0.1 back to static functions getData() and fetch() only instantiate object in fetch when parsing must be done (like it always was in WP)   
+ * 2.0.1 back to static functions getData() and fetch() only instantiate object in fetch when parsing must be done (like it always was in WP)  
+ * 2.1.0 add calendar class to list-group-item s 
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -90,7 +91,7 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
                     $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags( $e_dtend_1->format($dflgend, true, true) , $allowed_tags));
                 }
                 $evdtsum = (($e->startisdate === false) ? strip_tags($e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true), $allowed_tags) : '');
-                echo '<li class="list-group-item' .  $sflgi . '">';
+                echo '<li class="list-group-item' .  $sflgi . ' ' . $e->cal_class . '">';
                 if (!$startwsum && $curdate != $evdate ) {
                     $curdate =  $evdate;
                     echo '<span class="ical-date">' . ucfirst($evdate) . '</span>' . (('a' == $attributes['tag_sum'] ) ? '<br>': '');

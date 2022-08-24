@@ -19,6 +19,8 @@
  *   Added header Accept-Encoding: '' (['headers' => ['Accept-Encoding' => ['']]]); to let curl accepts all known encoding and decode them.
  *   Then removed decoding based on Content-Encoding header because body is already decoded by curl. 
  * 2.0.1 back to static functions getData() and fetch() only instantiate object in fetch when parsing must be done (like it always was in WP)   
+ * 2.1.0 calendar_id can be array of ID;class elements; elements foreach in fetch() to parse each element; sort replaced to fetch() after foreach.
+ *   parse() directly add in events in $this->events, add class from new input parameter to each event
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -275,10 +277,9 @@ END:VCALENDAR';
      *
      * @since
      */
-    public function parse($str ,  $penddate,  $pcount, $instance  ) {
+    public function parse($str ,  $penddate,  $pcount, $cal_class = '', $instance  ) {
         $curstr = $str;
         $haveVevent = true;
-        $events = $this->events;
         $this->now = time();
 //        $this->now = (new \DateTime('2022-01-01'))->getTimestamp();
         
@@ -295,7 +296,8 @@ END:VCALENDAR';
                 }
                 $eventStr = trim(substr($eventStr, 0, $endpos), "\n\r\0");
                 $e = $this->parseVevent($eventStr, $instance);
-                $events[] = $e;
+                $e->cal_class = $cal_class;
+                $this->events[] = $e;
                 // Recurring event?
                 if (isset($e->rrule) && $e->rrule !== '') {
                     /* Recurring event, parse RRULE in associative array add appropriate duplicate events
@@ -549,7 +551,7 @@ END:VCALENDAR';
                                                             }
                                                             $en->uid = $i . '_' . $e->uid;
                                                             if ($test > ' ') { 	$en->summary = $en->summary . '<br>Test:' . $test; 	}
-                                                            $events[] = $en;
+                                                            $this->events[] = $en;
                                                     } // copy eevents
                                                     // next eventcount from $e->start
                                                     $i++;
@@ -582,10 +584,6 @@ END:VCALENDAR';
                 $haveVevent = false;
             }
         } while($haveVevent);
-        
-        usort($events, array($this, "eventSortComparer"));
-        
-        $this->events =  $events;
     }
     
     public function getFutureEvents($penddate ) {
@@ -869,11 +867,13 @@ END:VCALENDAR';
             }
            
             try {
-                $parser->parse($httpBody, $penddate, $instance['event_count'],  $instance );
+                $parser->parse($httpBody, $penddate, $instance['event_count'], $cal_class,  $instance );
             } catch(\Exception $e) {
                 return null;
             }
         } // end foreach
+
+        usort($this->events, array($this, "eventSortComparer"));
         $events = $parser->getFutureEvents($penddate);
         return self::limitArray($events, $instance['event_count']);
     }
