@@ -278,7 +278,7 @@ END:VCALENDAR';
     public function parse($str ,  $penddate,  $pcount, $instance  ) {
         $curstr = $str;
         $haveVevent = true;
-        $events = array();
+        $events = $this->events;
         $this->now = time();
 //        $this->now = (new \DateTime('2022-01-01'))->getTimestamp();
         
@@ -585,7 +585,7 @@ END:VCALENDAR';
         
         usort($events, array($this, "eventSortComparer"));
         
-        $this->events = array_merge($this->events, $events) ;
+        $this->events =  $events;
     }
     
     public function getFutureEvents($penddate ) {
