@@ -585,7 +585,7 @@ END:VCALENDAR';
         
         usort($events, array($this, "eventSortComparer"));
         
-        $this->events = $events;
+        $this->events = array_merge($this->events, $events) ;
     }
     
     public function getFutureEvents($penddate ) {
