@@ -236,7 +236,7 @@ END:VCALENDAR';
     protected $events = [];
 
     /**
-     * The Http object to get the ical data (for Joomla
+     * The start time fo parsing, set by parse function.
      *
      * @var    \DateTime
      * @since  1.5.1
