@@ -837,7 +837,8 @@ END:VCALENDAR';
         foreach (explode(',', $instance['calendar_id']) as $cal)
         {
             list($cal_id, $cal_class) = explode(';', $cal, 2);
-        
+            $cal_id = trim($cal_id," \n\r\t\v\x00\x22");
+            $cal_class = trim($cal_class," \n\r\t\v\x00\x22");
             if ('#example' == $cal_id){
                 $httpBody = self::$example_events;
             }
