@@ -236,6 +236,29 @@ END:VCALENDAR';
      * @var    array array of event objects
      * @since  1.5.1 
      */
+    protected $calendar_id = '';
+    /**
+     * Comma sperated list of Id's or url's of the calendar to fetch data.
+     * Each Id/url may be followed by semicolon and a html-class
+     *
+     * @var    string
+     * @since 2.1.0
+     */
+    protected $event_count = 0;
+    /**
+     * max number of events to return
+     *
+     * @var    int
+     * @since 2.1.0
+     */
+    protected $event_period = 0;
+    /**
+     * max number of days after now to fetch events.
+     *
+     * @var    int
+     * @since 2.1.0
+     */
+    
     protected $events = [];
 
     /**
@@ -810,7 +833,8 @@ END:VCALENDAR';
         
         //        if ($instance['clear_cache_now']) $cachecontroller->cache->remove($cacheId, $cachegroup);
         if(false === ( $data = $cachecontroller->get( $cacheId, $cachegroup))) {
-            $data = self::fetch(  $instance,  );
+            $parser = new IcsParser();
+            $data = $parser->fetch(  $instance,  );
             // do not cache data if fetching failed
             if ($data) {
                 $cachecontroller->store($data, $cacheId, $cachegroup );
@@ -829,11 +853,10 @@ END:VCALENDAR';
      *
      * @return array event objects
      */
-    static function fetch( $instance )
+    function fetch( $instance )
     {
         $period = $instance['event_period'];
         $penddate = strtotime("+$period day");
-        $parser = new IcsParser();
         foreach (explode(',', $instance['calendar_id']) as $cal)
         {
             list($cal_id, $cal_class) = explode(';', $cal, 2);
@@ -868,14 +891,14 @@ END:VCALENDAR';
             }
            
             try {
-                $parser->parse($httpBody, $penddate, $instance['event_count'], $cal_class,  $instance );
+                $this->parse($httpBody, $penddate, $instance['event_count'], $cal_class,  $instance );
             } catch(\Exception $e) {
                 return null;
             }
         } // end foreach
 
-        usort($parser->events, array($parser, "eventSortComparer"));
-        $events = $parser->getFutureEvents($penddate);
+        usort($this->events, array($this, "eventSortComparer"));
+        $events = $this->getFutureEvents($penddate);
         return self::limitArray($events, $instance['event_count']);
     }
     
