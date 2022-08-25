@@ -277,15 +277,23 @@ END:VCALENDAR';
     /**
      * Constructor.
      *
-     * @param
+     * @param array $instance with block-attributes / module-parameters
+     *    ['calendar_id'] Comma separated list of Id's or url's of the calendar to fetch data.
+     *       Each Id/url may be followed by semicolon and a html-class
+     *    ['event_count'] max number of events to return
+     *    ['event_period'] max number of days after now to fetch events.
      *
      * @return  $this IcsParser object
      *
      * @since
      */
-    public function __construct()
+    public function __construct($instance)
     {
         $this->timezone_string = Factory::getApplication()->get('offset');
+        $this->calendar_id = $instance['calendar_id'];
+        $this->event_count = $instance['event_count'];
+        $this->event_period = $instance['event_period'];
+        
     }
     /**
      * Parse ical string to individual events
@@ -832,7 +840,7 @@ END:VCALENDAR';
         
         //        if ($instance['clear_cache_now']) $cachecontroller->cache->remove($cacheId, $cachegroup);
         if(false === ( $data = $cachecontroller->get( $cacheId, $cachegroup))) {
-            $parser = new IcsParser();
+            $parser = new IcsParser($instance);
             $data = $parser->fetch(  $instance,  );
             // do not cache data if fetching failed
             if ($data) {
@@ -854,9 +862,6 @@ END:VCALENDAR';
      */
     function fetch( $instance )
     {
-        $this->calendar_id = $instance['calendar_id'];
-        $this->event_count = $instance['event_count'];
-        $this->event_period = $instance['event_period'];
         $period = $instance['event_period'];
         $penddate = strtotime("+$period day");
         foreach (explode(',', $instance['calendar_id']) as $cal)
