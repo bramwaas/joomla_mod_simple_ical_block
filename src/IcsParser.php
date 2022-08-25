@@ -21,6 +21,7 @@
  * 2.0.1 back to static functions getData() and fetch() only instantiate object in fetch when parsing must be done (like it always was in WP)   
  * 2.1.0 calendar_id can be array of ID;class elements; elements foreach in fetch() to parse each element; sort replaced to fetch() after foreach.
  *   parse() directly add in events in $this->events, add class from new input parameter to each event
+ *   made class properties of determining parameters 
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -231,36 +232,34 @@ END:VCALENDAR';
         'Yakutsk Standard Time'           => 'Asia/Yakutsk',
     );
     /**
-     * The arry of events parsed from the ics file, initial set by parse function.
-     *
-     * @var    array array of event objects
-     * @since  1.5.1 
-     */
-    protected $calendar_id = '';
-    /**
      * Comma sperated list of Id's or url's of the calendar to fetch data.
      * Each Id/url may be followed by semicolon and a html-class
      *
      * @var    string
      * @since 2.1.0
      */
-    protected $event_count = 0;
+    protected $calendar_id = '';
     /**
      * max number of events to return
      *
      * @var    int
      * @since 2.1.0
      */
-    protected $event_period = 0;
+    protected $event_count = 0;
     /**
      * max number of days after now to fetch events.
      *
      * @var    int
      * @since 2.1.0
      */
-    
+    protected $event_period = 0;
+    /**
+     * The arry of events parsed from the ics file, initial set by parse function.
+     *
+     * @var    array array of event objects
+     * @since  1.5.1
+     */
     protected $events = [];
-
     /**
      * The start time fo parsing, set by parse function.
      *
@@ -855,6 +854,9 @@ END:VCALENDAR';
      */
     function fetch( $instance )
     {
+        $this->calendar_id = $instance['calendar_id'];
+        $this->event_count = $instance['event_count'];
+        $this->event_period = $instance['event_period'];
         $period = $instance['event_period'];
         $penddate = strtotime("+$period day");
         foreach (explode(',', $instance['calendar_id']) as $cal)
@@ -871,7 +873,6 @@ END:VCALENDAR';
                 try {
                     $httpResponse =  $http->get($url);
                 } catch(\Exception $e) {
-    //                echo '<!-- 1 error http->get(' . $url . '): message:' . $e->getMessage(). ' -->';
                     return false;
                 }
                 if (200 != $httpResponse->code) {
@@ -879,11 +880,9 @@ END:VCALENDAR';
                     try {
                         $httpResponse =  $http->get('https://' . explode('://', $url)[1]);
                         if (200 != $httpResponse->code) {
-    //                    echo '<!-- Simple iCal Block: ', $httpResponse->code, ' -->';
-                        return false;
+                       return false;
                     }
                     } catch(\Exception $e) {
-    //                echo '<!-- 2 error http->get(' . $url . '): message:' . $e->getMessage(). ' -->';
                         return false;
                     }
                 }
