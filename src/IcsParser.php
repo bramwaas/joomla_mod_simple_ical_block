@@ -238,7 +238,7 @@ END:VCALENDAR';
      * @var    string
      * @since 2.1.0
      */
-    protected $calendar_id = '';
+    protected $calendar_ids = '';
     /**
      * max number of events to return
      *
@@ -247,12 +247,12 @@ END:VCALENDAR';
      */
     protected $event_count = 0;
     /**
-     * max number of days after now to fetch events.
+     * Timestamp periode enddate calculated from today and event_period
      *
-     * @var    int
+     * @var   int
      * @since 2.1.0
      */
-    protected $event_period = 0;
+    protected $penddate = NULL;
     /**
      * The arry of events parsed from the ics file, initial set by parse function.
      *
@@ -261,9 +261,9 @@ END:VCALENDAR';
      */
     protected $events = [];
     /**
-     * The start time fo parsing, set by parse function.
+     * Timestamp of the start time fo parsing, set by parse function.
      *
-     * @var    \DateTime
+     * @var    int
      * @since  1.5.1
      */
     protected $now = NULL;
@@ -278,28 +278,27 @@ END:VCALENDAR';
      * Constructor.
      *
      * @param array $instance with block-attributes / module-parameters
-     *    ['calendar_id'] Comma separated list of Id's or url's of the calendar to fetch data.
-     *       Each Id/url may be followed by semicolon and a html-class
-     *    ['event_count'] max number of events to return
-     *    ['event_period'] max number of days after now to fetch events.
+     * @param string  $calendar_ids Comma separated list of Id's or url's of the calendar to fetch data. Each Id/url may be followed by semicolon and a html-class
+     * @param int     $event_count max number of events to return
+     * @param int     $event_period max number of days after now to fetch events. => penddate
      *
      * @return  $this IcsParser object
      *
      * @since
      */
-    public function __construct($instance)
+    public function __construct($calendar_ids, $event_count = 0, $event_period = 0)
     {
         $this->timezone_string = Factory::getApplication()->get('offset');
-        $this->calendar_id = $instance['calendar_id'];
-        $this->event_count = $instance['event_count'];
-        $this->event_period = $instance['event_period'];
-        
+        $this->now = time();
+        $this->calendar_ids = $calendar_ids;
+        $this->event_count = $event_count;
+        $this->penddate = (0 < $event_period) ? strtotime("+$event_period day"): $this->now;
     }
     /**
      * Parse ical string to individual events
      *
      * @param   string      $str the  content of the file to parse as a string.
-     * @param   \datetime   $penddate the max date for the last event to return.
+     * @param   int         $penddate the max date for the last event to return.
      * @param   int         $pcount   the max number of events to return.
      * @param   array       $instance array of options
      *
@@ -310,8 +309,6 @@ END:VCALENDAR';
     public function parse($str ,  $penddate,  $pcount, $cal_class = '', $instance  ) {
         $curstr = $str;
         $haveVevent = true;
-        $this->now = time();
-//        $this->now = (new \DateTime('2022-01-01'))->getTimestamp();
         
         $penddate = (isset($penddate) && $penddate > $this->now) ? $penddate : $this->now;
         do {
@@ -638,7 +635,7 @@ END:VCALENDAR';
     * Parse timestamp from date time string (with timezone ID)
     * @param  string $datetime date time format YYYYMMDDTHHMMSSZ last letter ='Z' means Zero-time or 'UTC' time. overrides any timezone.
     * @param  string $ptzid (timezone ID)
-    * @return \DateTimeZone object
+    * @return int timestamp
     */
     private function parseIcsDateTime($datetime, $tzid = '') {
         if (strlen($datetime) < 8) {
@@ -819,7 +816,7 @@ END:VCALENDAR';
      * @param array $instance the block attributes
      *    ['blockid'] to create transientid
      *    ['transient_time'] time the transient cache is valid in minutes.
-     *    ['calendar_id'] id or url of the calender to fetch data
+     *    ['calendar_id'] id's or url's of the calendar(s) to fetch data
      *    ['event_count'] max number of events to return
      *    ['event_period'] max number of days after now to fetch events.
      *    ['allowhtml'] allow html in output.
@@ -840,8 +837,8 @@ END:VCALENDAR';
         
         //        if ($instance['clear_cache_now']) $cachecontroller->cache->remove($cacheId, $cachegroup);
         if(false === ( $data = $cachecontroller->get( $cacheId, $cachegroup))) {
-            $parser = new IcsParser($instance);
-            $data = $parser->fetch(  $instance,  );
+            $parser = new IcsParser($instance['calendar_id'] ,$instance['event_count'] ,$instance['event_period']);
+            $data = $parser->fetch( );
             // do not cache data if fetching failed
             if ($data) {
                 $cachecontroller->store($data, $cacheId, $cachegroup );
@@ -864,7 +861,7 @@ END:VCALENDAR';
     {
         $period = $instance['event_period'];
         $penddate = strtotime("+$period day");
-        foreach (explode(',', $instance['calendar_id']) as $cal)
+        foreach (explode(',', $this->calendar_ids) as $cal)
         {
             list($cal_id, $cal_class) = explode(';', $cal, 2);
             $cal_id = trim($cal_id," \n\r\t\v\x00\x22");
@@ -895,14 +892,14 @@ END:VCALENDAR';
             }
            
             try {
-                $this->parse($httpBody, $penddate, $instance['event_count'], $cal_class,  $instance );
+                $this->parse($httpBody, $this->penddate, $instance['event_count'], $cal_class,  $instance );
             } catch(\Exception $e) {
                 return null;
             }
         } // end foreach
 
         usort($this->events, array($this, "eventSortComparer"));
-        $events = $this->getFutureEvents($penddate);
+        $events = $this->getFutureEvents($this->penddate);
         return self::limitArray($events, $instance['event_count']);
     }
     
