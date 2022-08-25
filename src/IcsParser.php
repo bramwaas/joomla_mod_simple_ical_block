@@ -19,9 +19,10 @@
  *   Added header Accept-Encoding: '' (['headers' => ['Accept-Encoding' => ['']]]); to let curl accepts all known encoding and decode them.
  *   Then removed decoding based on Content-Encoding header because body is already decoded by curl. 
  * 2.0.1 back to static functions getData() and fetch() only instantiate object in fetch when parsing must be done (like it always was in WP)   
- * 2.1.0 calendar_id can be array of ID;class elements; elements foreach in fetch() to parse each element; sort replaced to fetch() after foreach.
- *   parse() directly add in events in $this->events, add class from new input parameter to each event
- *   made class properties of determining parameters 
+ * 2.1.0 calendar_id can be array of ID;class elements; elements foreach in fetch() to parse each element; sort moved to fetch() after foreach.
+ *   parse() directly add in events in $this->events, add html-class from new input parameter to each event
+ *   Make properties to use in several functions to limit copying of input params for most important parameters during instantiation of the class .
+ *   Removed htmlspecialchars() from summary, description and location //TODO add in default.php
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -298,19 +299,17 @@ END:VCALENDAR';
      * Parse ical string to individual events
      *
      * @param   string      $str the  content of the file to parse as a string.
-     * @param   int         $penddate the max date for the last event to return.
-     * @param   int         $pcount   the max number of events to return.
-     * @param   array       $instance array of options
+     * @param   string      $cal_class the html-class for this calendar
+     * @param   int         $cal_ser   serial number of this calendar
      *
      * @return  array       $this->events the parsed event objects.
      *
      * @since
      */
-    public function parse($str ,  $penddate,  $pcount, $cal_class = '', $instance  ) {
+    public function parse($str ,   $cal_class = '', $cal_ser = 0) {
         $curstr = $str;
         $haveVevent = true;
         
-        $penddate = (isset($penddate) && $penddate > $this->now) ? $penddate : $this->now;
         do {
             $startpos = strpos($curstr, self::TOKEN_BEGIN_VEVENT);
             if ($startpos !== false) {
@@ -322,7 +321,7 @@ END:VCALENDAR';
                     throw new \Exception('IcsParser->parse: No valid END:VEVENT found.');
                 }
                 $eventStr = trim(substr($eventStr, 0, $endpos), "\n\r\0");
-                $e = $this->parseVevent($eventStr, $instance);
+                $e = $this->parseVevent($eventStr);
                 $e->cal_class = $cal_class;
                 $this->events[] = $e;
                 // Recurring event?
@@ -367,9 +366,9 @@ END:VCALENDAR';
                     $interval = (isset($rrules['interval']) && $rrules['interval'] !== '') ? $rrules['interval'] : 1;
                     $freqinterval =new \DateInterval('P' . $interval . substr($frequency,0,1));
                     $interval3day =new \DateInterval('P3D');
-                    $until = (isset($rrules['until'])) ? $this->parseIcsDateTime($rrules['until']) : $penddate;
-                    $until = ($until < $penddate) ? $until : ($penddate - 1);
-                    $freqendloop = ($until > $penddate) ? $until : $penddate;
+                    $until = (isset($rrules['until'])) ? $this->parseIcsDateTime($rrules['until']) : $this->penddate;
+                    $until = ($until < $this->penddate) ? $until : ($this->penddate - 1);
+                    $freqendloop = ($until > $this->penddate) ? $until : $this->penddate;
                     switch ($frequency){
                         case "YEARLY"	:
                             $freqendloop = $freqendloop + (31622400 * $interval); // 366 days in sec
@@ -586,7 +585,7 @@ END:VCALENDAR';
                                         } // end byday
                                     } // end bymonthday
                                 } // end bymonth
-                                // next startdate by FREQ for loop < $until and <= $penddate
+                                // next startdate by FREQ for loop < $until and <= $this->penddate
                                 $freqstart->add($freqinterval);
                                 if ($freqstart->format('His') != $edtstarttod) {// correction when time changed by ST to DST transition
                                     $freqstart->setTime($edtstarthour, $edtstartmin, $edtstartsec);
@@ -712,11 +711,9 @@ END:VCALENDAR';
      * Parse an event string from an ical file to an event object.
      *
      * @param  string $eventStr
-     * @param  array  $instance array of options.
-     *    ['allowhtml'] allow html in output.
      * @return \StdClass $eventObj
      */
-    public function parseVevent($eventStr, $instance) {
+    public function parseVevent($eventStr) {
         $lines = explode("\n", $eventStr);
         $eventObj = new \StdClass;
         $tokenprev = "";
@@ -749,8 +746,8 @@ END:VCALENDAR';
             if (count($list) > 1 && strlen($token) > 1 && substr($token, 0, 1) > ' ') { //all tokens start with a alphabetic char , otherwise it is a continuation of a description with a colon in it.
                 // trim() to remove \n\r\0
                 $value = trim($list[1]);
-                $desc = ( $instance['allowhtml']) ? $list[1] : htmlspecialchars($list[1]);
-                $desc = str_replace(array('\;', '\,', '\r\n','\n', '\r'), array(';', ',', "\n","\n","\n"), $desc);
+//TODO add in default.php                $desc = ( $instance['allowhtml']) ? $list[1] : htmlspecialchars($list[1]);
+                $desc = str_replace(array('\;', '\,', '\r\n','\n', '\r'), array(';', ',', "\n","\n","\n"), $list[1]);
                 $tokenprev = $token;
                 switch($token) {
                     case "SUMMARY":
@@ -792,8 +789,8 @@ END:VCALENDAR';
                 }
             }else { // count($list) <= 1
                 if (strlen($l) > 1) {
-                    $desc = ($instance['allowhtml']) ? $l : htmlspecialchars($l);
-                    $desc = str_replace(array('\;', '\,', '\r\n','\n', '\r'), array(';', ',', "\n","\n","\n"), substr($desc,1));
+//TODO add in default.php                    $desc = ($instance['allowhtml']) ? $l : htmlspecialchars($l);
+                    $desc = str_replace(array('\;', '\,', '\r\n','\n', '\r'), array(';', ',', "\n","\n","\n"), substr($l,1));
                     switch($tokenprev) {
                         case "SUMMARY":
                             $eventObj->summary .= $desc;
@@ -837,7 +834,7 @@ END:VCALENDAR';
         
         //        if ($instance['clear_cache_now']) $cachecontroller->cache->remove($cacheId, $cachegroup);
         if(false === ( $data = $cachecontroller->get( $cacheId, $cachegroup))) {
-            $parser = new IcsParser($instance['calendar_id'] ,$instance['event_count'] ,$instance['event_period']);
+            $parser = new IcsParser($instance['calendar_id'], $instance['event_count'], $instance['event_period']);
             $data = $parser->fetch( );
             // do not cache data if fetching failed
             if ($data) {
@@ -847,25 +844,23 @@ END:VCALENDAR';
         return $data;
     }
     /**
-     * Fetches from calender
+     * Fetches from calender using calendar_ids, event_count and 
      *
-     * @param array $instance the block attributes
-     *    ['calendar_id']  id or url of the calender to fetch data
+    *    ['calendar_id']  id or url of the calender to fetch data
      *    ['event_count']  max number of events to return
      *    ['event_period'] max number of days after now to fetch events.
-     *    ['allowhtml'] allow html in output.
      *
      * @return array event objects
      */
-    function fetch( $instance )
+    function fetch()
     {
-        $period = $instance['event_period'];
-        $penddate = strtotime("+$period day");
+        $cal_ser = 0;
         foreach (explode(',', $this->calendar_ids) as $cal)
         {
             list($cal_id, $cal_class) = explode(';', $cal, 2);
             $cal_id = trim($cal_id," \n\r\t\v\x00\x22");
             $cal_class = trim($cal_class," \n\r\t\v\x00\x22");
+            $cal_ser = $cal_ser + 1;
             if ('#example' == $cal_id){
                 $httpBody = self::$example_events;
             }
@@ -875,32 +870,32 @@ END:VCALENDAR';
                 try {
                     $httpResponse =  $http->get($url);
                 } catch(\Exception $e) {
-                    return false;
+                    continue ;
                 }
                 if (200 != $httpResponse->code) {
                     echo '<!-- ' . $url . ' not found ' . 'fall back to https:// -->';
                     try {
                         $httpResponse =  $http->get('https://' . explode('://', $url)[1]);
                         if (200 != $httpResponse->code) {
-                       return false;
+                            continue ;
                     }
                     } catch(\Exception $e) {
-                        return false;
+                        continue ;
                     }
                 }
                 $httpBody = $httpResponse->body;
             }
            
             try {
-                $this->parse($httpBody, $this->penddate, $instance['event_count'], $cal_class,  $instance );
+                $this->parse($httpBody,  $cal_class, $cal_ser );
             } catch(\Exception $e) {
-                return null;
+                continue ;
             }
         } // end foreach
 
         usort($this->events, array($this, "eventSortComparer"));
         $events = $this->getFutureEvents($this->penddate);
-        return self::limitArray($events, $instance['event_count']);
+        return self::limitArray($events, $this->event_count);
     }
     
     private static function getCalendarUrl($calId)
