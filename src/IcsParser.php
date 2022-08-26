@@ -623,12 +623,12 @@ END:VCALENDAR';
         $newEvents = array();
         $i=0;
         foreach ($this->events as $e) {
-            $i++;
-            if ($i > $this->event_count) {
-                break;
-            }
             if (($e->end >= $this->now)
                 && $e->start <= $this->penddate) {
+                    $i++;
+                    if ($i > $this->event_count) {
+                        break;
+                    }
                     $newEvents[] = $e;
                 }
         }
