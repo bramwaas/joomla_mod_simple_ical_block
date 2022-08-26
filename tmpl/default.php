@@ -29,7 +29,7 @@
  *   removed checks isset on attributes because that is already done before.
  *   replaced date( with Date()->format where translation is necessary.
  * 2.0.1 back to static functions getData() and fetch() only instantiate object in fetch when parsing must be done (like it always was in WP)  
- * 2.1.0 add calendar class to list-group-item s 
+ * 2.1.0 add calendar class to list-group-item added htmlspecialchars() to summary, description and location when not 'allowhtml', replacing similar code from IcsParser
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -87,6 +87,11 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
                 $e_dtend_1 = new Jdate ($e->end -1);
                 $e_dtend_1->setTimezone($tz_ui);
                 $evdate = strip_tags($e_dtstart->format($dflg, true, true) , $allowed_tags);
+                if ( !$instance['allowhtml']) {
+                    $e->summary = htmlspecialchars($e->summary);
+                    $e->description = htmlspecialchars($e->description);
+                    $e->location = htmlspecialchars($e->location);
+                }
                 if (date('yz', $e->start) != date('yz', $e->end)) {
                     $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags( $e_dtend_1->format($dflgend, true, true) , $allowed_tags));
                 }

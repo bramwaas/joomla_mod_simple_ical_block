@@ -22,7 +22,7 @@
  * 2.1.0 calendar_id can be array of ID;class elements; elements foreach in fetch() to parse each element; sort moved to fetch() after foreach.
  *   parse() directly add in events in $this->events, add html-class from new input parameter to each event
  *   Make properties to use in several functions to limit copying of input params for most important parameters during instantiation of the class .
- *   Removed htmlspecialchars() from summary, description and location //TODO add in default.php
+ *   Removed htmlspecialchars() from summary, description and location, to replace it in the output template/block
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -746,7 +746,6 @@ END:VCALENDAR';
             if (count($list) > 1 && strlen($token) > 1 && substr($token, 0, 1) > ' ') { //all tokens start with a alphabetic char , otherwise it is a continuation of a description with a colon in it.
                 // trim() to remove \n\r\0
                 $value = trim($list[1]);
-//TODO add in default.php                $desc = ( $instance['allowhtml']) ? $list[1] : htmlspecialchars($list[1]);
                 $desc = str_replace(array('\;', '\,', '\r\n','\n', '\r'), array(';', ',', "\n","\n","\n"), $list[1]);
                 $tokenprev = $token;
                 switch($token) {
@@ -789,7 +788,6 @@ END:VCALENDAR';
                 }
             }else { // count($list) <= 1
                 if (strlen($l) > 1) {
-//TODO add in default.php                    $desc = ($instance['allowhtml']) ? $l : htmlspecialchars($l);
                     $desc = str_replace(array('\;', '\,', '\r\n','\n', '\r'), array(';', ',', "\n","\n","\n"), substr($l,1));
                     switch($tokenprev) {
                         case "SUMMARY":
