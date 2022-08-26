@@ -88,7 +88,7 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
                 $e_dtend_1 = new Jdate ($e->end -1);
                 $e_dtend_1->setTimezone($tz_ui);
                 $evdate = strip_tags($e_dtstart->format($dflg, true, true) , $allowed_tags);
-                if ( !$instance['allowhtml']) {
+                if ( !$attributes['allowhtml']) {
                     $e->summary = htmlspecialchars($e->summary);
                     $e->description = htmlspecialchars($e->description);
                     $e->location = htmlspecialchars($e->location);
