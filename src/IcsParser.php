@@ -23,6 +23,7 @@
  *   parse() directly add in events in $this->events, add html-class from new input parameter to each event
  *   Make properties to use in several functions to limit copying of input params for most important parameters during instantiation of the class .
  *   Removed htmlspecialchars() from summary, description and location, to replace it in the output template/block
+ *   Combined getFutureEvents and Limit array. usort eventsortcomparer now on start, end, cal_ser and with arithmic subtraction because all are integers.
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -278,7 +279,6 @@ END:VCALENDAR';
     /**
      * Constructor.
      *
-     * @param array $instance with block-attributes / module-parameters
      * @param string  $calendar_ids Comma separated list of Id's or url's of the calendar to fetch data. Each Id/url may be followed by semicolon and a html-class
      * @param int     $event_count max number of events to return
      * @param int     $event_period max number of days after now to fetch events. => penddate
@@ -323,6 +323,7 @@ END:VCALENDAR';
                 $eventStr = trim(substr($eventStr, 0, $endpos), "\n\r\0");
                 $e = $this->parseVevent($eventStr);
                 $e->cal_class = $cal_class;
+                $e->cal_ser = $cal_ser;
                 $this->events[] = $e;
                 // Recurring event?
                 if (isset($e->rrule) && $e->rrule !== '') {
@@ -611,19 +612,26 @@ END:VCALENDAR';
             }
         } while($haveVevent);
     }
-    
-    public function getFutureEvents($penddate ) {
-        // events are already sorted
+/*
+ * Limit events to the first event_count events from today. 
+ * Events are already sorted
+ * 
+ * @return  array       remaining event objects.
+ */
+    public function getFutureEvents( ) {
+        // 
         $newEvents = array();
-//        $this->now = time();
-        
+        $i=0;
         foreach ($this->events as $e) {
-            if ((($e->start > $this->now) || (!empty($e->end) && $e->end >= $this->now))
-                && $e->start <= $penddate) {
+            $i++;
+            if ($i > $this->event_count) {
+                break;
+            }
+            if (($e->end >= $this->now)
+                && $e->start <= $this->penddate) {
                     $newEvents[] = $e;
                 }
         }
-        
         return $newEvents;
     }
     
@@ -698,14 +706,21 @@ END:VCALENDAR';
         return new \DateTimeZone('UTC');
     }
     
+    /**
+     * Compare events order for usort.
+     *
+     * @param  \StdClass $a first event to compare
+     * @param  \StdClass $b second event to compare
+     * @return int 0 if eventsorder is equal, positive if $a > $b negative if $a < $b
+     */
     private function eventSortComparer($a, $b) {
         if ($a->start == $b->start) {
-            return 0;
-        } else if($a->start > $b->start) {
-            return 1;
-        } else {
-            return -1;
-        }
+            if ($a->end == $b->end) {
+                return ($a->cal_ser - $b->cal_ser);
+            } 
+            else return ($a->end - $b->end);
+        } 
+        else return ($a->start - $b->start);
     }
     /**
      * Parse an event string from an ical file to an event object.
@@ -810,7 +825,7 @@ END:VCALENDAR';
      *
      * @param array $instance the block attributes
      *    ['blockid'] to create transientid
-     *    ['transient_time'] time the transient cache is valid in minutes.
+     *    ['cache_time'] / ['transient_time'] time the transient cache is valid in minutes.
      *    ['calendar_id'] id's or url's of the calendar(s) to fetch data
      *    ['event_count'] max number of events to return
      *    ['event_period'] max number of days after now to fetch events.
@@ -892,8 +907,7 @@ END:VCALENDAR';
         } // end foreach
 
         usort($this->events, array($this, "eventSortComparer"));
-        $events = $this->getFutureEvents($this->penddate);
-        return self::limitArray($events, $this->event_count);
+        return $this->getFutureEvents();
     }
     
     private static function getCalendarUrl($calId)
@@ -904,20 +918,6 @@ END:VCALENDAR';
            return $calId; }
         else
         { return 'https://www.google.com/calendar/ical/'.$calId.'/public/basic.ics'; }
-    }
-    
-    private static function limitArray($arr, $limit)
-    {
-        $i = 0;
-        $out = array();
-        foreach ($arr as $e) {
-            $i++;
-            if ($i > $limit) {
-                break;
-            }
-            $out[] = $e;
-        }
-        return $out;
     }
     
 }

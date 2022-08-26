@@ -29,7 +29,8 @@
  *   removed checks isset on attributes because that is already done before.
  *   replaced date( with Date()->format where translation is necessary.
  * 2.0.1 back to static functions getData() and fetch() only instantiate object in fetch when parsing must be done (like it always was in WP)  
- * 2.1.0 add calendar class to list-group-item added htmlspecialchars() to summary, description and location when not 'allowhtml', replacing similar code from IcsParser
+ * 2.1.0 add calendar class to list-group-item
+ *   add htmlspecialchars() to summary, description and location when not 'allowhtml', replacing similar code from IcsParser
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
