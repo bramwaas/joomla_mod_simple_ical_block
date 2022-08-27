@@ -97,7 +97,7 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
                     $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags( $e_dtend_1->format($dflgend, true, true) , $allowed_tags));
                 }
                 $evdtsum = (($e->startisdate === false) ? strip_tags($e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true), $allowed_tags) : '');
-                echo '<li class="list-group-item' .  $sflgi . ' ' . $e->cal_class . '">';
+                echo '<li class="list-group-item' .  $sflgi . ' ' . SimpleicalblockHelper::sanitize_html_class($e->cal_class) . '">';
                 if (!$startwsum && $curdate != $evdate ) {
                     $curdate =  $evdate;
                     echo '<span class="ical-date">' . ucfirst($evdate) . '</span>' . (('a' == $attributes['tag_sum'] ) ? '<br>': '');

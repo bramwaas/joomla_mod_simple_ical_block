@@ -21,9 +21,10 @@
  * 2.0.1 back to static functions getData() and fetch() only instantiate object in fetch when parsing must be done (like it always was in WP)   
  * 2.1.0 calendar_id can be array of ID;class elements; elements foreach in fetch() to parse each element; sort moved to fetch() after foreach.
  *   parse() directly add in events in $this->events, add html-class from new input parameter to each event
- *   Make properties to use in several functions to limit copying of input params for most important parameters during instantiation of the class .
+ *   Make properties from most important parameters during instantiation of the class to limit copying of input params in several functions.
  *   Removed htmlspecialchars() from summary, description and location, to replace it in the output template/block
- *   Combined getFutureEvents and Limit array. usort eventsortcomparer now on start, end, cal_ser and with arithmic subtraction because all are integers.
+ *   Combined getFutureEvents and Limit array. usort eventsortcomparer now on start, end, cal_ord and with arithmic subtraction because all are integers.
+ *   Parse event DURATION; (only) When DTEND is empty: determine end from start plus duration, when duration is empty and start is DATE start plus one day, else = start  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -298,15 +299,15 @@ END:VCALENDAR';
     /**
      * Parse ical string to individual events
      *
-     * @param   string      $str the  content of the file to parse as a string.
+     * @param   string      $str the   content of the file to parse as a string.
      * @param   string      $cal_class the html-class for this calendar
-     * @param   int         $cal_ser   serial number of this calendar
+     * @param   int         $cal_ord   order in list of this calendar 
      *
      * @return  array       $this->events the parsed event objects.
      *
      * @since
      */
-    public function parse($str ,   $cal_class = '', $cal_ser = 0) {
+    public function parse($str ,   $cal_class = '', $cal_ord = 0) {
         $curstr = $str;
         $haveVevent = true;
         
@@ -323,7 +324,7 @@ END:VCALENDAR';
                 $eventStr = trim(substr($eventStr, 0, $endpos), "\n\r\0");
                 $e = $this->parseVevent($eventStr);
                 $e->cal_class = $cal_class;
-                $e->cal_ser = $cal_ser;
+                $e->cal_ord = $cal_ord;
                 $this->events[] = $e;
                 // Recurring event?
                 if (isset($e->rrule) && $e->rrule !== '') {
@@ -716,7 +717,7 @@ END:VCALENDAR';
     private function eventSortComparer($a, $b) {
         if ($a->start == $b->start) {
             if ($a->end == $b->end) {
-                return ($a->cal_ser - $b->cal_ser);
+                return ($a->cal_ord - $b->cal_ord);
             } 
             else return ($a->end - $b->end);
         } 
@@ -779,14 +780,13 @@ END:VCALENDAR';
                         $eventObj->tzid = $tzid;
                         $eventObj->startisdate = $isdate;
                         $eventObj->start = $this->parseIcsDateTime($value, $tzid);
-                        if (!isset($eventObj->end)) { // because I am not sure the order is alway DTSTART before DTEND
-                            $eventObj->endisdate = $isdate;
-                            $eventObj->end = $eventObj->start;
-                        }
                         break;
                     case "DTEND":
                         $eventObj->endisdate = $isdate;
                         $eventObj->end = $this->parseIcsDateTime($value, $tzid);
+                        break;
+                    case "DURATION":
+                        $eventObj->duration = $value;
                         break;
                     case "UID":
                         $eventObj->uid = $value;
@@ -816,6 +816,17 @@ END:VCALENDAR';
                             break;
                     }
                 }
+            }
+        }
+        if (!isset($eventObj->end)) {
+            if (isset($eventObj->duration)) {
+                $timezone = new \DateTimeZone((isset($eventObj->tzid)&& $eventObj->tzid !== '') ? $eventObj->tzid : $this->timezone_string);
+                $edtstart = new \DateTime('@' . $eventObj->start);
+                $edtstart->setTimezone($timezone);
+                $eventObj->end = $edtstart->add(new \DateInterval($eventObj->duration));
+            } else {
+                $eventObj->endisdate = $eventObj->startisdate;
+                $eventObj->end = ($eventObj->startisdate) ? $eventObj->start + 86400 : $eventObj->start;
             }
         }
         return $eventObj;
@@ -867,13 +878,13 @@ END:VCALENDAR';
      */
     function fetch()
     {
-        $cal_ser = 0;
+        $cal_ord = 0;
         foreach (explode(',', $this->calendar_ids) as $cal)
         {
             list($cal_id, $cal_class) = explode(';', $cal, 2);
             $cal_id = trim($cal_id," \n\r\t\v\x00\x22");
             $cal_class = trim($cal_class," \n\r\t\v\x00\x22");
-            $cal_ser = $cal_ser + 1;
+            $cal_ord = $cal_ord + 1;
             if ('#example' == $cal_id){
                 $httpBody = self::$example_events;
             }
@@ -900,7 +911,7 @@ END:VCALENDAR';
             }
            
             try {
-                $this->parse($httpBody,  $cal_class, $cal_ser );
+                $this->parse($httpBody,  $cal_class, $cal_ord );
             } catch(\Exception $e) {
                 continue ;
             }
