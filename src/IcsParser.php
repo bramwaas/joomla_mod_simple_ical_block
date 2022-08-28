@@ -66,7 +66,8 @@ SUMMARY:Example Monthly day 29
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20220618
-DTEND;VALUE=DATE:20220620
+//DTEND;VALUE=DATE:20220620
+DURATION:P1DT23H59M1S
 RRULE:FREQ=MONTHLY;COUNT=13;BYDAY=4SA
 UID:a-3
 DESCRIPTION:Example Monthly 4th weekend
@@ -823,7 +824,7 @@ END:VCALENDAR';
                 $timezone = new \DateTimeZone((isset($eventObj->tzid)&& $eventObj->tzid !== '') ? $eventObj->tzid : $this->timezone_string);
                 $edtstart = new \DateTime('@' . $eventObj->start);
                 $edtstart->setTimezone($timezone);
-                $eventObj->end = $edtstart->add(new \DateInterval($eventObj->duration));
+                $eventObj->end = $edtstart->add(new \DateInterval($eventObj->duration))->getTimestamp();
             } else {
                 $eventObj->endisdate = $eventObj->startisdate;
                 $eventObj->end = ($eventObj->startisdate) ? $eventObj->start + 86400 : $eventObj->start;
