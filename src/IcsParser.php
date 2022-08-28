@@ -826,9 +826,9 @@ END:VCALENDAR';
                 $edtstart->setTimezone($timezone);
                 $eventObj->end = $edtstart->add(new \DateInterval($eventObj->duration))->getTimestamp();
             } else {
-                $eventObj->endisdate = $eventObj->startisdate;
                 $eventObj->end = ($eventObj->startisdate) ? $eventObj->start + 86400 : $eventObj->start;
             }
+            $eventObj->endisdate = $eventObj->startisdate;
         }
         return $eventObj;
     }
