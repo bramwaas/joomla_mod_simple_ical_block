@@ -824,7 +824,15 @@ END:VCALENDAR';
                 $timezone = new \DateTimeZone((isset($eventObj->tzid)&& $eventObj->tzid !== '') ? $eventObj->tzid : $this->timezone_string);
                 $edtstart = new \DateTime('@' . $eventObj->start);
                 $edtstart->setTimezone($timezone);
-                $eventObj->end = $edtstart->add(new \DateInterval($eventObj->duration))->getTimestamp();
+                $w = stripos($eventObj->duration, 'W');
+                if (0 < $w && $w < stripos($eventObj->duration, 'D')) { // in php < 8.0 W cannot be combined with D.
+                    $edtstart->add(new \DateInterval(substr($eventObj->duration,0, ++$w)));
+                    $edtstart->add(new \DateInterval('P' . substr($eventObj->duration,$w)));
+                }
+                else {
+                    $edtstart->add(new \DateInterval($eventObj->duration));
+                }
+                $eventObj->end = $edtstart->getTimestamp();
             } else {
                 $eventObj->end = ($eventObj->startisdate) ? $eventObj->start + 86400 : $eventObj->start;
             }
