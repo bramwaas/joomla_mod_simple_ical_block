@@ -542,7 +542,7 @@ END:VCALENDAR';
                                                 if ($byday == array('')
                                                     || in_array(strtoupper(substr($newstart->format('D'),0,2 )), $byday)
                                                     ){ // only one time in this loop no change of $newstart
-                                                        fdays =  array('');
+                                                        $bydays =  array('');
                                                 } else {
                                                     continue;
                                                 }
