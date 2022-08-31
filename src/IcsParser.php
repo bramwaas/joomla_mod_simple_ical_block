@@ -370,7 +370,8 @@ END:VCALENDAR';
                     $freqinterval =new \DateInterval('P' . $interval . substr($frequency,0,1));
                     $interval3day =new \DateInterval('P3D');
                     $until = (isset($rrules['until'])) ? $this->parseIcsDateTime($rrules['until']) : $this->penddate;
-                    $freqendloop = ($until < $this->penddate) ? $until : $this->penddate;
+                    $until = ($until < $this->penddate) ? $until : $this->penddate;
+                    $freqendloop = $until;
                     switch ($frequency){
                         case "YEARLY"	:
                             $freqendloop = $freqendloop + (31622400 * $interval); // 366 days in sec
@@ -560,7 +561,7 @@ END:VCALENDAR';
                                                 ($fmdayok  || $expand
                                                     || $newstart->format('Ymd') != $edtstart->format('Ymd'))
                                                 && ($count == 0 || $i < $count)
-                                                && $newstart->getTimestamp() <= $freqendloop
+                                                && $newstart->getTimestamp() <= $until
                                                 && !(!empty($e->exdate) && in_array($newstart->getTimestamp(), $e->exdate))
                                                 && $newstart> $edtstart) { // count events after dtstart
                                                     if (($newstart->getTimestamp() + $edurationsecs) >= $this->now
