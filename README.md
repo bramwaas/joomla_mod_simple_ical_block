@@ -36,8 +36,8 @@ Date format first line: ".<\b\r>l jS \o\f  F"
 Enddate format first line: " - l jS \o\f F"  
 Time format time summary line: " G:i"   
 Time format end time summary line: " - G:i"   
-Time format start time: ""  
-Time format end time: ""  
+Time format start time: "<>"  
+Time format end time: "<>"  
 Tag for summary: "strong" 
   
 == Installation ==
