@@ -236,7 +236,7 @@ END:VCALENDAR';
         'Yakutsk Standard Time'           => 'Asia/Yakutsk',
     );
     /**
-     * Comma sperated list of Id's or url's of the calendar to fetch data.
+     * Comma separated list of Id's or url's of the calendar to fetch data.
      * Each Id/url may be followed by semicolon and a html-class
      *
      * @var    string
@@ -275,7 +275,7 @@ END:VCALENDAR';
      * The timezone string from the configuration.
      *
      * @var   string
-     * @since  0.0.1
+     * @since  2.0.0
      */
     protected $timezone_string = 'UTC';
     /**
@@ -761,7 +761,7 @@ END:VCALENDAR';
             if (count($list) > 1 && strlen($token) > 1 && substr($token, 0, 1) > ' ') { //all tokens start with a alphabetic char , otherwise it is a continuation of a description with a colon in it.
                 // trim() to remove \n\r\0
                 $value = trim($list[1]);
-                $desc = str_replace(array('\;', '\,', '\r\n','\n', '\r'), array(';', ',', "\n","\n","\n"), $list[1]);
+                $desc = str_replace(array('\;', '\,', '\r\n','\n', '\r'), array(';', ',', "\n","\n","\n"), $value);
                 $tokenprev = $token;
                 switch($token) {
                     case "SUMMARY":
@@ -847,7 +847,6 @@ END:VCALENDAR';
      *    ['calendar_id'] id's or url's of the calendar(s) to fetch data
      *    ['event_count'] max number of events to return
      *    ['event_period'] max number of days after now to fetch events.
-     *    ['allowhtml'] allow html in output.
      *
      * @return array event objects
      */
@@ -877,7 +876,7 @@ END:VCALENDAR';
     /**
      * Fetches from calender using calendar_ids, event_count and 
      *
-    *    ['calendar_id']  id or url of the calender to fetch data
+     *    ['calendar_id']  id or url of the calender to fetch data
      *    ['event_count']  max number of events to return
      *    ['event_period'] max number of days after now to fetch events.
      *
@@ -891,7 +890,7 @@ END:VCALENDAR';
             list($cal_id, $cal_class) = explode(';', $cal, 2);
             $cal_id = trim($cal_id," \n\r\t\v\x00\x22");
             $cal_class = trim($cal_class," \n\r\t\v\x00\x22");
-            $cal_ord = $cal_ord + 1;
+            ++$cal_ord;
             if ('#example' == $cal_id){
                 $httpBody = self::$example_events;
             }
@@ -909,7 +908,7 @@ END:VCALENDAR';
                         $httpResponse =  $http->get('https://' . explode('://', $url)[1]);
                         if (200 != $httpResponse->code) {
                             continue ;
-                    }
+	                    }
                     } catch(\Exception $e) {
                         continue ;
                     }
