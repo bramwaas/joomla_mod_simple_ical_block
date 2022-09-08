@@ -150,6 +150,8 @@ see http://www.ietf.org/rfc/rfc5545.txt for specification of te ical format.
   |____________|_________|________|_________|________|
   |BYDAY       |Limit    |Expand  |Note 1   |Note 2  |
   |____________|_________|________|_________|________|
+  |BYSETPOS    |Limit    |Limit   |Limit    |Limit   |
+  |____________|_________|________|_________|________|
  
     Note 1:  Limit if BYMONTHDAY is present; 
              otherwise, special expand for MONTHLY.
@@ -172,6 +174,7 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 == Changelog ==
 * 2.1.0 Support more calendars in one module/block. Support DURATION of event. Move processing 'allowhtml' complete out Parser to template/block. 
   Use properties in IcsParser to limit copying of input params in several functions.  
+  //TODO Support  BYSETPOS
 * 2.0.0 major and minor vesion number aligned with those of Wordpress block with the same functionality and the same code for the IcsParser block apart from CMS specific functions (get_option('timezone_string') / Factory::getApplication()->get('offset'), wp_transient / cache type 'output' and wp_remote_get / Joomla\Http\Http->get()) and temporary wp_date() / date().
 * 0.0.7 added Accept-Encoding: '' to http request to tell curl to handle compressed results (known by the server) correct.
 * 0.0.6 added translations and adjustments to comply with JED checker.

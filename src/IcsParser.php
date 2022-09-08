@@ -25,6 +25,7 @@
  *   Removed htmlspecialchars() from summary, description and location, to replace it in the output template/block
  *   Combined getFutureEvents and Limit array. usort eventsortcomparer now on start, end, cal_ord and with arithmic subtraction because all are integers.
  *   Parse event DURATION; (only) When DTEND is empty: determine end from start plus duration, when duration is empty and start is DATE start plus one day, else = start  
+ *   Parse event BYSETPOS; \\TODO ...   
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -344,7 +345,7 @@ END:VCALENDAR';
                      * FREQ=WEEKLY;COUNT=10;BYDAY=MO,TU,WE,TH,FR Every week 10 times on weekdays
                      * FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU every year last sunday of october
                      * FREQ=DAILY;COUNT=5;INTERVAL=7 Every 7 days,5 times
-                     
+//TODO                     * FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=1,-1 represents the first and the last work day of the month:   
                      */
                     $timezone = new \DateTimeZone((isset($e->tzid)&& $e->tzid !== '') ? $e->tzid : $this->timezone_string);
                     $edtstart = new \DateTime('@' . $e->start);
@@ -393,6 +394,7 @@ END:VCALENDAR';
                     $bymonth = explode(',', (isset($rrules['bymonth'])) ? $rrules['bymonth'] : '');
                     $bymonthday = explode(',', (isset($rrules['bymonthday'])) ? $rrules['bymonthday'] : '');
                     $byday = explode(',', (isset($rrules['byday'])) ? $rrules['byday'] : '');
+                    $bysetpos = explode(',', (isset($rrules['bysetpos'])) ? $rrules['bysetpos'] : '');
                     $i = 1;
                     $cen = 0;
                     switch ($frequency){
