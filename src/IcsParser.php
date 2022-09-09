@@ -394,7 +394,8 @@ END:VCALENDAR';
                     $bymonth = explode(',', (isset($rrules['bymonth'])) ? $rrules['bymonth'] : '');
                     $bymonthday = explode(',', (isset($rrules['bymonthday'])) ? $rrules['bymonthday'] : '');
                     $byday = explode(',', (isset($rrules['byday'])) ? $rrules['byday'] : '');
-                    $bysetpos = explode(',', (isset($rrules['bysetpos'])) ? $rrules['bysetpos'] : '');
+                    $bysetpos = (isset($rrules['bysetpos'])) ? explode(',',  $rrules['bysetpos'])  : false;
+                    $evset = [];
                     $i = 1;
                     $cen = 0;
                     switch ($frequency){
@@ -582,13 +583,30 @@ END:VCALENDAR';
                                                             }
                                                             $en->uid = $i . '_' . $e->uid;
                                                             if ($test > ' ') { 	$en->summary = $en->summary . '<br>Test:' . $test; 	}
-                                                            $this->events[] = $en;
-                                                            $i++;
+                                                            if (false === $bysetpos) {
+                                                                $this->events[] = $en;
+                                                                $i++;
+                                                            } else { // add to set
+                                                                $evset[] = $en;
+                                                            }
                                                     } // copy eevents
                                             } // end count events
                                         } // end byday
                                     } // end bymonthday
                                 } // end bymonth
+                                if (false !== $bysetpos) { // process set
+                                    usort($evset, array($this, "eventSortComparer"));
+                                    $cset = count($bysetpos) + 1;
+                                    $si = 0;
+                                    foreach ($evset as $evm){
+                                        $si++;
+                                        if (in_array($si, $bysetpos) || in_array($si - $cset, $bysetpos)) {
+                                            $this->events[] = $evm;
+                                            $i++;
+                                        }
+                                    }
+                                    $evset = [];
+                                }
                                 // next startdate by FREQ 
                                 $freqstart->add($freqinterval);
                                 if ($freqstart->format('His') != $edtstarttod) {// correction when time changed by ST to DST transition
