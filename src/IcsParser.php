@@ -567,29 +567,30 @@ END:VCALENDAR';
                                                 && $newstart->getTimestamp() <= $until
                                                 && !(!empty($e->exdate) && in_array($newstart->getTimestamp(), $e->exdate))
                                                 && $newstart> $edtstart) { // count events after dtstart
-                                                    if (($newstart->getTimestamp() + $edurationsecs) >= $this->now
-                                                        ) { // copy only events after now
-                                                            $cen++;
-                                                            $en =  clone $e;
-                                                            $en->start = $newstart->getTimestamp();
-                                                            $en->end = $en->start + $edurationsecs;
-                                                            if ($en->startisdate ){ //
-                                                                $endtime = date('His', $en->end, $timezone);
-                                                                if ('000000' < $endtime){
-                                                                    if ('120000' < $endtime) $en->end = $en->end + 86400;
-                                                                    $enddate = \DateTime::createFromFormat('Y-m-d H:i:s', date('Y-m-d 00:00:00', $en->end, $timezone), $timezone );
-                                                                    $en->end = $enddate->getTimestamp();
-                                                                }
+                                                if (($newstart->getTimestamp() + $edurationsecs) >= $this->now
+                                                    ) { // copy only events after now
+                                                        $cen++;
+                                                        $en =  clone $e;
+                                                        $en->start = $newstart->getTimestamp();
+                                                        $en->end = $en->start + $edurationsecs;
+                                                        if ($en->startisdate ){ //
+                                                            $endtime = date('His', $en->end, $timezone);
+                                                            if ('000000' < $endtime){
+                                                                if ('120000' < $endtime) $en->end = $en->end + 86400;
+                                                                $enddate = \DateTime::createFromFormat('Y-m-d H:i:s', date('Y-m-d 00:00:00', $en->end, $timezone), $timezone );
+                                                                $en->end = $enddate->getTimestamp();
                                                             }
-                                                            $en->uid = $i . '_' . $e->uid;
-                                                            if ($test > ' ') { 	$en->summary = $en->summary . '<br>Test:' . $test; 	}
-                                                            if (false === $bysetpos) {
-                                                                $this->events[] = $en;
-                                                                $i++;
-                                                            } else { // add to set
-                                                                $evset[] = $en;
-                                                            }
-                                                    } // copy eevents
+                                                        }
+                                                        $en->uid = $i . '_' . $e->uid;
+                                                        if ($test > ' ') { 	$en->summary = $en->summary . '<br>Test:' . $test; 	}
+                                                        if (false === $bysetpos) {
+                                                            $this->events[] = $en;
+                                                        } else { // add to set
+                                                            $evset[] = $en;
+                                                        }
+                                                } // copy eevents
+                                                // next eventcount from $e->start (also before now)
+                                                $i++;
                                             } // end count events
                                         } // end byday
                                     } // end bymonthday
@@ -602,7 +603,6 @@ END:VCALENDAR';
                                         $si++;
                                         if (in_array($si, $bysetpos) || in_array($si - $cset, $bysetpos)) {
                                             $this->events[] = $evm;
-                                            $i++;
                                         }
                                     }
                                     $evset = [];
