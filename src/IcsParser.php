@@ -602,6 +602,7 @@ END:VCALENDAR';
                                     foreach ($evset as $evm){
                                         $si++;
                                         if (in_array($si, $bysetpos) || in_array($si - $cset, $bysetpos)) {
+                                            $evm->description = $evm->description . '<br>$cset=' . $cset . ';  $si=' .  $si . ';<br>$bysetpos=' . print_r($bysetpos, true);
                                             $this->events[] = $evm;
                                         }
                                     }
