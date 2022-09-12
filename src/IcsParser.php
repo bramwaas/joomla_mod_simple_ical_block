@@ -335,17 +335,27 @@ END:VCALENDAR';
                      * frequency by multiplied by INTERVAL (default INTERVAL = 1)
                      * in a period starting after today() and after the first instance of the event, ending
                      * not after the last day of the displayed period, and not after the last instance defined by UNTIL or COUNT*Frequency*INTERVAL
-                     * BY: only parse BYDAY, BYMONTH, BYMONTHDAY, possibly with multiple instances (eg BYDAY=TU,WE or BYMONTHDAY=1,2,3,4,5)
-                     * not parsed: BYYEARDAY, BYSETPOS, BYHOUR, BYMINUTE, WKST
+                     * BY: only parse BYDAY, BYMONTH, BYMONTHDAY, BYSETPOS, possibly with multiple instances (eg BYDAY=TU,WE or BYMONTHDAY=1,2,3,4,5,-1)
+                     * not parsed: BYYEARDAY, BYHOUR, BYMINUTE, WKST
+                     * Set for BYSETPOS is defined from start till end of FREQUENCY period
                      * examples:
-                     * FREQ=MONTHLY;UNTIL=20201108T225959Z;BYMONTHDAY=8 Every 8th of the month until 20201108
+                     * FREQ=MONTHLY;UNTIL=20201108T225959Z;BYMONTHDAY=8 Every 8th of the month until (and including) 20201108
                      * FREQ=MONTHLY;UNTIL=20201010T215959Z;BYDAY=2SA Monthly  2nde saturday until 20201010.
                      * FREQ=MONTHLY;BYMONTHDAY=5 Monthly the 5th
                      * FREQ=WEEKLY;INTERVAL=3;BYDAY=SU,SA Every 3 weeks on sunday and saturday
-                     * FREQ=WEEKLY;COUNT=10;BYDAY=MO,TU,WE,TH,FR Every week 10 times on weekdays
-                     * FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU every year last sunday of october
-                     * FREQ=DAILY;COUNT=5;INTERVAL=7 Every 7 days,5 times
-//TODO                     * FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=1,-1 represents the first and the last work day of the month:   
+                     * FREQ=WEEKLY;COUNT=10;BYDAY=MO,TU,WE,TH,FR Every week on weekdays 10 times (10 events from and including DTSTART)
+                     * FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU or FREQ=YEARLY;BYMONTH=10;BYDAY=SU;BYSETPOS=-1  every year last sunday of october
+                     * FREQ=DAILY;COUNT=5;INTERVAL=7 Every 7 days, 5 times
+                     * FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=1,-1 represents the first and the last work day of the month.
+                     * Borders (newdtstart) for parsing at least:
+                     * Resultset >DTSTART >= (now - length event) <= penddate <= UNTIL
+                     * when COUNT: Counting  > DTSTART even if that is before (now - length event).
+                     * when expanding by a BY...: to calculate the new events we need to expand to at least the first date in the set with until/penddate
+                     * to be sure that this is always ok we can add the FREQ length * interval to the enddate of parsing.
+                     * when BYSETPOS: to calculate setpos expand in past and in future to borders of a set.
+                     * Expanding beyond borders by subtracting and adding a whole FREQ length or more is no problem the results of first and last incomplete sets
+                     * are complete outside the resultset borders and will not appear in the final resultset.
+                     * After parsing filter events > max((now - length event -1), DTSTART)   <= min(penddate, UNTIL) for output.
                      */
                     $timezone = new \DateTimeZone((isset($e->tzid)&& $e->tzid !== '') ? $e->tzid : $this->timezone_string);
                     $edtstart = new \DateTime('@' . $e->start);
@@ -358,6 +368,7 @@ END:VCALENDAR';
                     $edtendd   = new \DateTime('@' . $e->end);
                     $edtendd->setTimezone($timezone);
                     $edurationsecs =  $e->end - $e->start;
+                    $nowstart = $this->now - $edurationsecs -1;
                     
                     $rrules = array();
                     $rruleStrings = explode(';', $e->rrule);
@@ -372,32 +383,34 @@ END:VCALENDAR';
                     $interval3day =new \DateInterval('P3D');
                     $until = (isset($rrules['until'])) ? $this->parseIcsDateTime($rrules['until']) : $this->penddate;
                     $until = ($until < $this->penddate) ? $until : $this->penddate;
-                    $freqendloop = $until;
+                    $count = (isset($rrules['count'])) ? $rrules['count'] : 0;
+                    $bysetpos = (isset($rrules['bysetpos'])) ? explode(',',  $rrules['bysetpos'])  : false;
+                    $freqstartloop = (0 == $count &&  $e->start < $nowstart ) ? $nowstart : $e->start;
                     switch ($frequency){
                         case "YEARLY"	:
-                            $freqendloop = $freqendloop + (31622400 * $interval); // 366 days in sec
+                            $freqstartloop = $freqstartloop - (31622400); // 366 days in sec
+                            $freqendloop = $until + (31622400 * $interval);
                             break;
                         case "MONTHLY"	:
-                            $freqendloop = $freqendloop + (2678400 * $interval); // 31 days in sec
+                            $freqstartloop = $freqstartloop - (2678400); // 31 days in sec
+                            $freqendloop = $until + (2678400 * $interval);
                             break;
-                            
                         case "WEEKLY"	:
-                            $freqendloop = $freqendloop + (604800 * $interval); // 7 days in sec
+                            $freqstartloop = $freqstartloop - (604800); // 7 days in sec
+                            $freqendloop = $until + (604800 * $interval);
                             break;
                             
                         case "DAILY"	:
-                            $freqendloop = $freqendloop + (86400 * $interval); // 1 days in sec
+                            $freqstartloop = $freqstartloop - (86400); // 1 days in sec
+                            $freqendloop = $until + (86400 * $interval);
                             break;
                             
                     }
-                    $count = (isset($rrules['count'])) ? $rrules['count'] : 0;
                     $bymonth = explode(',', (isset($rrules['bymonth'])) ? $rrules['bymonth'] : '');
                     $bymonthday = explode(',', (isset($rrules['bymonthday'])) ? $rrules['bymonthday'] : '');
                     $byday = explode(',', (isset($rrules['byday'])) ? $rrules['byday'] : '');
-                    $bysetpos = (isset($rrules['bysetpos'])) ? explode(',',  $rrules['bysetpos'])  : false;
                     $evset = [];
                     $i = 1;
-                    $cen = 0;
                     switch ($frequency){
                         case "YEARLY"	:
                         case "MONTHLY"	:
@@ -556,60 +569,50 @@ END:VCALENDAR';
                                         }
                                         $bydays= array_unique($bydays); // make unique
                                         sort($bydays);	// order array so that oldest items first are counted
+                                        $cset = count($bydays) + 1;
+                                        $si = 0;
                                         foreach ($bydays as $by) {
-                                            if (intval($by) > 0 ) { //TODO what if $by <= 0
-                                                $newstart->setTimestamp($by) ;
-                                            }
-                                            if (
-                                                ($fmdayok  || $expand
-                                                    || $newstart->format('Ymd') != $edtstart->format('Ymd'))
-                                                && ($count == 0 || $i < $count)
-                                                && ($newstart->getTimestamp() <= $until || (false !== $bysetpos))
-                                                && !(!empty($e->exdate) && in_array($newstart->getTimestamp(), $e->exdate))
-                                                && $newstart> $edtstart) { // count events after dtstart
-                                                if (($newstart->getTimestamp() + $edurationsecs) >= $this->now
-                                                    ) { // copy only events after now
-                                                        $cen++;
-                                                        $en =  clone $e;
-                                                        $en->start = $newstart->getTimestamp();
-                                                        $en->end = $en->start + $edurationsecs;
-                                                        if ($en->startisdate ){ //
-                                                            $endtime = date('His', $en->end, $timezone);
-                                                            if ('000000' < $endtime){
-                                                                if ('120000' < $endtime) $en->end = $en->end + 86400;
-                                                                $enddate = \DateTime::createFromFormat('Y-m-d H:i:s', date('Y-m-d 00:00:00', $en->end, $timezone), $timezone );
-                                                                $en->end = $enddate->getTimestamp();
-                                                            }
-                                                        }
-                                                        $en->uid = $i . '_' . $e->uid;
-                                                        if ($test > ' ') { 	$en->summary = $en->summary . '<br>Test:' . $test; 	}
-                                                        if (false === $bysetpos) {
-                                                            $this->events[] = $en;
-                                                        } else { // add to set
-                                                            $evset[] = $en;
-                                                        }
-                                                } // copy eevents
-                                                // next eventcount from $e->start (also before now)
-                                                $i++;
-                                            } // end count events
+                                            $si++;
+                                            if (false === $bysetpos || in_array($si, $bysetpos) || in_array($si - $cset, $bysetpos)) {
+                                                if (intval($by) > 0 ) {
+                                                    $newstart->setTimestamp($by) ;
+                                                }
+                                                if (
+                                                    ($fmdayok || $expand || $newstart->format('Ymd') != $edtstart->format('Ymd'))
+                                                    && ($count == 0 || $i < $count)
+                                                    && $newstart->getTimestamp() <= $until
+                                                    && !(!empty($e->exdate) && in_array($newstart->getTimestamp(), $e->exdate))
+                                                    && $newstart> $edtstart) { // count events after dtstart
+                                                        if ($newstart->getTimestamp() > $nowstart
+                                                            ) { // copy only events after now
+                                                                $en =  clone $e;
+                                                                $en->start = $newstart->getTimestamp();
+                                                                $en->end = $en->start + $edurationsecs;
+                                                                if ($en->startisdate ){ //
+                                                                    $endtime = date('His', $en->end, $timezone);
+                                                                    if ('000000' < $endtime){
+                                                                        if ('120000' < $endtime) $en->end = $en->end + 86400;
+                                                                        $enddate = \DateTime::createFromFormat('Y-m-d H:i:s', date('Y-m-d 00:00:00', $en->end, $timezone), $timezone );
+                                                                        $en->end = $enddate->getTimestamp();
+                                                                    }
+                                                                }
+                                                                $en->uid = $i . '_' . $e->uid;
+                                                                if ($test > ' ') { 	$en->summary = $en->summary . '<br>Test:' . $test; 	}
+                                                                $this->events[] = $en;
+                                                                if (false !== $bysetpos) {
+                                                                    $en->description = $en->description . '<br>$cset=' . $cset . ';  $si=' .  $si . ';<br>$bysetpos=' . print_r($bysetpos, true)
+                                                                    . ';<br>$this->penddate=' . date('Y-m-d H:i:s', $this->penddate). ';<br>$freqstartloop=' . date('Y-m-d H:i:s', $freqstartloop )
+                                                                    . ';<br>$freqstart=' . $freqstart->format('Y-m-d H:i:s')
+                                                                    . ';<br>$freqendloop=' . date('Y-m-d H:i:s',$freqendloop);
+                                                                }
+                                                        } // copy events
+                                                        // next eventcount from $e->start (also before now)
+                                                        $i++;
+                                                } // end count events
+                                            } // end bysetpos
                                         } // end byday
                                     } // end bymonthday
                                 } // end bymonth
-                                if (false !== $bysetpos) { // process set
-                                    usort($evset, array($this, "eventSortComparer"));
-                                    $cset = count($evset) + 1;
-                                    $si = 0;
-                                    foreach ($evset as $evm){
-                                        $si++;
-                                        if (in_array($si, $bysetpos) || in_array($si - $cset, $bysetpos)) {
-                                            if ($newstart->getTimestamp() <= $until) {
-                                                $evm->description = $evm->description . '<br>$cset=' . $cset . ';  $si=' .  $si . ';<br>$bysetpos=' . print_r($bysetpos, true);
-                                                $this->events[] = $evm;
-                                            }
-                                        }
-                                    }
-                                    $evset = [];
-                                }
                                 // next startdate by FREQ 
                                 $freqstart->add($freqinterval);
                                 if ($freqstart->format('His') != $edtstarttod) {// correction when time changed by ST to DST transition
