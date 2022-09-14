@@ -350,9 +350,9 @@ END:VCALENDAR';
                      * Borders (newdtstart) for parsing at least:
                      * Resultset >DTSTART >= (now - length event) <= penddate <= UNTIL
                      * when COUNT: Counting  > DTSTART even if that is before (now - length event).
-                     * when expanding by a BY...: to calculate the new events we need to expand to at least the first date in the set with until/penddate
-                     * to be sure that this is always ok we can add the FREQ length * interval to the enddate of parsing.
-                     * when BYSETPOS: to calculate setpos expand in past and in future to borders of a set.
+                     * when expanding by a BY...: to calculate the new events we need to expand in past and in future to borders of first and last set.
+                     * to be sure that this is always ok we can subtract/add the FREQ length from/to the startdate/enddate of parsing.
+                     * when BYSETPOS: to calculate setpos the same applies here.
                      * Expanding beyond borders by subtracting and adding a whole FREQ length or more is no problem the results of first and last incomplete sets
                      * are complete outside the resultset borders and will not appear in the final resultset.
                      * After parsing filter events > max((now - length event -1), DTSTART)   <= min(penddate, UNTIL) for output.
@@ -385,31 +385,28 @@ END:VCALENDAR';
                     $until = ($until < $this->penddate) ? $until : $this->penddate;
                     $count = (isset($rrules['count'])) ? $rrules['count'] : 0;
                     $bysetpos = (isset($rrules['bysetpos'])) ? explode(',',  $rrules['bysetpos'])  : false;
-                    $freqstartloop = (0 == $count &&  $e->start < $nowstart ) ? $nowstart : $e->start;
+                    $freqstartparse = (0 == $count &&  $e->start < $nowstart ) ? $nowstart : $e->start;
                     switch ($frequency){
                         case "YEARLY"	:
-                            $freqstartloop = $freqstartloop - (31622400); // 366 days in sec
-                            $freqendloop = $until + (31622400 * $interval);
+                            $freqstartparse = $freqstartparse - 31622400; // 366 days in sec
+                            $freqendloop = $until + 31622400;
                             break;
                         case "MONTHLY"	:
-                            $freqstartloop = $freqstartloop - (2678400); // 31 days in sec
-                            $freqendloop = $until + (2678400 * $interval);
+                            $freqstartparse = $freqstartparse - 2678400; // 31 days in sec
+                            $freqendloop = $until + 2678400;
                             break;
                         case "WEEKLY"	:
-                            $freqstartloop = $freqstartloop - (604800); // 7 days in sec
-                            $freqendloop = $until + (604800 * $interval);
+                            $freqstartparse = $freqstartparse - 604800; // 7 days in sec
+                            $freqendloop = $until + 604800;
                             break;
-                            
                         case "DAILY"	:
-                            $freqstartloop = $freqstartloop - (86400); // 1 days in sec
-                            $freqendloop = $until + (86400 * $interval);
+                            $freqstartparse = $freqstartparse - 86400; // 1 days in sec
+                            $freqendloop = $until + 86400;
                             break;
-                            
                     }
                     $bymonth = explode(',', (isset($rrules['bymonth'])) ? $rrules['bymonth'] : '');
                     $bymonthday = explode(',', (isset($rrules['bymonthday'])) ? $rrules['bymonthday'] : '');
                     $byday = explode(',', (isset($rrules['byday'])) ? $rrules['byday'] : '');
-                    $evset = [];
                     $i = 1;
                     switch ($frequency){
                         case "YEARLY"	:
@@ -420,17 +417,16 @@ END:VCALENDAR';
                             $freqstart = clone $edtstart;
                             $newstart = clone $edtstart;
                             while ( $freqstart->getTimestamp() <= $freqendloop
-                                && ($count == 0 || $i < $count  )            						)
+                                && ($count == 0 || $i < $count  ))
+                            { if ($freqstartparse <= $freqstart->getTimestamp())
                             {   // first FREQ loop on dtstart will only output new events
                                 // created by a BY... clause
                                 $test = '';
                                 //							$test = print_r($e->exdate, true);
                                 $fd = $freqstart->format('d'); // Day of the month, 2 digits with leading zeros
-                                $fn = $freqstart->format('n'); // Month, without leading zeros
                                 $fY = $freqstart->format('Y'); // Year, 4 digits
                                 $fH = $freqstart->format('H'); // 24-hour format of an hour with leading zeros
                                 $fi = $freqstart->format('i'); // Minutes with leading zeros
-                                $fdays = $freqstart->format('t'); // Number of days in the given month
                                 $expand = false;
                                 // bymonth
                                 if (isset($rrules['bymonth'])) {
@@ -589,7 +585,7 @@ END:VCALENDAR';
                                                                 $en->start = $newstart->getTimestamp();
                                                                 $en->end = $en->start + $edurationsecs;
                                                                 if ($en->startisdate ){ //
-                                                                    $endtime = date('His', $en->end, $timezone);
+                                                                    $endtime = date('His', $en->end, $timezone); //TODO repair and test for DST transition
                                                                     if ('000000' < $endtime){
                                                                         if ('120000' < $endtime) $en->end = $en->end + 86400;
                                                                         $enddate = \DateTime::createFromFormat('Y-m-d H:i:s', date('Y-m-d 00:00:00', $en->end, $timezone), $timezone );
@@ -601,7 +597,7 @@ END:VCALENDAR';
                                                                 $this->events[] = $en;
                                                                 if (false !== $bysetpos) {
                                                                     $en->description = $en->description . '<br>$cset=' . $cset . ';  $si=' .  $si . ';<br>$bysetpos=' . print_r($bysetpos, true)
-                                                                    . ';<br>$this->penddate=' . date('Y-m-d H:i:s', $this->penddate). ';<br>$freqstartloop=' . date('Y-m-d H:i:s', $freqstartloop )
+                                                                    . ';<br>$this->penddate=' . date('Y-m-d H:i:s', $this->penddate). ';<br>$freqstartparse=' . date('Y-m-d H:i:s', $freqstartparse )
                                                                     . ';<br>$freqstart=' . $freqstart->format('Y-m-d H:i:s')
                                                                     . ';<br>$freqendloop=' . date('Y-m-d H:i:s',$freqendloop);
                                                                 }
@@ -613,21 +609,22 @@ END:VCALENDAR';
                                         } // end byday
                                     } // end bymonthday
                                 } // end bymonth
-                                // next startdate by FREQ 
-                                $freqstart->add($freqinterval);
-                                if ($freqstart->format('His') != $edtstarttod) {// correction when time changed by ST to DST transition
-                                    $freqstart->setTime($edtstarthour, $edtstartmin, $edtstartsec);
-                                }
-                                if  ($fmdayok &&
-                                    in_array($frequency , array('MONTHLY', 'YEARLY')) &&
-                                    $freqstart->format('j') !== $edtstartmday){ // monthday changed eg 31 jan + 1 month = 3 mar; 
-                                        $freqstart->sub($interval3day);
-                                        $fmdayok = false;
-                                } elseif (!$fmdayok ){
-                                    $freqstart->add($interval3day);
-                                    $fmdayok = true;
-                                }
-                            }  // end while $freqstart->getTimestamp() <= $freqendloop and $count ...
+                            } // end > $freqstartparse
+                            // next startdate by FREQ
+                            $freqstart->add($freqinterval);
+                            if ($freqstart->format('His') != $edtstarttod) {// correction when time changed by ST to DST transition
+                                $freqstart->setTime($edtstarthour, $edtstartmin, $edtstartsec);
+                            }
+                            if  ($fmdayok &&
+                                in_array($frequency , array('MONTHLY', 'YEARLY')) &&
+                                $freqstart->format('j') !== $edtstartmday){ // monthday changed eg 31 jan + 1 month = 3 mar;
+                                    $freqstart->sub($interval3day);
+                                    $fmdayok = false;
+                            } elseif (!$fmdayok ){
+                                $freqstart->add($interval3day);
+                                $fmdayok = true;
+                            }
+                        }  // end while $freqstart->getTimestamp() <= $freqendloop and $count ...
                     }
                 } // switch freq
                 //
@@ -913,9 +910,9 @@ END:VCALENDAR';
         $cal_ord = 0;
         foreach (explode(',', $this->calendar_ids) as $cal)
         {
-            list($cal_id, $cal_class) = explode(';', $cal, 2);
-            $cal_id = trim($cal_id," \n\r\t\v\x00\x22");
-            $cal_class = trim($cal_class," \n\r\t\v\x00\x22");
+            $calary = explode(';', $cal, 2);
+            $cal_id = trim($calary[0]," \n\r\t\v\x00\x22");
+            $cal_class = (isset($calary[1])) ?trim($calary[1]," \n\r\t\v\x00\x22"): '';
             ++$cal_ord;
             if ('#example' == $cal_id){
                 $httpBody = self::$example_events;
