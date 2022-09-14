@@ -585,10 +585,16 @@ END:VCALENDAR';
                                                                 $en->start = $newstart->getTimestamp();
                                                                 $en->end = $en->start + $edurationsecs;
                                                                 if ($en->startisdate ){ //
-                                                                    $endtime = date('His', $en->end, $timezone); //TODO repair and test for DST transition
+                                                                    $enddate = date_create( '@' . $en->end ); //TODO repair and test for DST transition
+                                                                    $enddate->setTimezone( $timezone );
+                                                                    $endtime= $enddate->format('His');
+//                                                                    $endtime = wp_date('His', $en->end, $timezone); 
                                                                     if ('000000' < $endtime){
                                                                         if ('120000' < $endtime) $en->end = $en->end + 86400;
-                                                                        $enddate = \DateTime::createFromFormat('Y-m-d H:i:s', date('Y-m-d 00:00:00', $en->end, $timezone), $timezone );
+//                                                                        $enddate = \DateTime::createFromFormat('Y-m-d H:i:s', wp_date('Y-m-d 00:00:00', $en->end, $timezone), $timezone );
+                                                                        $enddate = date_create( '@' . $en->end ); //TODO repair and test for DST transition
+                                                                        $enddate->setTimezone( $timezone );
+                                                                        $enddate->setTime(0,0,0);
                                                                         $en->end = $enddate->getTimestamp();
                                                                     }
                                                                 }
