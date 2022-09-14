@@ -80,7 +80,7 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
             $curdate = '';
             foreach($data as $e) {
                 $idlist = explode("@", $e->uid );
-                $itemid = 'b' . $attributes['blockid'] . '_' . $idlist[0]; //TODO find correct block id when duplicate
+                $itemid = 'b' . $attributes['blockid'] . '_' . $idlist[0]; 
                 $e_dtstart = new Jdate ($e->start);
                 $e_dtstart->setTimezone($tz_ui);
                 $e_dtend = new Jdate ($e->end);

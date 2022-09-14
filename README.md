@@ -116,9 +116,9 @@ Check if you can download the ics file you have designated in the block with a b
 * Displays most common repeating events 
 * Frequency Yearly, Monthly, Weekly, Dayly (not parsed Hourly, Minutely ...)
 * End of repeating by COUNT or UNTIL
-* Exclude events on EXDATE from repeat 
-* By day month or by monthday (BYDAY, BYMONTH, BYMONTHDAY) no other by
-  (not parsed: BYYEARDAY, BYSETPOS, BYHOUR, BYMINUTE, WKST)  
+* By day month, monthday or setpos (BYDAY, BYMONTH, BYMONTHDAY, BYSETPOS) no other by...   
+  (not parsed: BYYEARDAY, BYHOUR, BYMINUTE, WKST, RDATE)
+* Exclude events on EXDATE from repeat (after evaluating BYSETPOS)
 * Respects Timezone and Day Light Saving time. Build and tested with Iana timezones as used in php, Google, and Apple now also tested with Microsoft timezones and unknown timezones. For unknown timezone-names using the default timezone of te site  (probably the local timezone set in Joomla administration).  
 
 === Recurrent events, Timezone,  Daylight Saving Time ===
@@ -126,7 +126,7 @@ Check if you can download the ics file you have designated in the block with a b
 Most users don't worry about time zones. The timezonesettings for the Joomla installation, the calendar application and the events are all the same local time.   
 In that case this block displays all the recurrent events with the same local times. The block uses the properties of the starttime and duration (in seconds) of the first event to calculate the repeated events. Only when a calculated time is removed during the transition from ST (standard time, wintertime) to DST (daylight saving time, summertime) by turning the clock forward one hour, both the times of the event (in case the starttime is in the transition period) or only the endtime (in case only the endtime is in the transition period)  of the event are pushed forward with that same amount.    
 But because the transition period is usually very early in the morning, few events will be affected by it.   
-If a calculated day does not exist (i.e. February 30), the event will not be displayed.
+If a calculated day does not exist (i.e. February 30), the event will not be displayed. (Formally this should also happen to the time in the transition from ST to DST)   
 
 For users in countries that span more time zones, or users with international events the calendar applications can add a timezone to the event times. So users in other timezones will see the event in the local time in there timezone (as set in timezone settings of Joomla) corresponding with the time.    
 The block uses the starttime, the timezone of the starttime and the duration in seconds of the starting event as starting point for the calculation of repeating events. So if the events startime timezone does'not use daylight savings time and and timezone of the block (i.e. the Joomla timezone setting) does. During DST the events are placed an hour later than during ST. (more precisely shift with the local time shift). Similar the events will be shift earlier when the timezone of the starttime has DST and the timezone of the block not.   
@@ -173,8 +173,9 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 
 == Changelog ==
 * 2.1.0 Support more calendars in one module/block. Support DURATION of event. Move processing 'allowhtml' complete out Parser to template/block. 
-  Use properties in IcsParser to limit copying of input params in several functions.  
-  //TODO Support  BYSETPOS
+  Use properties in IcsParser to limit copying of input params in several functions.
+  Solved issue: Warning: date() expects at most 2 parameters, 3 given in ...IcsParser.php on line 542 caused by wp_date() / date() replacement.    
+  Support BYSETPOS in response to a github issue on the WP block of peppergrayxyz.
 * 2.0.0 major and minor vesion number aligned with those of Wordpress block with the same functionality and the same code for the IcsParser block apart from CMS specific functions (get_option('timezone_string') / Factory::getApplication()->get('offset'), wp_transient / cache type 'output' and wp_remote_get / Joomla\Http\Http->get()) and temporary wp_date() / date().
 * 0.0.7 added Accept-Encoding: '' to http request to tell curl to handle compressed results (known by the server) correct.
 * 0.0.6 added translations and adjustments to comply with JED checker.

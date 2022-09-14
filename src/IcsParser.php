@@ -553,7 +553,7 @@ END:VCALENDAR';
                                                 // intval (byi) is not allowed with a frquency other than YEARLY or MONTHLY so
                                                 // RRULE:FREQ=DAILY;BYDAY=-1SU; won't give any reptition.
                                                 if ($byday == array('')
-                                                    || in_array(strtoupper(substr($newstart->format('D'),0,2 )), $byday)
+                                                    || in_array(strtoupper(substr($newstart->format('D'),0,2 )), $byday) //TODO condition $fmdayok && needed??
                                                     ){ // only one time in this loop no change of $newstart
                                                         $bydays =  array('');
                                                 } else {
@@ -574,7 +574,7 @@ END:VCALENDAR';
                                                     $newstart->setTimestamp($by) ;
                                                 }
                                                 if (
-                                                    ($fmdayok || $expand || $newstart->format('Ymd') != $edtstart->format('Ymd'))
+                                                    ($fmdayok || $expand || $newstart->format('Ymd') != $edtstart->format('Ymd')) //TODO what if !$fmdayok
                                                     && ($count == 0 || $i < $count)
                                                     && $newstart->getTimestamp() <= $until
                                                     && !(!empty($e->exdate) && in_array($newstart->getTimestamp(), $e->exdate))
@@ -585,14 +585,12 @@ END:VCALENDAR';
                                                                 $en->start = $newstart->getTimestamp();
                                                                 $en->end = $en->start + $edurationsecs;
                                                                 if ($en->startisdate ){ //
-                                                                    $enddate = date_create( '@' . $en->end ); //TODO repair and test for DST transition
+                                                                    $enddate = date_create( '@' . $en->end ); 
                                                                     $enddate->setTimezone( $timezone );
                                                                     $endtime= $enddate->format('His');
-//                                                                    $endtime = wp_date('His', $en->end, $timezone); 
                                                                     if ('000000' < $endtime){
                                                                         if ('120000' < $endtime) $en->end = $en->end + 86400;
-//                                                                        $enddate = \DateTime::createFromFormat('Y-m-d H:i:s', wp_date('Y-m-d 00:00:00', $en->end, $timezone), $timezone );
-                                                                        $enddate = date_create( '@' . $en->end ); //TODO repair and test for DST transition
+                                                                        $enddate = date_create( '@' . $en->end );
                                                                         $enddate->setTimezone( $timezone );
                                                                         $enddate->setTime(0,0,0);
                                                                         $en->end = $enddate->getTimestamp();
