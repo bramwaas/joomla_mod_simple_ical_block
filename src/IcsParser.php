@@ -428,6 +428,7 @@ END:VCALENDAR';
                                 $fH = $freqstart->format('H'); // 24-hour format of an hour with leading zeros
                                 $fi = $freqstart->format('i'); // Minutes with leading zeros
                                 $expand = false;
+                                $fset = [];
                                 // bymonth
                                 if (isset($rrules['bymonth'])) {
                                     $bym = array();
@@ -496,7 +497,6 @@ END:VCALENDAR';
                                         } else { // passthrough
                                         }
                                         // byday
-                                        $bydays = array();
                                         if (isset($rrules['byday'])){
                                             if (in_array($frequency , array('WEEKLY','MONTHLY', 'YEARLY'))
                                                 && (! isset($rrules['bymonthday']))
@@ -520,15 +520,15 @@ END:VCALENDAR';
                                                             $wdl->setTime($fH, $fi);
                                                             if ($byi > 0) {
                                                                 $wdf->add(new \DateInterval('P' . ($byi - 1) . 'W'));
-                                                                $bydays[] = $wdf->getTimestamp();
+                                                                $fset[] = $wdf->getTimestamp();
                                                             } elseif ($byi < 0) {
                                                                 $wdl->sub(new \DateInterval('P' . (- $byi - 1) . 'W'));
-                                                                $bydays[] = $wdl->getTimestamp();
+                                                                $fset[] = $wdl->getTimestamp();
                                                                 
                                                             }
                                                             else {
                                                                 while ($wdf <= $wdl) {
-                                                                    $bydays[] = $wdf->getTimestamp();
+                                                                    $fset[] = $wdf->getTimestamp();
                                                                     $wdf->add(new \DateInterval('P1W'));
                                                                 }
                                                             }
@@ -543,7 +543,7 @@ END:VCALENDAR';
                                                                 $wdf->sub (new \DateInterval('P' . ($wdnrn - $wdnrb) . 'D'));
                                                                 
                                                             }
-                                                            $bydays[] = $wdf->getTimestamp();
+                                                            $fset[] = $wdf->getTimestamp();
                                                             
                                                         } // Weekly
                                                         
@@ -555,64 +555,64 @@ END:VCALENDAR';
                                                 if ($byday == array('')
                                                     || in_array(strtoupper(substr($newstart->format('D'),0,2 )), $byday) //TODO condition $fmdayok && needed??
                                                     ){ // only one time in this loop no change of $newstart
-                                                        $bydays =  array('');
+                                                        $fset[] =  $newstart->getTimestamp();
                                                 } else {
                                                     continue;
                                                 }
                                             } // limit
                                         } // isset byday
-                                        else {$bydays = array('');
+                                        else {$fset[] =  $newstart->getTimestamp();
                                         }
-                                        $bydays= array_unique($bydays); // make unique
-                                        sort($bydays);	// order array so that oldest items first are counted
-                                        $cset = count($bydays) + 1;
-                                        $si = 0;
-                                        foreach ($bydays as $by) {
-                                            $si++;
-                                            if (false === $bysetpos || in_array($si, $bysetpos) || in_array($si - $cset, $bysetpos)) {
-                                                if (intval($by) > 0 ) {
-                                                    $newstart->setTimestamp($by) ;
-                                                }
-                                                if (
-                                                    ($fmdayok || $expand || $newstart->format('Ymd') != $edtstart->format('Ymd')) //TODO what if !$fmdayok
-                                                    && ($count == 0 || $i < $count)
-                                                    && $newstart->getTimestamp() <= $until
-                                                    && !(!empty($e->exdate) && in_array($newstart->getTimestamp(), $e->exdate))
-                                                    && $newstart> $edtstart) { // count events after dtstart
-                                                        if ($newstart->getTimestamp() > $nowstart
-                                                            ) { // copy only events after now
-                                                                $en =  clone $e;
-                                                                $en->start = $newstart->getTimestamp();
-                                                                $en->end = $en->start + $edurationsecs;
-                                                                if ($en->startisdate ){ //
-                                                                    $enddate = date_create( '@' . $en->end ); 
-                                                                    $enddate->setTimezone( $timezone );
-                                                                    $endtime= $enddate->format('His');
-                                                                    if ('000000' < $endtime){
-                                                                        if ('120000' < $endtime) $en->end = $en->end + 86400;
-                                                                        $enddate = date_create( '@' . $en->end );
-                                                                        $enddate->setTimezone( $timezone );
-                                                                        $enddate->setTime(0,0,0);
-                                                                        $en->end = $enddate->getTimestamp();
-                                                                    }
-                                                                }
-                                                                $en->uid = $i . '_' . $e->uid;
-                                                                if ($test > ' ') { 	$en->summary = $en->summary . '<br>Test:' . $test; 	}
-                                                                $this->events[] = $en;
-                                                                if (false !== $bysetpos) {
-                                                                    $en->description = $en->description . '<br>$cset=' . $cset . ';  $si=' .  $si . ';<br>$bysetpos=' . print_r($bysetpos, true)
-                                                                    . ';<br>$this->penddate=' . date('Y-m-d H:i:s', $this->penddate). ';<br>$freqstartparse=' . date('Y-m-d H:i:s', $freqstartparse )
-                                                                    . ';<br>$freqstart=' . $freqstart->format('Y-m-d H:i:s')
-                                                                    . ';<br>$freqendloop=' . date('Y-m-d H:i:s',$freqendloop);
-                                                                }
-                                                        } // copy events
-                                                        // next eventcount from $e->start (also before now)
-                                                        $i++;
-                                                } // end count events
-                                            } // end bysetpos
-                                        } // end byday
                                     } // end bymonthday
                                 } // end bymonth
+                                $fset= array_unique($fset); // make unique
+                                sort($fset);	// order array so that oldest items first are counted
+                                $cset = count($fset) + 1;
+                                $si = 0;
+                                foreach ($fset as $by) {
+                                    $si++;
+                                    if (false === $bysetpos || in_array($si, $bysetpos) || in_array($si - $cset, $bysetpos)) {
+                                        if (intval($by) > 0 ) {
+                                            $newstart->setTimestamp($by) ;
+                                        }
+                                        if (
+                                            ($fmdayok || $expand)  //TODO what if !$fmdayok
+                                            && ($count == 0 || $i < $count)
+                                            && $newstart->getTimestamp() <= $until
+                                            && !(!empty($e->exdate) && in_array($newstart->getTimestamp(), $e->exdate))
+                                            && $newstart> $edtstart) { // count events after dtstart
+                                                if ($newstart->getTimestamp() > $nowstart
+                                                    ) { // copy only events after now
+                                                        $en =  clone $e;
+                                                        $en->start = $newstart->getTimestamp();
+                                                        $en->end = $en->start + $edurationsecs;
+                                                        if ($en->startisdate ){ //
+                                                            $enddate = date_create( '@' . $en->end );
+                                                            $enddate->setTimezone( $timezone );
+                                                            $endtime= $enddate->format('His');
+                                                            if ('000000' < $endtime){
+                                                                if ('120000' < $endtime) $en->end = $en->end + 86400;
+                                                                $enddate = date_create( '@' . $en->end );
+                                                                $enddate->setTimezone( $timezone );
+                                                                $enddate->setTime(0,0,0);
+                                                                $en->end = $enddate->getTimestamp();
+                                                            }
+                                                        }
+                                                        $en->uid = $i . '_' . $e->uid;
+                                                        if ($test > ' ') { 	$en->summary = $en->summary . '<br>Test:' . $test; 	}
+                                                        $this->events[] = $en;
+                                                        if (false !== $bysetpos) {
+                                                            $en->description = $en->description . '<br>$cset=' . $cset . ';  $si=' .  $si . ';<br>$bysetpos=' . print_r($bysetpos, true)
+                                                            . ';<br>$this->penddate=' . date('Y-m-d H:i:s', $this->penddate). ';<br>$freqstartparse=' . date('Y-m-d H:i:s', $freqstartparse )
+                                                            . ';<br>$freqstart=' . $freqstart->format('Y-m-d H:i:s')
+                                                            . ';<br>$freqendloop=' . date('Y-m-d H:i:s',$freqendloop);
+                                                        }
+                                                } // copy events
+                                                // next eventcount from $e->start (also before now)
+                                                $i++;
+                                        } // end count events
+                                    } // end bysetpos
+                                } // end byday
                             } // end > $freqstartparse
                             // next startdate by FREQ
                             $freqstart->add($freqinterval);
