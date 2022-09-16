@@ -536,6 +536,13 @@ END:VCALENDAR';
                                                         else  { // $frequency == 'WEEKLY' byi is not allowed so we dont parse it
                                                             $wdnrn = $newstart->format('N'); // Mo 1; Su 7
                                                             $wdnrb = array_search($byd,array_values(self::$weekdays)) + 1;  // numeric index in weekdays
+                                                            if (isset($rrules['wkst'])) {
+                                                                $wdnrws0 = array_search($rrules['wkst'],array_values(self::$weekdays));
+                                                                $wdnrn -= $wdnrws0;
+                                                                if (1 > $wdnrn) $wdnrn += 7;
+                                                                $wdnrb -= $wdnrws0;
+                                                                if (1 > $wdnrb) $wdnrb += 7;
+                                                            }
                                                             if ($wdnrb > $wdnrn) {
                                                                 $wdf->add (new \DateInterval('P' . ($wdnrb - $wdnrn ) . 'D'));
                                                             }
@@ -549,11 +556,10 @@ END:VCALENDAR';
                                                         
                                                     } // foreach
                                             } // expand
-                                            else { // limit frequency period smaller than Week//
+                                            else { // limit frequency period smaller than Week (DAILY)//
                                                 // intval (byi) is not allowed with a frquency other than YEARLY or MONTHLY so
                                                 // RRULE:FREQ=DAILY;BYDAY=-1SU; won't give any reptition.
-                                                if ($byday == array('')
-                                                    || in_array(strtoupper(substr($newstart->format('D'),0,2 )), $byday) //TODO condition $fmdayok && needed??
+                                                if ($byday == array('') || in_array(strtoupper(substr($newstart->format('D'),0,2 )), $byday)
                                                     ){ // only one time in this loop no change of $newstart
                                                         $fset[] =  $newstart->getTimestamp();
                                                 } else {
