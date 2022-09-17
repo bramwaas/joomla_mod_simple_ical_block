@@ -114,10 +114,10 @@ Check if you can download the ics file you have designated in the block with a b
 * Displays selected number of events, or events in a selected period from now as listgroup-items
 * Displays event start-date and summary; toggle details, description, start-, end-time, location. 
 * Displays most common repeating events 
-* Frequency Yearly, Monthly, Weekly, Dayly (not parsed Hourly, Minutely ...)
+* Frequency Yearly, Monthly, Weekly, Dayly (not parsed Hourly, Minutely ...), INTERVAL, WKST
 * End of repeating by COUNT or UNTIL
 * By day month, monthday or setpos (BYDAY, BYMONTH, BYMONTHDAY, BYSETPOS) no other by...   
-  (not parsed: BYYEARDAY, BYHOUR, BYMINUTE, WKST, RDATE)
+  (not parsed: BYWEEKNO, BYYEARDAY, BYHOUR, BYMINUTE, RDATE)
 * Exclude events on EXDATE from repeat (after evaluating BYSETPOS)
 * Respects Timezone and Day Light Saving time. Build and tested with Iana timezones as used in php, Google, and Apple now also tested with Microsoft timezones and unknown timezones. For unknown timezone-names using the default timezone of te site  (probably the local timezone set in Joomla administration).  
 
@@ -175,7 +175,7 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 * 2.1.0 Support more calendars in one module/block. Support DURATION of event. Move processing 'allowhtml' complete out Parser to template/block. 
   Use properties in IcsParser to limit copying of input params in several functions.
   Solved issue: Warning: date() expects at most 2 parameters, 3 given in ...IcsParser.php on line 542 caused by wp_date() / date() replacement.    
-  Support BYSETPOS in response to a github issue on the WP block of peppergrayxyz.
+  Support BYSETPOS in response to a github issue on the WP block of peppergrayxyz. Support WKST.   
 * 2.0.0 major and minor vesion number aligned with those of Wordpress block with the same functionality and the same code for the IcsParser block apart from CMS specific functions (get_option('timezone_string') / Factory::getApplication()->get('offset'), wp_transient / cache type 'output' and wp_remote_get / Joomla\Http\Http->get()) and temporary wp_date() / date().
 * 0.0.7 added Accept-Encoding: '' to http request to tell curl to handle compressed results (known by the server) correct.
 * 0.0.6 added translations and adjustments to comply with JED checker.

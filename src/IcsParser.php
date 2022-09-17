@@ -537,7 +537,7 @@ END:VCALENDAR';
                                                             $wdnrn = $newstart->format('N'); // Mo 1; Su 7
                                                             $wdnrb = array_search($byd,array_values(self::$weekdays)) + 1;  // numeric index in weekdays
                                                             if (isset($rrules['wkst'])) {
-                                                                $wdnrws0 = array_search($rrules['wkst'],array_values(self::$weekdays));
+                                                                $wdnrws0 = array_search($rrules['wkst'],array_keys(self::$weekdays));
                                                                 $wdnrn -= $wdnrws0;
                                                                 if (1 > $wdnrn) $wdnrn += 7;
                                                                 $wdnrb -= $wdnrws0;
@@ -548,12 +548,9 @@ END:VCALENDAR';
                                                             }
                                                             if ($wdnrb < $wdnrn) {
                                                                 $wdf->sub (new \DateInterval('P' . ($wdnrn - $wdnrb) . 'D'));
-                                                                
                                                             }
                                                             $fset[] = $wdf->getTimestamp();
-                                                            
                                                         } // Weekly
-                                                        
                                                     } // foreach
                                             } // expand
                                             else { // limit frequency period smaller than Week (DAILY)//
@@ -607,12 +604,6 @@ END:VCALENDAR';
                                                         $en->uid = $i . '_' . $e->uid;
                                                         if ($test > ' ') { 	$en->summary = $en->summary . '<br>Test:' . $test; 	}
                                                         $this->events[] = $en;
-                                                        if (false !== $bysetpos) {
-                                                            $en->description = $en->description . '<br>$cset=' . $cset . ';  $si=' .  $si . ';<br>$bysetpos=' . print_r($bysetpos, true)
-                                                            . ';<br>$this->penddate=' . date('Y-m-d H:i:s', $this->penddate). ';<br>$freqstartparse=' . date('Y-m-d H:i:s', $freqstartparse )
-                                                            . ';<br>$freqstart=' . $freqstart->format('Y-m-d H:i:s')
-                                                            . ';<br>$freqendloop=' . date('Y-m-d H:i:s',$freqendloop);
-                                                        }
                                                 } // copy events
                                                 // next eventcount from $e->start (also before now)
                                                 $i++;
@@ -778,18 +769,20 @@ END:VCALENDAR';
             //     eg. DTSTART;TZID=Europe/Amsterdam, or  DTSTART;VALUE=DATE:20171203
             $tl = explode(";", $list[0]);
             $token = $tl[0];
-            if (count($tl) > 1 ){
-                $dtl = explode("=", $tl[1]);
+            $i = 1;
+            while (count($tl) > $i ){
+                $dtl = explode("=", $tl[$i]);
                 if (count($dtl) > 1 ){
                     switch($dtl[0]) {
                         case 'TZID':
                             $tzid = $dtl[1];
                             break;
                         case 'VALUE':
-                            $isdate = (substr( $dtl[1],0,4) == 'DATE');
+                            $isdate = ('DATE' == $dtl[1]);
                             break;
                     }
                 }
+                $i++;
             }
             if (count($list) > 1 && strlen($token) > 1 && substr($token, 0, 1) > ' ') { //all tokens start with a alphabetic char , otherwise it is a continuation of a description with a colon in it.
                 // trim() to remove \n\r\0
