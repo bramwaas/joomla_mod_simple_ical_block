@@ -89,15 +89,15 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
                 $e_dtend_1->setTimezone($tz_ui);
                 $evdate = strip_tags($e_dtstart->format($dflg, true, true) , $allowed_tags);
                 if ( !$attributes['allowhtml']) {
-                    $e->summary = htmlspecialchars($e->summary);
-                    $e->description = htmlspecialchars($e->description);
-                    $e->location = htmlspecialchars($e->location);
+                    if (!empty($e->summary)) $e->summary = htmlspecialchars($e->summary);
+                    if (!empty($e->description)) $e->description = htmlspecialchars($e->description);
+                    if (!empty($e->location)) $e->location = htmlspecialchars($e->location);
                 }
                 if (date('yz', $e->start) != date('yz', $e->end)) {
                     $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags( $e_dtend_1->format($dflgend, true, true) , $allowed_tags));
                 }
                 $evdtsum = (($e->startisdate === false) ? strip_tags($e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true), $allowed_tags) : '');
-                echo '<li class="list-group-item' .  $sflgi . ' ' . SimpleicalblockHelper::sanitize_html_class($e->cal_class) . '">';
+                echo '<li class="list-group-item' .  $sflgi . ((!empty($e->cal_class)) ? ' ' . SimpleicalblockHelper::sanitize_html_class($e->cal_class): '') . '">';
                 if (!$startwsum && $curdate != $evdate ) {
                     $curdate =  $evdate;
                     echo '<span class="ical-date">' . ucfirst($evdate) . '</span>' . (('a' == $attributes['tag_sum'] ) ? '<br>': '');
