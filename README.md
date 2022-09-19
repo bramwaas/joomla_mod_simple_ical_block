@@ -3,7 +3,7 @@ Plugin name: Simple iCal Block
 Contributors: bramwaas
 Tags: Event Calendar, Google Calendar, iCal, Events, Block, Calendar, iCalendar, Outlook, iCloud
 Requires at least: 4.0.0
-Tested up to: 4.1
+Tested up to: 4.2
 Requires PHP: 5.3.0
 Stable tag: trunk
 License: GPLv3 or later
@@ -23,6 +23,7 @@ These are great, but as soon as you want to make a few adjustments to the stylin
 
 * Calendar block module to display appointments/events of a public Google calendar or other iCal file.
 * Small footprint, uses only Google ID of the calendar, or ICS link for Outlook, or Url of iCal file, to get event information via iCal
+* Merge more calendars into one module/block
 * Manage events in Google Calendar, or other iCalendar source.
 * Fully adaptable to your website with CSS. Output in unordered list with Bootstrap 4 or 5 listgroup classes and toggle for collapsed details.
 * Choose date / time format in settings screen that best suits your website.
@@ -35,8 +36,8 @@ Date format first line: ".<\b\r>l jS \o\f  F"
 Enddate format first line: " - l jS \o\f F"  
 Time format time summary line: " G:i"   
 Time format end time summary line: " - G:i"   
-Time format start time: ""  
-Time format end time: ""  
+Time format start time: "<>"  
+Time format end time: "<>"  
 Tag for summary: "strong" 
   
 == Installation ==
@@ -63,6 +64,13 @@ Then use the public iCal address or the Google calendar ID.
 
  You can find Google calendar ID by going to Calendar Settings / Calendars, clicking on the appropriate calendar, scrolling all the way down to find the Calendar ID at the bottom under the Integrate Calendar section. There's your calendar id.
  [More details on Google support](https://support.google.com/calendar/answer/37083#link)
+ 
+= How to merge more calendars into one module/block =  
+
+Fill a comma separated list of ID's in the Calendar ID field.      
+Optional you can add a html-class separated by a semicolon to some or all ID's to distinguish the descent in the lay-out of the event.   
+E.g.: #example;blue,https://p24-calendars.icloud.com/holiday/NL_nl.ics;red     
+Events of #example will be merged with events of NL holidays; html-class "blue" is added to all events of #example, html-class "red" to all events of NL holidays. 
 
 = Can I use HTML in the description of the appointement?  =
 
@@ -102,14 +110,15 @@ Check if you can download the ics file you have designated in the block with a b
 == Documentation ==
 
 * Gets calendar events via iCal url or google calendar ID
+* Merge more calendars into one module/block
 * Displays selected number of events, or events in a selected period from now as listgroup-items
 * Displays event start-date and summary; toggle details, description, start-, end-time, location. 
 * Displays most common repeating events 
-* Frequency Yearly, Monthly, Weekly, Dayly (not parsed Hourly, Minutely ...)
+* Frequency Yearly, Monthly, Weekly, Dayly (not parsed Hourly, Minutely ...), INTERVAL (default 1), WKST (default MO)
 * End of repeating by COUNT or UNTIL
-* Exclude events on EXDATE from repeat 
-* By day month or by monthday (BYDAY, BYMONTH, BYMONTHDAY) no other by
-  (not parsed: BYYEARDAY, BYSETPOS, BYHOUR, BYMINUTE, WKST)
+* By day month, monthday or setpos (BYDAY, BYMONTH, BYMONTHDAY, BYSETPOS) no other by...   
+  (not parsed: BYWEEKNO, BYYEARDAY, BYHOUR, BYMINUTE, RDATE)
+* Exclude events on EXDATE from repeat (after evaluating BYSETPOS)
 * Respects Timezone and Day Light Saving time. Build and tested with Iana timezones as used in php, Google, and Apple now also tested with Microsoft timezones and unknown timezones. For unknown timezone-names using the default timezone of te site  (probably the local timezone set in Joomla administration).  
 
 === Recurrent events, Timezone,  Daylight Saving Time ===
@@ -117,7 +126,7 @@ Check if you can download the ics file you have designated in the block with a b
 Most users don't worry about time zones. The timezonesettings for the Joomla installation, the calendar application and the events are all the same local time.   
 In that case this block displays all the recurrent events with the same local times. The block uses the properties of the starttime and duration (in seconds) of the first event to calculate the repeated events. Only when a calculated time is removed during the transition from ST (standard time, wintertime) to DST (daylight saving time, summertime) by turning the clock forward one hour, both the times of the event (in case the starttime is in the transition period) or only the endtime (in case only the endtime is in the transition period)  of the event are pushed forward with that same amount.    
 But because the transition period is usually very early in the morning, few events will be affected by it.   
-If a calculated day does not exist (i.e. February 30), the event will not be displayed.
+If a calculated day does not exist (i.e. February 30), the event will not be displayed. (Formally this should also happen to the time in the transition from ST to DST)   
 
 For users in countries that span more time zones, or users with international events the calendar applications can add a timezone to the event times. So users in other timezones will see the event in the local time in there timezone (as set in timezone settings of Joomla) corresponding with the time.    
 The block uses the starttime, the timezone of the starttime and the duration in seconds of the starting event as starting point for the calculation of repeating events. So if the events startime timezone does'not use daylight savings time and and timezone of the block (i.e. the Joomla timezone setting) does. During DST the events are placed an hour later than during ST. (more precisely shift with the local time shift). Similar the events will be shift earlier when the timezone of the starttime has DST and the timezone of the block not.   
@@ -141,6 +150,8 @@ see http://www.ietf.org/rfc/rfc5545.txt for specification of te ical format.
   |____________|_________|________|_________|________|
   |BYDAY       |Limit    |Expand  |Note 1   |Note 2  |
   |____________|_________|________|_________|________|
+  |BYSETPOS    |Limit    |Limit   |Limit    |Limit   |
+  |____________|_________|________|_________|________|
  
     Note 1:  Limit if BYMONTHDAY is present; 
              otherwise, special expand for MONTHLY.
@@ -161,6 +172,17 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 * works with Joomla 4 or higher.
 
 == Changelog ==
+* 2.1.0 Support more calendars in one module/block. Support DURATION of event. Move processing 'allowhtml' complete out Parser to template/block. 
+  Use properties in IcsParser to limit copying of input params in several functions.
+  Solved issue: Warning: date() expects at most 2 parameters, 3 given in ...IcsParser.php on line 542 caused by wp_date() / date() replacement.    
+  Support BYSETPOS in response to a github issue on the WP block of peppergrayxyz. Support WKST.   
+* 2.0.0 major and minor vesion number aligned with those of Wordpress block with the same functionality and the same code for the IcsParser block apart from CMS specific functions (get_option('timezone_string') / Factory::getApplication()->get('offset'), wp_transient / cache type 'output' and wp_remote_get / Joomla\Http\Http->get()) and temporary wp_date() / date().
+* 0.0.7 added Accept-Encoding: '' to http request to tell curl to handle compressed results (known by the server) correct.
+* 0.0.6 added translations and adjustments to comply with JED checker.
+* 0.0.5 added documentation tab in settings form.
+* 0.0.4 replace transient by cache type 'output'; split transientId in cachegroup and cacheID to distinguish the group in a.o. System/Clear cache
+* 0.0.3 module works in Joomla 4, with #example, with file, and with requests from google or outlook. 
+  Output is comparable with output of WP block but more testing and clean up needs to be done.
 * 0.0.0 imported V2.0.3 of my Wordpress plugin [Simple Google Calendar Outlook Events Block Widget](https://wordpress.org/plugins/simple-google-icalendar-widget/) and made modifications to let it work with Joomla 4.
 * copied src/IcsParser.php with IcsParser class from WP includes/IcsParser.php; replaced wp specific functions like wp_date() wp_remote_get() and
   get_option('timezone_string') by PHP or Joomla alternatives.
@@ -177,10 +199,3 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
   and form() function in simple-google-icalendar-widget.php. Removed title as we already have a module title. Filled blockid with module.id.
 * created CleartransientnowRule to handle action on field clear_cache_now like it is done in the WP widget; 
    i.e. deleting the transient when the parameters are saved and clear_cache_now = true.
-* 0.0.3 module works in Joomla 4, with #example, with file, and with requests from google or outlook. 
-  Output is comparable with output of WP block but more testing and clean up needs to be done.
-* 0.0.4 replace transient by cache type 'output'; split transientId in cachegroup and cacheID to distinguish the group in a.o. System/Clear cache
-* 0.0.5 added documentation tab in settings form.
-* 0.0.6 added translations and adjustments to comply with JED checker.
-* 0.0.7 added Accept-Encoding: '' to http request to tell curl to handle compressed results (known by the server) correct.
-* 2.0.0 major and minor vesion number aligned with those of Wordpress block with the same functionality and the same code for the IcsParser block apart from CMS specific functions (get_option('timezone_string') / Factory::getApplication()->get('offset'), wp_transient / cache type 'output' and wp_remote_get / Joomla\Http\Http->get()) and temporary wp_date() / date().

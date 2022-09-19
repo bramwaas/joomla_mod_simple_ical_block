@@ -28,6 +28,9 @@
  *   removed wp esc_attr from sanitizing $e->uid
  *   removed checks isset on attributes because that is already done before.
  *   replaced date( with Date()->format where translation is necessary.
+ * 2.0.1 back to static functions getData() and fetch() only instantiate object in fetch when parsing must be done (like it always was in WP)  
+ * 2.1.0 add calendar class to list-group-item
+ *   add htmlspecialchars() to summary, description and location when not 'allowhtml', replacing similar code from IcsParser
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -70,15 +73,14 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
         $excerptlength = $attributes['excerptlength'];
         $sflgi = $attributes['suffix_lgi_class'];
         $sflgia = $attributes['suffix_lgia_class'];
-        $parser = new IcsParser();
-        $data = $parser->getData($attributes);
+        $data = IcsParser::getData($attributes);
         if (!empty($data) && is_array($data)) {
             date_default_timezone_set($tzid_ui);
             echo '<ul class="list-group' .  $attributes['suffix_lg_class'] . ' simple-ical-widget">';
             $curdate = '';
             foreach($data as $e) {
                 $idlist = explode("@", $e->uid );
-                $itemid = 'b' . $attributes['blockid'] . '_' . $idlist[0]; //TODO find correct block id when duplicate
+                $itemid = 'b' . $attributes['blockid'] . '_' . $idlist[0]; 
                 $e_dtstart = new Jdate ($e->start);
                 $e_dtstart->setTimezone($tz_ui);
                 $e_dtend = new Jdate ($e->end);
@@ -86,11 +88,16 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
                 $e_dtend_1 = new Jdate ($e->end -1);
                 $e_dtend_1->setTimezone($tz_ui);
                 $evdate = strip_tags($e_dtstart->format($dflg, true, true) , $allowed_tags);
+                if ( !$attributes['allowhtml']) {
+                    if (!empty($e->summary)) $e->summary = htmlspecialchars($e->summary);
+                    if (!empty($e->description)) $e->description = htmlspecialchars($e->description);
+                    if (!empty($e->location)) $e->location = htmlspecialchars($e->location);
+                }
                 if (date('yz', $e->start) != date('yz', $e->end)) {
                     $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags( $e_dtend_1->format($dflgend, true, true) , $allowed_tags));
                 }
                 $evdtsum = (($e->startisdate === false) ? strip_tags($e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true), $allowed_tags) : '');
-                echo '<li class="list-group-item' .  $sflgi . '">';
+                echo '<li class="list-group-item' .  $sflgi . ((!empty($e->cal_class)) ? ' ' . SimpleicalblockHelper::sanitize_html_class($e->cal_class): '') . '">';
                 if (!$startwsum && $curdate != $evdate ) {
                     $curdate =  $evdate;
                     echo '<span class="ical-date">' . ucfirst($evdate) . '</span>' . (('a' == $attributes['tag_sum'] ) ? '<br>': '');
@@ -119,7 +126,7 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
                     }
                     }
                     $e->description = str_replace("\n", '<br>', strip_tags($e->description,$allowed_tags) );
-                    echo   $e->description ,(strrpos($e->description, '<br>') == (strlen($e->description) - 4)) ? '' : '<br>';
+                    echo   $e->description ,(strrpos($e->description, '<br>') === (strlen($e->description) - 4)) ? '' : '<br>';
                 }
                 if ($e->startisdate === false && date('yz', $e->start) === date('yz', $e->end))	{
                     echo '<span class="time">', strip_tags($e_dtstart->format($dftstart, true, true), $allowed_tags),

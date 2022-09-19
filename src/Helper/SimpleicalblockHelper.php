@@ -47,13 +47,6 @@ class SimpleicalblockHelper
     private static $allowed_tags_sum = ['a', 'b', 'div', 'h4', 'h5', 'h6', 'i', 'span', 'strong', 'u'] ;
     
     /**
-     * Delete existing transient with transientId.
-     *
-     * @param string  $transientId    Id for the transient
-     *
-     * @return void 
-     */
-    /**
      * copied from WP sanitize_html_class, and added space as allowed character to accomadate multiple classes in one string.
      * Strips the string down to A-Z,a-z,0-9,_,-. If this results in an empty string then it will return the alternative value supplied.
      * 
