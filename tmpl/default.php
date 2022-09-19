@@ -126,7 +126,7 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
                     }
                     }
                     $e->description = str_replace("\n", '<br>', strip_tags($e->description,$allowed_tags) );
-                    echo   $e->description ,(strrpos($e->description, '<br>') == (strlen($e->description) - 4)) ? '' : '<br>';
+                    echo   $e->description ,(strrpos($e->description, '<br>') === (strlen($e->description) - 4)) ? '' : '<br>';
                 }
                 if ($e->startisdate === false && date('yz', $e->start) === date('yz', $e->end))	{
                     echo '<span class="time">', strip_tags($e_dtstart->format($dftstart, true, true), $allowed_tags),
