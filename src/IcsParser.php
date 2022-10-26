@@ -26,6 +26,7 @@
  *   Combined getFutureEvents and Limit array. usort eventsortcomparer now on start, end, cal_ord and with arithmic subtraction because all are integers.
  *   Parse event DURATION; (only) When DTEND is empty: determine end from start plus duration, when duration is empty and start is DATE start plus one day, else = start  
  *   Parse event BYSETPOS;  Parse WKST (default MO) 
+ * 2.1.1 Solved Warning: Array to string conversion in .../Transport/Curl.php on line 183 that occured after using php 8.  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -921,7 +922,7 @@ END:VCALENDAR';
             }
             else  {
                 $url = self::getCalendarUrl($cal_id);
-                $http = new Http(['headers' => ['Accept-Encoding' => ['']]]); //accepts known encoding and decodes.
+                $http = new Http(['headers' => ['Accept-Encoding' => '']]); //accepts known encoding and decodes.
                 try {
                     $httpResponse =  $http->get($url);
                 } catch(\Exception $e) {
