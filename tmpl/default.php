@@ -56,10 +56,16 @@ $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 
 echo '<div id="' . $attributes['anchorId']  . '" >';
 
-if ($params->get('item_title')) {
+if ($module->showtitle)
+{
+    if (isset( $attribs['headerLevel'] ))
+    {
+        $headerLevel = $attribs['headerLevel'];
+    } else {
+        $headerLevel = 3;
+    }
     
-    $item_heading = $params->get('item_heading', 'h4');
-    echo '<', $item_heading, ' class="simple-ical-block-title">',$item->title,'</', $item_heading ,'>';
+    echo '<h', $headerLevel, ' class="simple-ical-block-title">',$module->title,'</h', $headerLevel ,'>';
     
 }
 
@@ -70,7 +76,6 @@ if ($params->get('item_title')) {
   * from static function display_block($attributes)
   */
     {
-//        echo '<h4 class="widget-title block-title">'. 'TZui:'  . $tzid_ui . 'Old:' . $old_timezone . '</h4>';
         
         $startwsum = $attributes['startwsum'];
         $dflg = $attributes['dateformat_lg'];
