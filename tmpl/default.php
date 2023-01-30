@@ -53,8 +53,16 @@ $tz_ui = new \DateTimeZone(Factory::getApplication()->get('offset'));
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 //$helper = new SimpleicalblockHelper;
 
+
 echo '<div id="' . $attributes['anchorId']  . '" >';
- 
+
+if ($params->get('item_title')) {
+    
+    $item_heading = $params->get('item_heading', 'h4');
+    echo '<', $item_heading, ' class="simple-ical-block-title">',$item->title,'</', $item_heading ,'>';
+    
+}
+
 /**
   * Front-end display of block or module.
   *
@@ -63,6 +71,7 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
   */
     {
 //        echo '<h4 class="widget-title block-title">'. 'TZui:'  . $tzid_ui . 'Old:' . $old_timezone . '</h4>';
+        
         $startwsum = $attributes['startwsum'];
         $dflg = $attributes['dateformat_lg'];
         $dflgend =$attributes['dateformat_lgend'];
