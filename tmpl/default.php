@@ -56,18 +56,6 @@ $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 
 echo '<div id="' . $attributes['anchorId']  . '" >';
 
-if ($module->showtitle)
-{
-    if (isset( $attribs['headerLevel'] ))
-    {
-        $headerLevel = $attribs['headerLevel'];
-    } else {
-        $headerLevel = 3;
-    }
-    
-    echo '<h', $headerLevel, ' class="simple-ical-block-title">',$module->title,'</h', $headerLevel ,'>';
-    
-}
 
 /**
   * Front-end display of block or module.
