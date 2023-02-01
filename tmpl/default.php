@@ -53,9 +53,7 @@ $tz_ui = new \DateTimeZone(Factory::getApplication()->get('offset'));
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 //$helper = new SimpleicalblockHelper;
 
-
 echo '<div id="' . $attributes['anchorId']  . '" >';
-
 
 /**
   * Front-end display of block or module.
@@ -64,7 +62,6 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
   * from static function display_block($attributes)
   */
     {
-        
         $startwsum = $attributes['startwsum'];
         $dflg = $attributes['dateformat_lg'];
         $dflgend =$attributes['dateformat_lgend'];
@@ -139,15 +136,12 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
                 if(!empty($e->location)) {
                     echo  '<span class="location">', str_replace("\n", '<br>', strip_tags($e->location,$allowed_tags)) , '</span>';
                 }
-                
-                
                 echo '</div></li>';
             }
             echo '</ul>';
             date_default_timezone_set($old_timezone);
         }
- 
         echo '<br class="clear" />';
     }
-    echo '</div>';
+echo '</div>';
 

@@ -26,7 +26,7 @@
 		<fields name="params"  
 			 addruleprefix="WaasdorpSoekhan\Module\Simpleicalblock\Site\Rule">
 			<fieldset name="basic">
-			    <!-- Title unnecessary because there is a module title -->
+			    <!-- Title unnecessary because there is a module title depending on module-style -->
 				<!-- field name="title" type="text" default="Events" label="MOD_SIMPLEICALBLOCK_TITLE" description="MOD_SIMPLEICALBLOCK_TITLE_DESC" /  replaced by module title -->
 				<field name="calendar_id" type="text" default="#example" label="MOD_SIMPLEICALBLOCK_CALENDAR_ID" description="MOD_SIMPLEICALBLOCK_CALENDAR_ID_DESC" />
 				<field name="event_count" type="number" min="0" max="100" default="10"  label="MOD_SIMPLEICALBLOCK_CNT_EVENTS" description="MOD_SIMPLEICALBLOCK_CNT_EVENTS_DESC" />
@@ -108,6 +108,10 @@
 			<fieldset name="Documentation" >
 				<field name="basic_help"  type="spacer" hr="false" class="span-12"
 					label="MOD_SIMPLEICALBLOCK_BASIC_HELP_LB"
+ 					 />
+				<field name="title_help"  type="note" 
+					label="MOD_SIMPLEICALBLOCK_TITLE_AND_SHOW"
+					description="MOD_SIMPLEICALBLOCK_TITLE_AND_SHOW_HELP"
  					 />
 				<field name="calendar_id_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_CALENDAR_ID"
@@ -203,6 +207,10 @@
 				<field name="cache_time_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_CACHE_TIME_HELP_LB"
 					description="MOD_SIMPLEICALBLOCK_CACHE_TIME_HELP"
+ 					 />
+				<field name="header_tag_help"  type="note" 
+					label="MOD_SIMPLEICALBLOCK_HEADER_TAG"
+					description="MOD_SIMPLEICALBLOCK_TITLE_AND_SHOW_HELP"
  					 />
 			</fieldset>
 		</fields>
