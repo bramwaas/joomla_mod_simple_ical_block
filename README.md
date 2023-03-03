@@ -2,7 +2,7 @@
 Plugin name: Simple iCal Block
 Contributors: bramwaas
 Tags: Event Calendar, Google Calendar, iCal, Events, Block, Calendar, iCalendar, Outlook, iCloud
-Requires at least: 4.0.0
+Requires at least Joomla: 4.0
 Tested up to: 4.2
 Requires PHP: 5.3.0
 Stable tag: trunk
@@ -24,9 +24,9 @@ These are great, but as soon as you want to make a few adjustments to the stylin
 * Calendar block module to display appointments/events of a public Google calendar or other iCal file.
 * Small footprint, uses only Google ID of the calendar, or ICS link for Outlook, or Url of iCal file, to get event information via iCal
 * Merge more calendars into one module/block
-* Manage events in Google Calendar, or other iCalendar source.
+* Manage events in Google Calendar, or other iCalendar source NOT in this module
 * Fully adaptable to your website with CSS. Output in unordered list with Bootstrap 4 or 5 listgroup classes and toggle for collapsed details.
-* Choose date / time format in settings screen that best suits your website.
+* Choose date / time format that best suits your website in settings screen.
 * Displays per event DTSTART, DTEND, SUMMARY, LOCATION and DESCRIPTION. DTSTART is required other components are optional. 
 * Displays most common repeating events. Frequency Yearly, Monthly, Weekly, Dayly (not Hourly, Minutely and smaller periods)    
 
