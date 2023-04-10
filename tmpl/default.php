@@ -63,7 +63,7 @@ echo '<div id="' . $attributes['anchorId']  . '" class="simple_ical_block" >';
   * from static function display_block($attributes)
   */
     {
-        $layout = (isset($attributes['layout'])) ? $attributes['layout'] : 3;
+        $layout = (isset($attributes['sib_layout'])) ? intval($attributes['sib_layout']) : 3;
         $dflg = $attributes['dateformat_lg'];
         $dflgend =$attributes['dateformat_lgend'];
         $dftsum =$attributes['dateformat_tsum'];

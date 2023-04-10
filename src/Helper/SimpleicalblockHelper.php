@@ -3,7 +3,7 @@
  * @version $Id: simpleicalblock.php 
  * @package simpleicalblock
  * @subpackage simpleicalblock Module
- * @copyright Copyright (C) 2022 -2022 A.H.C. Waasdorp, All rights reserved.
+ * @copyright Copyright (C) 2022 -2023 A.H.C. Waasdorp, All rights reserved.
  * @license GNU General Public License version 3 or later
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl
@@ -82,7 +82,7 @@ class SimpleicalblockHelper
                 'event_count' => 10,
                 'event_period' => 92,
                 'transient_time' => 60,
-                'startwsum' => false,
+                'sib_layout' => 3,
                 'dateformat_lg' => '',
                 'dateformat_lgend' => '',
                 'tag_sum' => 'a',
