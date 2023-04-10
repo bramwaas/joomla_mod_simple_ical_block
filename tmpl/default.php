@@ -3,7 +3,7 @@
  * @version $Id: default.php
  * @package simpleicalblock
  * @subpackage simpleicalblock Module
- * @copyright Copyright (C) 2022 -2022 simpleicalblock, All rights reserved.
+ * @copyright Copyright (C) 2022 -2023 simpleicalblock, All rights reserved.
  * @license GNU General Public License version 3 or later
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl
@@ -31,6 +31,7 @@
  * 2.0.1 back to static functions getData() and fetch() only instantiate object in fetch when parsing must be done (like it always was in WP)  
  * 2.1.0 add calendar class to list-group-item
  *   add htmlspecialchars() to summary, description and location when not 'allowhtml', replacing similar code from IcsParser
+ * 2.1.3 use select 'layout' in stead of 'start with summary' to create more lay-out options.   
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -53,8 +54,8 @@ $tz_ui = new \DateTimeZone(Factory::getApplication()->get('offset'));
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 //$helper = new SimpleicalblockHelper;
 
-echo '<div id="' . $attributes['anchorId']  . '" >';
- 
+echo '<div id="' . $attributes['anchorId']  . '" class="simple_ical_block" >';
+
 /**
   * Front-end display of block or module.
   *
@@ -62,8 +63,7 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
   * from static function display_block($attributes)
   */
     {
-//        echo '<h4 class="widget-title block-title">'. 'TZui:'  . $tzid_ui . 'Old:' . $old_timezone . '</h4>';
-        $startwsum = $attributes['startwsum'];
+        $layout = (isset($attributes['layout'])) ? $attributes['layout'] : 3;
         $dflg = $attributes['dateformat_lg'];
         $dflgend =$attributes['dateformat_lgend'];
         $dftsum =$attributes['dateformat_tsum'];
@@ -87,6 +87,7 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
                 $e_dtend->setTimezone($tz_ui);
                 $e_dtend_1 = new Jdate ($e->end -1);
                 $e_dtend_1->setTimezone($tz_ui);
+                $cal_class = ((!empty($e->cal_class)) ? ' ' . SimpleicalblockHelper::sanitize_html_class($e->cal_class): '');
                 $evdate = strip_tags($e_dtstart->format($dflg, true, true) , $allowed_tags);
                 if ( !$attributes['allowhtml']) {
                     if (!empty($e->summary)) $e->summary = htmlspecialchars($e->summary);
@@ -97,22 +98,26 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
                     $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags( $e_dtend_1->format($dflgend, true, true) , $allowed_tags));
                 }
                 $evdtsum = (($e->startisdate === false) ? strip_tags($e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true), $allowed_tags) : '');
-                echo '<li class="list-group-item' .  $sflgi . ((!empty($e->cal_class)) ? ' ' . SimpleicalblockHelper::sanitize_html_class($e->cal_class): '') . '">';
-                if (!$startwsum && $curdate != $evdate ) {
-                    $curdate =  $evdate;
+                if ($layout < 2 && $curdate != $evdate) {
+                    if  ($curdate != '') { echo '</ul></li>';}
+                    echo '<li class="list-group-item' .  $sflgi . ' head">' .
+                        '<span class="ical-date">' . ucfirst($evdate) . '</span><ul class="list-group' .  $attributes['suffix_lg_class'] . '">';
+                }
+                echo '<li class="list-group-item' .  $sflgi . $cal_class . '">';
+                if ($layout == 3 && $curdate != $evdate) {
                     echo '<span class="ical-date">' . ucfirst($evdate) . '</span>' . (('a' == $attributes['tag_sum'] ) ? '<br>': '');
                 }
                 echo  '<' . $attributes['tag_sum'] . ' class="ical_summary' .  $sflgia . (('a' == $attributes['tag_sum'] ) ? '" data-toggle="collapse" data-bs-toggle="collapse" href="#'.
                 $itemid . '" aria-expanded="false" aria-controls="'.
                 $itemid . '">' : '">') ;
-                if (!$startwsum)	{
+                if ($layout != 2)	{
                     echo $evdtsum;
                 }
                 if(!empty($e->summary)) {
                     echo str_replace("\n", '<br>', strip_tags($e->summary,$allowed_tags));
                 }
                 echo	'</' . $attributes['tag_sum'] . '>' ;
-                if ($startwsum ) {
+                if ($layout == 2)	{
                     echo '<span>', $evdate, $evdtsum, '</span>';
                 }
                 echo '<div class="ical_details' .  $sflgia . (('a' == $attributes['tag_sum'] ) ? ' collapse' : '') . '" id="',  $itemid, '">';
@@ -137,15 +142,16 @@ echo '<div id="' . $attributes['anchorId']  . '" >';
                 if(!empty($e->location)) {
                     echo  '<span class="location">', str_replace("\n", '<br>', strip_tags($e->location,$allowed_tags)) , '</span>';
                 }
-                
-                
                 echo '</div></li>';
+                $curdate =  $evdate;
+            }
+            if ($layout < 2 ) {
+                echo '</ul></li>';
             }
             echo '</ul>';
             date_default_timezone_set($old_timezone);
         }
- 
         echo '<br class="clear" />';
     }
-    echo '</div>';
+echo '</div>';
 
