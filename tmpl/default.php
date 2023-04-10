@@ -98,17 +98,14 @@ echo '<div id="' . $attributes['anchorId']  . '" class="simple_ical_block" >';
                     $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags( $e_dtend_1->format($dflgend, true, true) , $allowed_tags));
                 }
                 $evdtsum = (($e->startisdate === false) ? strip_tags($e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true), $allowed_tags) : '');
-                if ($layout < 2 && $curdate != $evdate && $curdate != '' ) {
-                    echo '</ul></li>';
+                if ($layout < 2 && $curdate != $evdate) {
+                    if  ($curdate != '') { echo '</ul></li>';}
+                    echo '<li class="list-group-item' .  $sflgi . ' head">' .
+                        '<span class="ical-date">' . ucfirst($evdate) . '</span><ul class="list-group' .  $attributes['suffix_lg_class'] . '">';
                 }
                 echo '<li class="list-group-item' .  $sflgi . $cal_class . '">';
-                if ($layout != 2 && $curdate != $evdate ) {
-                    if ($layout == 3) {
-                        echo '<span class="ical-date">' . ucfirst($evdate) . '</span>' . (('a' == $attributes['tag_sum'] ) ? '<br>': '');}
-                        else {
-                            echo '<span class="ical-date">' . ucfirst($evdate) . '</span><ul class="list-group' .  $attributes['suffix_lg_class']
-                            . ' sub"><li class="list-group-item' .  $sflgi . $cal_class . ' sub">';
-                        }
+                if ($layout == 3 && $curdate != $evdate) {
+                    echo '<span class="ical-date">' . ucfirst($evdate) . '</span>' . (('a' == $attributes['tag_sum'] ) ? '<br>': '');
                 }
                 echo  '<' . $attributes['tag_sum'] . ' class="ical_summary' .  $sflgia . (('a' == $attributes['tag_sum'] ) ? '" data-toggle="collapse" data-bs-toggle="collapse" href="#'.
                 $itemid . '" aria-expanded="false" aria-controls="'.
@@ -120,7 +117,7 @@ echo '<div id="' . $attributes['anchorId']  . '" class="simple_ical_block" >';
                     echo str_replace("\n", '<br>', strip_tags($e->summary,$allowed_tags));
                 }
                 echo	'</' . $attributes['tag_sum'] . '>' ;
-                if ($layout != 2)	{
+                if ($layout == 2)	{
                     echo '<span>', $evdate, $evdtsum, '</span>';
                 }
                 echo '<div class="ical_details' .  $sflgia . (('a' == $attributes['tag_sum'] ) ? ' collapse' : '') . '" id="',  $itemid, '">';
