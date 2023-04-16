@@ -25,6 +25,7 @@
  * 0.0.3 replaced defaults for dateformats by "", because we also use empty format to skip the field.
  *  Added space to sanitize html class because it it also used for more classes.
  * 0.0.4 removed selfmade transient functions because we now use Joomla standard cache type output to replace wp_transient. 
+ * 2.1.4 add closing HTML output after eventlist or when no events are available.    
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
@@ -94,6 +95,8 @@ class SimpleicalblockHelper
                 'suffix_lg_class' => '',
                 'suffix_lgi_class' => ' py-0',
                 'suffix_lgia_class' => '',
+                'after_events' => '',
+                'no_events' => '',
                 'allowhtml' => false,
                 'clear_cache_now' => false,
                 //               'align'=>'',

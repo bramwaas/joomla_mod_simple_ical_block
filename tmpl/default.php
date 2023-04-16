@@ -31,7 +31,8 @@
  * 2.0.1 back to static functions getData() and fetch() only instantiate object in fetch when parsing must be done (like it always was in WP)  
  * 2.1.0 add calendar class to list-group-item
  *   add htmlspecialchars() to summary, description and location when not 'allowhtml', replacing similar code from IcsParser
- * 2.1.3 use select 'layout' in stead of 'start with summary' to create more lay-out options.   
+ * 2.1.3 use select 'layout' in stead of 'start with summary' to create more lay-out options.
+ * 2.1.4 add closing HTML output after eventlist or when no events are available.    
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -46,7 +47,7 @@ use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
  */
 static $allowed_tags = ['a','abbr', 'acronym', 'address','area','article', 'aside','audio',
  'b','big','blockquote', 'br','button', 'caption','cite','code','col',
- 'details', 'div', 'em', 'fieldset', 'figcaption', 'figure', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','hr',
+ 'details', 'div', 'em', 'fieldset', 'figcaption', 'figure', 'footer', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','hr',
  'i', 'img', 'li', 'label', 'legend', 'ol', 'p','q', 'section', 'small', 'span','strike', 'strong', 'u','ul'] ;
 $old_timezone = date_default_timezone_get();
 $tzid_ui = Factory::getApplication()->get('offset');
@@ -150,6 +151,11 @@ echo '<div id="' . $attributes['anchorId']  . '" class="simple_ical_block" >';
             }
             echo '</ul>';
             date_default_timezone_set($old_timezone);
+            echo strip_tags($attributes['after_events'],$allowed_tags);
+        }
+        else {
+            echo strip_tags($attributes['after_events'],$allowed_tags);
+            
         }
         echo '<br class="clear" />';
     }
