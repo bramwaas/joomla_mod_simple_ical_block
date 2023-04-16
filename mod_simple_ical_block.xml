@@ -186,6 +186,14 @@
 					label="MOD_SIMPLEICALBLOCK_ALLOWHTML"
 					description="MOD_SIMPLEICALBLOCK_ALLOWHTML_HELP"
  					 />
+				<field name="after_events_help"  type="note" 
+					label="MOD_SIMPLEICALBLOCK_AFTER_EVENTS"
+					description="MOD_SIMPLEICALBLOCK_AFTER_EVENTS_HELP"
+ 					 />
+				<field name="no_events_help"  type="note" 
+					label="MOD_SIMPLEICALBLOCK_NO_EVENTS"
+					description="MOD_SIMPLEICALBLOCK_NO_EVENTS_HELP"
+ 					 />
 				<field name="clear_cache_now_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_CCN"
 					description="MOD_SIMPLEICALBLOCK_CLEAR_CACHE_NOW_HELP"

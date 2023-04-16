@@ -154,7 +154,7 @@ echo '<div id="' . $attributes['anchorId']  . '" class="simple_ical_block" >';
             echo strip_tags($attributes['after_events'],$allowed_tags);
         }
         else {
-            echo strip_tags($attributes['after_events'],$allowed_tags);
+            echo strip_tags($attributes['no_events'],$allowed_tags);
             
         }
         echo '<br class="clear" />';
