@@ -4,7 +4,7 @@ Contributors: bramwaas
 Tags: Event Calendar, Google Calendar, iCal, Events, Block, Calendar, iCalendar, Outlook, iCloud
 Requires at least Joomla: 4.0
 Tested up to: 4.2
-Requires PHP: 5.3.0
+Requires PHP: 7
 Stable tag: trunk
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -172,6 +172,8 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 * works with Joomla 4 or higher.
 
 == Changelog ==
+* 2.1.4 After a feature request of achimmm (in github on Joomla module) added optional placeholder HTML output when no upcoming events are avalable. Also added optional output after the events list (when upcoming events are available).
+* 2.1.3 In response to a support issue of (@marijnvr) (on WP plugin). New lay-out for block with first date line on a higer level li. 'Start with summary' toggle-setting changed in 'layout' select-setting with options 'Startdate higher level', 'Start with summary', 'Old style'.   
 * 2.1.1 Solved Warning: Array to string conversion in .../Transport/Curl.php on line 183 that occured after using php 8.  
 * 2.1.0 Support more calendars in one module/block. Support DURATION of event. Move processing 'allowhtml' complete out Parser to template/block. 
   Use properties in IcsParser to limit copying of input params in several functions.
