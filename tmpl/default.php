@@ -55,7 +55,7 @@ $tz_ui = new \DateTimeZone(Factory::getApplication()->get('offset'));
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 //$helper = new SimpleicalblockHelper;
 
-echo '<div id="' . $attributes['anchorId']  . '" class="simple_ical_block" >';
+echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['blockid'] . '" ' . '" class="simple_ical_block" >';
 
 /**
   * Front-end display of block or module.
