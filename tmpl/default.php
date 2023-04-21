@@ -49,9 +49,6 @@ static $allowed_tags = ['a','abbr', 'acronym', 'address','area','article', 'asid
  'b','big','blockquote', 'br','button', 'caption','cite','code','col',
  'details', 'div', 'em', 'fieldset', 'figcaption', 'figure', 'footer', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','hr',
  'i', 'img', 'li', 'label', 'legend', 'ol', 'p','q', 'section', 'small', 'span','strike', 'strong', 'u','ul'] ;
-$old_timezone = date_default_timezone_get();
-$tzid_ui = Factory::getApplication()->get('offset');
-$tz_ui = new \DateTimeZone(Factory::getApplication()->get('offset'));
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 //$helper = new SimpleicalblockHelper;
 
@@ -64,6 +61,9 @@ echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['bl
   * from static function display_block($attributes)
   */
     {
+        $old_timezone = date_default_timezone_get();
+        $tzid_ui = Factory::getApplication()->get('offset');
+        $tz_ui = new \DateTimeZone($tzid_ui);
         $layout = (isset($attributes['sib_layout'])) ? intval($attributes['sib_layout']) : 3;
         $dflg = $attributes['dateformat_lg'];
         $dflgend =$attributes['dateformat_lgend'];
