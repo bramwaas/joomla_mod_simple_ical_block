@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module"   client="site" method="upgrade">
 	<name>Simple iCal Block</name>
-	<creationDate>16-04-2023</creationDate>	
+	<creationDate>07-12-2023</creationDate>	
 	<author>A.H.C. Waasdorp</author>
-	<copyright>Copyright (C) 2022 - 2023 A.H.C. Waasdorp, All rights reserved.</copyright>
+	<copyright>Copyright (C) 2022 - 2024 A.H.C. Waasdorp, All rights reserved.</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<authorEmail>contact@waasdorpsoekhan.nl</authorEmail>
 	<authorUrl>http://www.waasdorpsoekhan.nl</authorUrl>

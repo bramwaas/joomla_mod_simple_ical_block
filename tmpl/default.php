@@ -3,7 +3,7 @@
  * @version $Id: default.php
  * @package simpleicalblock
  * @subpackage simpleicalblock Module
- * @copyright Copyright (C) 2022 -2023 simpleicalblock, All rights reserved.
+ * @copyright Copyright (C) 2022 -2024 simpleicalblock, All rights reserved.
  * @license GNU General Public License version 3 or later
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl

@@ -2,7 +2,7 @@
 /**
  * @package     simple_ical_block
  * @subpackage  mod_simple_ical_block  Module
- * @copyright Copyright (C) 2022 - 2023 AHC Waasdorp, All rights reserved.
+ * @copyright Copyright (C) 2022 - 2024 AHC Waasdorp, All rights reserved.
  * @license     GNU General Public License version 3 or later
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl
@@ -30,7 +30,7 @@ require ModuleHelper::getLayoutPath('mod_simple_ical_block', $params->get('layou
 else {
     ?>
     <div id="simpleicalblock<?php echo $params->get('blockid'); ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
-<h3>site simpleicalblock needs joomla v4</h3>
+<h3>site simpleicalblock needs joomla v4 or v5</h3>
 </div>
 <?php
 }
