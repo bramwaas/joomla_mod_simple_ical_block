@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module"   client="site" method="upgrade">
+  	<compatibility>
+    	<include>
+      		<versions from="4.0.0" to="5.0.99" />
+    	</include>
+  	</compatibility>
 	<name>Simple iCal Block</name>
 	<creationDate>07-12-2023</creationDate>	
 	<author>A.H.C. Waasdorp</author>
