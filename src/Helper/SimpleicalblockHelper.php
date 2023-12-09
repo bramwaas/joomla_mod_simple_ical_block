@@ -78,7 +78,6 @@ class SimpleicalblockHelper
         $block_attributes =  array_merge(
             array(
                 'blockid' => 'AZ',
-  //              'title' => Text::_('MOD_SIMPLEICALBLOCK_TITLE_DFT'),
                 'calendar_id' => '',
                 'event_count' => 10,
                 'event_period' => 92,
@@ -113,8 +112,5 @@ class SimpleicalblockHelper
         
        
        return $block_attributes;
-       
     }
-    
-
 }

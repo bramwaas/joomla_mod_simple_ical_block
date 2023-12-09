@@ -3,7 +3,7 @@
  * @version $Id: default.php
  * @package simpleicalblock
  * @subpackage simpleicalblock Module
- * @copyright Copyright (C) 2022 -2023 simpleicalblock, All rights reserved.
+ * @copyright Copyright (C) 2022 -2024 simpleicalblock, All rights reserved.
  * @license GNU General Public License version 3 or later
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl
@@ -49,13 +49,10 @@ static $allowed_tags = ['a','abbr', 'acronym', 'address','area','article', 'asid
  'b','big','blockquote', 'br','button', 'caption','cite','code','col',
  'details', 'div', 'em', 'fieldset', 'figcaption', 'figure', 'footer', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','hr',
  'i', 'img', 'li', 'label', 'legend', 'ol', 'p','q', 'section', 'small', 'span','strike', 'strong', 'u','ul'] ;
-$old_timezone = date_default_timezone_get();
-$tzid_ui = Factory::getApplication()->get('offset');
-$tz_ui = new \DateTimeZone(Factory::getApplication()->get('offset'));
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 //$helper = new SimpleicalblockHelper;
 
-echo '<div id="' . $attributes['anchorId']  . '" class="simple_ical_block" >';
+echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['blockid'] . '" ' . '" class="simple_ical_block" >';
 
 /**
   * Front-end display of block or module.
@@ -64,6 +61,9 @@ echo '<div id="' . $attributes['anchorId']  . '" class="simple_ical_block" >';
   * from static function display_block($attributes)
   */
     {
+        $old_timezone = date_default_timezone_get();
+        $tzid_ui = Factory::getApplication()->get('offset');
+        $tz_ui = new \DateTimeZone($tzid_ui);
         $layout = (isset($attributes['sib_layout'])) ? intval($attributes['sib_layout']) : 3;
         $dflg = $attributes['dateformat_lg'];
         $dflgend =$attributes['dateformat_lgend'];
