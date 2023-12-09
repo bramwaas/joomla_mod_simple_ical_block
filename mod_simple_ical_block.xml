@@ -2,7 +2,7 @@
 <extension type="module"   client="site" method="upgrade">
   	<compatibility>
     	<include>
-      		<versions from="4.0.0" to="5.0.99" />
+      		<versions from="4.0.0" to="5.99.99" />
     	</include>
   	</compatibility>
 	<name>Simple iCal Block</name>
