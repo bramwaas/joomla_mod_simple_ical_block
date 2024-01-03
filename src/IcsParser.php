@@ -826,7 +826,15 @@ END:VCALENDAR';
                             $eventObj->exdate[] = $this->parseIcsDateTime($value, $tzid);
                         }
                         break;
-                }
+/*                         not implemented yet
+                                            case "RDATE":
+                                                $dtl = explode(",", $value);
+                                                foreach ($dtl as $value) {
+                                                    $eventObj->rdate[] = $this->parseIcsPeriodOrDateTime($value, $tzid);
+                                                }
+                                                break;
+                        PERIOD = period-explicit OR period-start; period-explicit = date-time "/" date-time;  period-start = date-time "/" dur-value
+ */                }
             }else { // count($list) <= 1
                 if (strlen($l) > 1) {
                     $desc = str_replace(array('\;', '\,', '\r\n','\n', '\r'), array(';', ',', "\n","\n","\n"), substr($l,1));
