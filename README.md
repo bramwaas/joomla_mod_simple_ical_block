@@ -118,7 +118,7 @@ Check if you can download the ics file you have designated in the block with a b
 * End of repeating by COUNT or UNTIL
 * By day month, monthday or setpos (BYDAY, BYMONTH, BYMONTHDAY, BYSETPOS) no other by...   
   (not parsed: BYWEEKNO, BYYEARDAY, BYHOUR, BYMINUTE, RDATE)
-* Exclude events on EXDATE from repeat (after evaluating BYSETPOS)
+* Exclude events on EXDATE from recurrence set (after evaluating BYSETPOS)
 * Respects Timezone and Day Light Saving time. Build and tested with Iana timezones as used in php, Google, and Apple now also tested with Microsoft timezones and unknown timezones. For unknown timezone-names using the default timezone of te site  (probably the local timezone set in Joomla administration).  
 
 === Recurrent events, Timezone,  Daylight Saving Time ===
@@ -139,7 +139,8 @@ Test results and comparison with Google and Outlook calendar [with the wordpress
   
 === From the ical specifications ===
 ~~~
-see http://www.ietf.org/rfc/rfc5545.txt for specification of te ical format.
+see http://www.ietf.org/rfc/rfc5545.txt for specification of te ical format,
+or https://icalendar.org/iCalendar-RFC-5545/
 (see 3.3.10. [Page 38] Recurrence Rule in specification
   .____________._________.________._________.________.
   |            |DAILY    |WEEKLY  |MONTHLY  |YEARLY  |
@@ -172,6 +173,8 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 * works with Joomla 4 or higher.
 
 == Changelog ==
+* 2.2.0 after an issue of gonzob (@gonzob) in WP support forum: 'Bug with repeating events
+' improved handling of EXDATE so that also the first event of a recurrent set can be excluded.
 * 2.1.5 tested with joomla 5 added compatibility to 5.0.99
 * 2.1.4 After a feature request of achimmm (in github on Joomla module) added optional placeholder HTML output when no upcoming events are avalable. Also added optional output after the events list (when upcoming events are available).
 * 2.1.3 In response to a support issue of (@marijnvr) (on WP plugin). New lay-out for block with first date line on a higer level li. 'Start with summary' toggle-setting changed in 'layout' select-setting with options 'Startdate higher level', 'Start with summary', 'Old style'.   
