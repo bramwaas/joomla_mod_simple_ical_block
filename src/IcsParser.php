@@ -329,7 +329,9 @@ END:VCALENDAR';
                 $e = $this->parseVevent($eventStr);
                 $e->cal_class = $cal_class;
                 $e->cal_ord = $cal_ord;
-                $this->events[] = $e;
+                if (empty($e->exdate) || !in_array($e->start, $e->exdate)) {
+                    $this->events[] = $e;
+                }
                 // Recurring event?
                 if (isset($e->rrule) && $e->rrule !== '') {
                     /* Recurring event, parse RRULE in associative array add appropriate duplicate events
@@ -583,7 +585,7 @@ END:VCALENDAR';
                                             ($fmdayok || $expand)
                                             && ($count == 0 || $i < $count)
                                             && $newstart->getTimestamp() <= $until
-                                            && !(!empty($e->exdate) && in_array($newstart->getTimestamp(), $e->exdate))
+                                            && (empty($e->exdate) || !in_array($newstart->getTimestamp(), $e->exdate))
                                             && $newstart> $edtstart) { // count events after dtstart
                                                 if ($newstart->getTimestamp() > $nowstart
                                                     ) { // copy only events after now
@@ -934,7 +936,7 @@ END:VCALENDAR';
                 $http = new Http(['headers' => ['Accept-Encoding' => '']]); //accepts known encoding and decodes.
                 try {
                     $httpResponse =  $http->get($url);
-                } catch(\Exception $e) {
+                } catch(\Exception $exc) {
                     continue ;
                 }
                 if (200 != $httpResponse->code) {
@@ -944,7 +946,7 @@ END:VCALENDAR';
                         if (200 != $httpResponse->code) {
                             continue ;
 	                    }
-                    } catch(\Exception $e) {
+                    } catch(\Exception $exc) {
                         continue ;
                     }
                 }
@@ -953,7 +955,7 @@ END:VCALENDAR';
            
             try {
                 $this->parse($httpBody,  $cal_class, $cal_ord );
-            } catch(\Exception $e) {
+            } catch(\Exception $exc) {
                 continue ;
             }
         } // end foreach
