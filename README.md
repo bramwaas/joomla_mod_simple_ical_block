@@ -174,7 +174,8 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 
 == Changelog ==
 * 2.2.0 after an issue of gonzob (@gonzob) in WP support forum: 'Bug with repeating events
-' improved handling of EXDATE so that also the first event of a recurrent set can be excluded.
+' improved handling of EXDATE so that also the first event of a recurrent set can be excluded.   
+Parse Recurrence-ID to support changes in individual recurrent events in Google Calendar. Remove _ chars from UID.
 * 2.1.5 tested with joomla 5 added compatibility to 5.0.99
 * 2.1.4 After a feature request of achimmm (in github on Joomla module) added optional placeholder HTML output when no upcoming events are avalable. Also added optional output after the events list (when upcoming events are available).
 * 2.1.3 In response to a support issue of (@marijnvr) (on WP plugin). New lay-out for block with first date line on a higer level li. 'Start with summary' toggle-setting changed in 'layout' select-setting with options 'Startdate higher level', 'Start with summary', 'Old style'.   
