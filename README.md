@@ -175,6 +175,7 @@ Theoretically this could als happen with recurrent events in the same timezone w
 Test results and comparison with Google and Outlook calendar [with the wordpress plugin](https://wordpress.org/plugins/simple-google-icalendar-widget/) have been uploaded as DayLightSavingTime test.xlsx.
   
 === From the ical specifications ===
+
 ~~~
 see http://www.ietf.org/rfc/rfc5545.txt for specification of te ical format,
 or https://icalendar.org/iCalendar-RFC-5545/
