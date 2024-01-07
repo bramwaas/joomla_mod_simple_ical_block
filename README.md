@@ -107,6 +107,41 @@ Check if you can download the ics file you have designated in the block with a b
 
  Yes you can,  I have tested this with [https://p24-calendars.icloud.com/holiday/NL_nl.ics](https://p24-calendars.icloud.com/holiday/NL_nl.ics) .
 
+= How do I set different colours and text size for the dates, the summary, and the details? =
+
+There is no setting for the color or font of parts in this plugin.
+My philosophy is that layout and code/content should be separated as much as possible.
+Furthermore, the plugin should seamlessly fit the style of the website and be fully customizable via CSS
+
+So for color and font, the settings of the template are used and are then applied via CSS.
+But you can give each element within the plugin its own style (such as color and font size) from the theme via CSS.
+
+If you know your template css well and it contains classes you want to use on these fields you can add those class-names in
+the Settings Tab Advanced : &#34;SUFFIX GROUP CLASS:&#34;, &#34;SUFFIX EVENT START CLASS:&#34; and &#34;SUFFIX EVENT DETAILS CLASS:&#34;
+
+Otherwise you can add a block of additional CSS (or extra css or user css or something like that), which is possible with most templates.   
+IMPORTANT:   
+In order to target the CSS very specifically to the simple-ical-block, it is best to enter something unique in the settings of the module Tab Advanced in &#34;HTML ANCHOR&#34;, for example &#39;Simple-ical-Block-1&#39; the code translated into a high-level ID of the module.
+With the next block of additional CSS you can make the Dates red and 24 px, the Summary blue and 16 px,
+and the Details green with a gray background.
+
+~~~
+/*additional CSS for Simple-ical-Block-1 */
+&#35;Simple-ical-Block-1 .ical-date {
+color: #ff0000;
+font-size: 24px;
+}
+&#35;Simple-ical-Block-1 .ical_summary {
+color: #0000ff;
+font-size: 16px;
+}
+&#35;Simple-ical-Block-1 .ical_details {
+color: #00ff00;
+background-color: gray;
+}
+/*end additional CSS for Simple-ical-Block-1 */
+~~~
+
 == Documentation ==
 
 * Gets calendar events via iCal url or google calendar ID
@@ -118,7 +153,7 @@ Check if you can download the ics file you have designated in the block with a b
 * End of repeating by COUNT or UNTIL
 * By day month, monthday or setpos (BYDAY, BYMONTH, BYMONTHDAY, BYSETPOS) no other by...   
   (not parsed: BYWEEKNO, BYYEARDAY, BYHOUR, BYMINUTE, RDATE)
-* Exclude events on EXDATE from repeat (after evaluating BYSETPOS)
+* Exclude events on EXDATE from recurrence set (after evaluating BYSETPOS)
 * Respects Timezone and Day Light Saving time. Build and tested with Iana timezones as used in php, Google, and Apple now also tested with Microsoft timezones and unknown timezones. For unknown timezone-names using the default timezone of te site  (probably the local timezone set in Joomla administration).  
 
 === Recurrent events, Timezone,  Daylight Saving Time ===
@@ -138,8 +173,10 @@ Theoretically this could als happen with recurrent events in the same timezone w
 Test results and comparison with Google and Outlook calendar [with the wordpress plugin](https://wordpress.org/plugins/simple-google-icalendar-widget/) have been uploaded as DayLightSavingTime test.xlsx.
   
 === From the ical specifications ===
+
 ~~~
-see http://www.ietf.org/rfc/rfc5545.txt for specification of te ical format.
+see http://www.ietf.org/rfc/rfc5545.txt for specification of te ical format,
+or https://icalendar.org/iCalendar-RFC-5545/
 (see 3.3.10. [Page 38] Recurrence Rule in specification
   .____________._________.________._________.________.
   |            |DAILY    |WEEKLY  |MONTHLY  |YEARLY  |
@@ -172,6 +209,9 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 * works with Joomla 4 or higher.
 
 == Changelog ==
+* 2.2.0 after an issue of gonzob (@gonzob) in WP support forum: 'Bug with repeating events
+' improved handling of EXDATE so that also the first event of a recurrent set can be excluded.   
+Basic parse Recurrence-ID (only one Recurrence-ID event to replace one occurrence of the recurrent set) to support changes in individual recurrent events in Google Calendar. Remove _ chars from UID.
 * 2.1.5 tested with joomla 5 added compatibility to 5.0.99
 * 2.1.4 After a feature request of achimmm (in github on Joomla module) added optional placeholder HTML output when no upcoming events are avalable. Also added optional output after the events list (when upcoming events are available).
 * 2.1.3 In response to a support issue of (@marijnvr) (on WP plugin). New lay-out for block with first date line on a higer level li. 'Start with summary' toggle-setting changed in 'layout' select-setting with options 'Startdate higher level', 'Start with summary', 'Old style'.   
