@@ -107,6 +107,43 @@ Check if you can download the ics file you have designated in the block with a b
 
  Yes you can,  I have tested this with [https://p24-calendars.icloud.com/holiday/NL_nl.ics](https://p24-calendars.icloud.com/holiday/NL_nl.ics) .
 
+= How do I set different colours and text size for the dates, the summary, and the details? =
+
+There is no setting for the color or font of parts in this plugin.
+My philosophy is that layout and code/content should be separated as much as possible.
+Furthermore, the plugin should seamlessly fit the style of the website and be fully customizable via CSS
+
+So for color and font, the settings of the theme are used and are then applied via CSS.
+But you can give each element within the plugin its own style (such as color and font size) from the theme via CSS.
+
+If you know your theme css well and it contains classes you want to use on these fields you can add those class-names in
+the Advanced settings: "SUFFIX GROUP CLASS:", "SUFFIX EVENT START CLASS:" and "SUFFIX EVENT DETAILS CLASS:"
+
+Otherwise you can add a block of additional CSS (or extra css or user css or something like that), which is possible with most themes.   
+IMPORTANT:   
+In order to target the CSS very specifically to the simple-ical-block, it is best to enter something unique in the settings of the block/widget under Advanced in "HTML ANCHOR", for example “Simple-ical-Block-1” the code translated into a high-level ID of the block.
+With the next block of additional CSS you can make the Dates red and 24 px, the Summary blue and 16 px,
+and the Details green with a gray background.
+
+```
+/*additional CSS for Simple-ical-Block-1 */
+#Simple-ical-Block-1 .ical-date {
+color: #ff0000;
+font-size: 24px;
+}
+#Simple-ical-Block-1 .ical_summary {
+color: #0000ff;
+font-size: 16px;
+}
+#Simple-ical-Block-1 .ical_details {
+color: #00ff00;
+background-color: gray;
+font-size: 16px;
+}
+/*end additional CSS for Simple-ical-Block-1 */
+```
+
+
 == Documentation ==
 
 * Gets calendar events via iCal url or google calendar ID
