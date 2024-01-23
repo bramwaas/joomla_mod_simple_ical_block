@@ -33,6 +33,7 @@
  *   add htmlspecialchars() to summary, description and location when not 'allowhtml', replacing similar code from IcsParser
  * 2.1.3 use select 'layout' in stead of 'start with summary' to create more lay-out options.
  * 2.1.4 add closing HTML output after eventlist or when no events are available.    
+ * 2.2.1 20240123 don't display description line when excerpt-length = 0
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -71,7 +72,7 @@ echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['bl
         $dftsend = $attributes['dateformat_tsend'];
         $dftstart = $attributes['dateformat_tstart'];
         $dftend = $attributes['dateformat_tend'];
-        $excerptlength = $attributes['excerptlength'];
+        $excerptlength = (isset($attributes['excerptlength']) && ' ' < trim($attributes['excerptlength']) ) ? (int) $attributes['excerptlength'] : '' ;
         $sflgi = $attributes['suffix_lgi_class'];
         $sflgia = $attributes['suffix_lgia_class'];
         $data = IcsParser::getData($attributes);

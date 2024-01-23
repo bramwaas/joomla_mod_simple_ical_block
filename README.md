@@ -209,6 +209,7 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 * works with Joomla 4 or higher.
 
 == Changelog ==
+* 2.2.1 20240123 after an issue of black88mx6 in WP support forum: don't display description line when excerpt-length = 0
 * 2.2.0 after an issue of gonzob (@gonzob) in WP support forum: 'Bug with repeating events
 ' improved handling of EXDATE so that also the first event of a recurrent set can be excluded.   
 Basic parse Recurrence-ID (only one Recurrence-ID event to replace one occurrence of the recurrent set) to support changes in individual recurrent events in Google Calendar. Remove _ chars from UID.
