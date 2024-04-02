@@ -45,7 +45,7 @@ use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 //$helper = new SimpleicalblockHelper;
 
-echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['blockid'] . '" ' . '" class="simple_ical_block" >';
+echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid'] . '" ' . ' class="simple_ical_block" >';
 SimpleicalblockHelper::display_block($attributes);
 echo '</div>';
 

@@ -19,7 +19,7 @@ use Joomla\CMS\Language\Text;
 $joomlaverge4 = (version_compare(JVERSION, '4.0', '>='));
 $app = Factory::getApplication();
 $document = $app->getDocument();
-$params->set('blockid',  $module->id);
+$params->set('sibid',  'm' . $module->id);
 $params->set('clear_cache_now', FALSE); // only clear transient on save in admin.
 $direction = $document->direction;
 $asset_dir =  "media/mod_simple_ical_block/";
@@ -29,7 +29,7 @@ require ModuleHelper::getLayoutPath('mod_simple_ical_block', $params->get('layou
 }
 else {
     ?>
-    <div id="simpleicalblock<?php echo $params->get('blockid'); ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
+    <div id="simpleicalblock<?php echo $params->get('sibid'); ?>" class="simpleicalblock<?php echo $params->get('moduleclass_sfx') ?> "  tabindex="0">
 <h3>site simpleicalblock needs joomla v4 or v5</h3>
 </div>
 <?php

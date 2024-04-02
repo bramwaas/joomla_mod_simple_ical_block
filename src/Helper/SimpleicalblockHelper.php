@@ -46,6 +46,8 @@ use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
  */
 class SimpleicalblockHelper
 {
+    const SIB_ATTR = 'simple_ical_block_attrs';
+    
     /*
      * @var array allowed tags for text-output
      */
@@ -57,7 +59,45 @@ class SimpleicalblockHelper
      * @var array allowed tags for summary
      */
     private static $allowed_tags_sum = ['a', 'b', 'div', 'h4', 'h5', 'h6', 'i', 'span', 'strong', 'u'] ;
-    
+    /**
+     * default value for block_attributes (or instance)
+     *
+     * @var array
+     */
+    static $default_block_attributes = [
+        'wptype' => 'block',
+        'sibid' => '',
+        'postid' => '0',
+        'calendar_id' => '',
+        'event_count' => 10,
+        'event_period' => 92,
+        'transient_time' => 60,
+        'sib_layout' => 3,
+        'dateformat_lg' => '',
+        'dateformat_lgend' => '',
+        'tag_sum' => 'a',
+        'dateformat_tsum' => '',
+        'dateformat_tsend' => '',
+        'dateformat_tstart' => '',
+        'dateformat_tend' => '',
+        'excerptlength' => '',
+        'suffix_lg_class' => '',
+        'suffix_lgi_class' => ' py-0',
+        'suffix_lgia_class' => '',
+        'allowhtml' => false,
+        'after_events' => '',
+        'no_events' => '',
+        'clear_cache_now' => false,
+        'period_limits' => '1',
+        'rest_utzui' => '',
+        'className' => '',
+        'anchorId' => '',
+        'before_widget' => '<div id="%1$s" %2$s>',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h3 class="widget-title block-title">',
+        'after_title'   => '</h3>'
+        
+    ];
     /**
      * Merge block attributes with defaults to be sure they exist is necesary.
      *
@@ -65,41 +105,15 @@ class SimpleicalblockHelper
      * @return array attributes from parameters merged with default  attributes. 
      */
     static function render_attributes($block_attributes) {
-        
         $block_attributes =  array_merge(
-            array(
-                'blockid' => 'AZ',
-                'calendar_id' => '',
-                'event_count' => 10,
-                'event_period' => 92,
-                'transient_time' => 60,
-                'sib_layout' => 3,
-                'dateformat_lg' => '',
-                'dateformat_lgend' => '',
-                'tag_sum' => 'a',
-                'dateformat_tsum' => '',
-                'dateformat_tsend' => '',
-                'dateformat_tstart' => '',
-                'dateformat_tend' => '',
-                'excerptlength' => '',
-                'suffix_lg_class' => '',
-                'suffix_lgi_class' => ' py-0',
-                'suffix_lgia_class' => '',
-                'after_events' => '',
-                'no_events' => '',
-                'allowhtml' => false,
-                'clear_cache_now' => false,
-                //               'align'=>'',
-                'className'=>'',
-                'anchorId'=> '',
-            ),
+            self::$default_block_attributes,
             $block_attributes
             );
         if (!in_array($block_attributes['tag_sum'], self::$allowed_tags_sum)) $block_attributes['tag_sum'] = 'a';
         $block_attributes['suffix_lg_class'] = self::sanitize_html_class($block_attributes['suffix_lg_class']);
         $block_attributes['suffix_lgi_class'] = self::sanitize_html_class($block_attributes['suffix_lgi_class']);
         $block_attributes['suffix_lgia_class'] = self::sanitize_html_class($block_attributes['suffix_lgia_class']);
-        $block_attributes['anchorId'] = self::sanitize_html_class($block_attributes['anchorId'], 'b' . $block_attributes['blockid']);
+        $block_attributes['anchorId'] = self::sanitize_html_class($block_attributes['anchorId'], 'b' . $block_attributes['sibid']);
         
        
        return $block_attributes;
