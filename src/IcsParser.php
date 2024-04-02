@@ -31,7 +31,8 @@
  *   Parse Recurrence-ID to support changes in individual recurrent events in Google Calendar. Remove _ chars from UID.
  * 2.3.0 limit events after caching. process the different types of period endpoints (Time of day, Whole day). 
  *   Modulo 4 for period_limits (default 1 Whole day, whole day; 2 Time of day, Wd; 3 Td, Td; 0 Wd, Td)
- *   Add unescape \\ to \ and improve \, to ,   \; to ;  chars that should be escaped following the text specification.    
+ *   Add unescape \\ to \ and improve \, to ,   \; to ;  chars that should be escaped following the text specification. 
+ * 2.4.0 exclude DTEND from event that is evend ends before (<) DTEND in stead of at (<=) DTEND. \\todo       
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
