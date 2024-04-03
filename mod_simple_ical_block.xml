@@ -53,6 +53,12 @@
 			<fieldset name="advanced">
 				<field name="transient_time" type="number" min="2" max="1440" default="60"  label="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME" description="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME_DESC" hint="60" />
 				<field name="excerptlength" type="text" default="" label="MOD_SIMPLEICALBLOCK_EXCERPTL" description="MOD_SIMPLEICALBLOCK_EXCERPTL_DESC" />
+				<field name="period_limits" type="list" default="1" label="MOD_SIMPLEICALBLOCK_PER_LIMITS" description="MOD_SIMPLEICALBLOCK_PER_LIMITS_DESC">
+					<option value="1">MOD_SIMPLEICALBLOCK_PER_LIMITS_DD</option>
+					<option value="2">MOD_SIMPLEICALBLOCK_PER_LIMITS_TD</option>
+					<option value="3">MOD_SIMPLEICALBLOCK_PER_LIMITS_TT</option>
+					<option value="4">MOD_SIMPLEICALBLOCK_PER_LIMITS_DT</option>
+				</field>
 				<field name="tag_sum" type="list" default="div" label="MOD_SIMPLEICALBLOCK_TAG_SUM" description="MOD_SIMPLEICALBLOCK_TAG_SUM_DESC">
 					<option value="a">MOD_SIMPLEICALBLOCK_TAG_SUM_A</option>
 					<option value="b">MOD_SIMPLEICALBLOCK_TAG_SUM_B</option>

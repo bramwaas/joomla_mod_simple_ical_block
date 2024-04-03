@@ -199,6 +199,7 @@ class SimpleicalblockHelper
                     echo '<span>', $evdate, $evdtsum, '</span>';
                 }
                 echo '<div class="ical_details' .  $sflgia . (('a' == $attributes['tag_sum'] ) ? ' collapse' : '') . '" id="',  $itemid, '">';
+                echo '<!-- $excerptlength:' . $excerptlength . '. -->';
                 if(!empty($e->description) && trim($e->description) > '' && $excerptlength !== 0) {
                     if ($excerptlength !== '' && strlen($e->description) > $excerptlength) {$e->description = substr($e->description, 0, $excerptlength + 1);
                     if (rtrim($e->description) !== $e->description) {$e->description = substr($e->description, 0, $excerptlength);}
