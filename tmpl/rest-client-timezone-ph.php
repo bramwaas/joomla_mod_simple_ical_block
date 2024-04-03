@@ -29,6 +29,6 @@ echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['si
 //. ((empty($attributes['title'])) ? '" data-sib-notitle="true' : '')
 . '" data-sib-st="0-start" class="simple_ical_block" >';
 //SimpleicalblockHelper::display_block($attributes);
-echo '<p>' . "MOD_SIMPLEICALBLOCK_PROCESSING" . '</p>';
+echo '<p>' . Text::_('MOD_SIMPLEICALBLOCK_PROCESSING') . '</p>';
 echo '</div>';
 
