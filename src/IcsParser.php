@@ -32,7 +32,7 @@
  * 2.3.0 limit events after caching. process the different types of period endpoints (Time of day, Whole day). 
  *   Modulo 4 for period_limits (default 1 Whole day, whole day; 2 Time of day, Wd; 3 Td, Td; 0 Wd, Td)
  *   Add unescape \\ to \ and improve \, to ,   \; to ;  chars that should be escaped following the text specification. 
- * 2.4.0 exclude DTEND from event that is evend ends before (<) DTEND in stead of at (<=) DTEND.    
+ * 2.4.0 exclude DTEND from event that is evend ends before (<) DTEND in stead of at (<=) DTEND. removed modulo 4   
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -989,11 +989,11 @@ END:VCALENDAR';
         $p_start = $pdt_start->modify("today")->getTimestamp();
         $ep = (empty($instance['event_period']) || 1 > $instance['event_period']) ? 1: $instance['event_period'] + 1;
         $p_end = $pdt_start->modify("+$ep day")->getTimestamp();
-        $pl = $instance['period_limits'] % 4;
+        $pl = intval($instance['period_limits']);
         if (in_array($pl, [2,3])){
                     $p_start = $now;
         }
-        if (in_array($pl, [0,3])){
+        if (in_array($pl, [3,4])){
             $ep = $ep - 1;
             $pdt_start->setTimestamp($now);
             $p_end = $pdt_start->modify("+$ep day")->getTimestamp();
