@@ -1,3 +1,5 @@
+# joomla_mod_simple_ical_block
+
 === Simple iCal Block ===
 Plugin name: Simple iCal Block
 Contributors: bramwaas
