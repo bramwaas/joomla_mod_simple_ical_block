@@ -1,5 +1,7 @@
 # joomla_mod_simple_ical_block
 
+Block module that displays events from a public google calendar or iCal file.
+
 === Simple iCal Block ===
 Plugin name: Simple iCal Block
 Contributors: bramwaas
@@ -11,7 +13,6 @@ Stable tag: trunk
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
  
-Block module that displays events from a public google calendar or iCal file.
  
 == Description ==
 
