@@ -38,6 +38,7 @@ defined('_JEXEC') or die ('Restricted access');
 use Joomla\CMS\Date\Date as Jdate;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Response\JsonResponse;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
 
 /**
@@ -101,13 +102,66 @@ class SimpleicalblockHelper
     ];
     /**
      * call Ajax component.
+     * Get block content wth sibid, postid, and client timezone from request
+     *
+     * @param Input object $input $app-> 
+     * 
+     * @return JsonResponse object $data 
+     * ["succes":   {true|false},
+     *  "message":  {null|string}
+     *  "messages": {null|array}
+     *  "data":     ["content": {null| string: content of module},
+     *               "params":  {null| array: used params ] 
+     * ]
+     * sinc 2.4.0
      *
      */
     public static function getAjax()
     {
-        $data = ['test sibh without mod'];
+        $input = Factory::getApplication()->getInput();
+        $params = $input->getArray();
+        unset($params['option'],$params['module'],$params['method'],$params['view'],$params['Itemid']);
+        if (empty($params['sibid'])) {
+            $content = '<p>' . 'Empty sibid. Not possible to get block content' .'</p>';
+        } else {
+            $content = '<p>' . ('Not yet possible to get block content') .'</p>';
+        }
+        $data = [
+            'content' => $content ,
+            'params' => $params
+        ];
         return $data;
     }
+    /**
+     */
+    public function get_content_by_ids($request)
+    {
+        // get parameters from request
+        $params = $request->get_params();
+        if (empty($params['sibid'])) return new WP_Error('404', __('Empty sibid. Not possible to get block content', 'simple-google-icalendar-widget'));
+        $block_attributes = get_option(SimpleicalBlock::SIB_ATTR)[$params['sibid']];
+        if (empty($block_attributes)) {
+            $content = '<p>' . __('Settings not found in option', 'simple-google-icalendar-widget') . '<br>' .
+                __('Not possible to get block content', 'simple-google-icalendar-widget') . '</p>';
+        } else {
+            $block_attributes = array_merge($block_attributes, $params);
+            $content = SimpleicalBlock::render_block($block_attributes, []);
+        }
+        $data = $this->prepare_item_for_response([
+            'content' => $content,
+            'params' => $params
+        ], $request);
+        if (isset($data)) {
+            return new WP_REST_Response($data, 200);
+        } else {
+            $data = $this->prepare_item_for_response([
+                'content' => '<p>' . __('Not possible to get block content', 'simple-google-icalendar-widget') .'</p>',
+                'params' => $params
+            ], $request);
+            return new WP_REST_Response($data, 404);
+        }
+    }
+    
     /**
      * Merge block attributes with defaults to be sure they exist is necesary.
      *
