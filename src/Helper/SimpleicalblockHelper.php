@@ -1,21 +1,21 @@
 <?php
 /**
- * @version $Id: simpleicalblock.php 
+ * @version $Id: SimpleicalblockHelper.php 
  * @package simpleicalblock
  * @subpackage simpleicalblock Module
- * @copyright Copyright (C) 2022 -2023 A.H.C. Waasdorp, All rights reserved.
+ * @copyright Copyright (C) 2022 -2024 A.H.C. Waasdorp, All rights reserved.
  * @license GNU General Public License version 3 or later
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl
  * @developer A.H.C. Waasdorp
  *
  *
- * wsacarousel is free software: you can redistribute it and/or modify
+ * simpleicalblock is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * wsacarousel is distributed in the hope that it will be useful,
+ * simpleicalblock is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -27,7 +27,8 @@
  * 0.0.4 removed selfmade transient functions because we now use Joomla standard cache type output to replace wp_transient. 
  * 2.1.4 add closing HTML output after eventlist or when no events are available. 
  * 2.2.1 20240123 don't display description line when excerpt-length = 0
- * 2.3.0 Moved display_block() and $allowed_tags to this class to accommodate calls from REST service
+ * 2.3.0 Moved display_block() and $allowed_tags to this class to accommodate calls from Ajax/REST service
+ * 2.4.0 added getAjax function 
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
@@ -98,6 +99,15 @@ class SimpleicalblockHelper
         'after_title'   => '</h3>'
         
     ];
+    /**
+     * call Ajax component.
+     *
+     */
+    public static function getAjax()
+    {
+        $data = ['test sibh without mod'];
+        return $data;
+    }
     /**
      * Merge block attributes with defaults to be sure they exist is necesary.
      *
