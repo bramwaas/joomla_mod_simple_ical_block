@@ -37,6 +37,7 @@ defined('_JEXEC') or die ('Restricted access');
 
 use Joomla\CMS\Date\Date as Jdate;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Response\JsonResponse;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
@@ -117,14 +118,23 @@ class SimpleicalblockHelper
      *
      */
     public static function getAjax()
-    {
+    {   
         $input = Factory::getApplication()->getInput();
         $params = $input->getArray();
         unset($params['option'],$params['module'],$params['method'],$params['view'],$params['Itemid']);
         if (empty($params['sibid'])) {
             $content = '<p>' . 'Empty sibid. Not possible to get block content' .'</p>';
         } else {
-            $content = '<p>' . ('Not yet possible to get block content') .'</p>';
+            $mod = ModuleHelper::getModuleById($params['sibid']);
+            if (empty($mod)) {
+                $content = '<p>' . ('Not yet possible to get block content') .'</p>';
+            } else {
+                $content = '';
+                ob_start();
+                $attributes = self::render_attributes( array_merge( json_decode($mod->params, true), $params));
+                self::display_block($attributes);
+                $content = $content . ob_get_clean();
+            }
         }
         $data = [
             'content' => $content ,
@@ -132,36 +142,6 @@ class SimpleicalblockHelper
         ];
         return $data;
     }
-    /**
-     */
-    public function get_content_by_ids($request)
-    {
-        // get parameters from request
-        $params = $request->get_params();
-        if (empty($params['sibid'])) return new WP_Error('404', __('Empty sibid. Not possible to get block content', 'simple-google-icalendar-widget'));
-        $block_attributes = get_option(SimpleicalBlock::SIB_ATTR)[$params['sibid']];
-        if (empty($block_attributes)) {
-            $content = '<p>' . __('Settings not found in option', 'simple-google-icalendar-widget') . '<br>' .
-                __('Not possible to get block content', 'simple-google-icalendar-widget') . '</p>';
-        } else {
-            $block_attributes = array_merge($block_attributes, $params);
-            $content = SimpleicalBlock::render_block($block_attributes, []);
-        }
-        $data = $this->prepare_item_for_response([
-            'content' => $content,
-            'params' => $params
-        ], $request);
-        if (isset($data)) {
-            return new WP_REST_Response($data, 200);
-        } else {
-            $data = $this->prepare_item_for_response([
-                'content' => '<p>' . __('Not possible to get block content', 'simple-google-icalendar-widget') .'</p>',
-                'params' => $params
-            ], $request);
-            return new WP_REST_Response($data, 404);
-        }
-    }
-    
     /**
      * Merge block attributes with defaults to be sure they exist is necesary.
      *
@@ -177,7 +157,7 @@ class SimpleicalblockHelper
         $block_attributes['suffix_lg_class'] = self::sanitize_html_class($block_attributes['suffix_lg_class']);
         $block_attributes['suffix_lgi_class'] = self::sanitize_html_class($block_attributes['suffix_lgi_class']);
         $block_attributes['suffix_lgia_class'] = self::sanitize_html_class($block_attributes['suffix_lgia_class']);
-        $block_attributes['anchorId'] = self::sanitize_html_class($block_attributes['anchorId'], 'b' . $block_attributes['sibid']);
+        $block_attributes['anchorId'] = self::sanitize_html_class($block_attributes['anchorId'], 'simpleicalblock' . $block_attributes['sibid']);
         
        
        return $block_attributes;

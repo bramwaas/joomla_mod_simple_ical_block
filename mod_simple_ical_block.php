@@ -19,7 +19,7 @@ use Joomla\CMS\Language\Text;
 $joomlaverge4 = (version_compare(JVERSION, '4.0', '>='));
 $app = Factory::getApplication();
 $document = $app->getDocument();
-$params->set('sibid',  'm' . $module->id);
+$params->set('sibid',  $module->id);
 $params->set('clear_cache_now', FALSE); // only clear transient on save in admin.
 $direction = $document->direction;
 $asset_dir =  "media/mod_simple_ical_block/";
