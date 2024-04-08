@@ -24,11 +24,14 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 $wa  = $document->getWebAssetManager();
+
+$wa->registerAndUseScript('simple-ical-block-view.js', 'mod_simple_ical_block/simple-ical-block-view.js', ['version'=>'2.4.0'],  ['defer' => TRUE],[]);
+
 $wa->addInlineScript(
     '(window.simpleIcalBlock=window.simpleIcalBlock || {}).restRoot = "' . Uri::root() . 'index.php?option=com_ajax"',
      ['position' => 'before', 'name' => 'define.restRoot'], [],[]
     );
-$wa->useScript('simple-ical-block-view.js');
+//$wa->useScript('simple-ical-block-view.js');
 //$wa->usePreset('ps.mod_simple_ical_block');
 
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
