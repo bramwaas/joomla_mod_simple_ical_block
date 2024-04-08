@@ -27,7 +27,7 @@
 		<folder>src</folder>
 		<folder>tmpl</folder>
 	</files>
-	<media destination="mod_wsacarousel" folder="assets">
+	<media destination="mod_simple_ical_block" folder="assets">
 		<!-- folder>css</folder -->
 		<folder>js</folder>
 	</media>
