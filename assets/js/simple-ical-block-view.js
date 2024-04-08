@@ -4,8 +4,7 @@
  * restRoot for endpoint passed via inlinescript and this script in enqueue_block_assets 
  * v2.4.0
 **/
-/* const endpoint = window.simpleIcalBlock.restRoot + "simple-google-icalendar-widget/v1/content-by-ids"; */
-const endpoint = "/index.php?option=com_ajax&module=simple_ical_block&method=get&format=json"
+const endpoint = window.simpleIcalBlock.restRoot + "&module=simple_ical_block&method=get&format=json";
 let titl;
 
 window.simpleIcalBlock = {...(window.simpleIcalBlock || {}), ...{

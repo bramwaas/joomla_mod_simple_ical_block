@@ -15,13 +15,21 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * 2.4.0 Created as placeholder for REST service
+ * 2.4.0 Created as placeholder for Ajax (or Rest) service
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
+$wa  = $document->getWebAssetManager();
+$wa->addInlineScript(
+    '(window.simpleIcalBlock=window.simpleIcalBlock || {}).restRoot = "' . Uri::root() . 'index.php?option=com_ajax"',
+     ['position' => 'before', 'name' => 'define.restRoot'], [],[]
+    );
+$wa->useScript('simple-ical-block-view.js');
+//$wa->usePreset('ps.mod_simple_ical_block');
 
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 

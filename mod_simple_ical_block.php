@@ -15,6 +15,8 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 
 $joomlaverge4 = (version_compare(JVERSION, '4.0', '>='));
 $app = Factory::getApplication();

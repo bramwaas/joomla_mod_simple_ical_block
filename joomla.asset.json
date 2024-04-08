@@ -16,8 +16,8 @@
       }
     },
     {
-      "name": "module.mod_wsacarousel",
-      "description": "Default css eand scripts for this module",
+      "name": "ps.mod_simple_ical_block",
+      "description": "Default css and scripts for this module",
       "type": "preset",
       "dependencies": [
         "simple-ical-block-view.js#script"
