@@ -33,10 +33,11 @@ $wa->addInlineScript(
     );
 //$wa->useScript('simple-ical-block-view.js');
 //$wa->usePreset('ps.mod_simple_ical_block');
+$maid = $app->getMenu()->getActive()->id;
 
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 
-echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid'] 
+echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid'] . '" data-sib-maid="' . $maid
 //. ((empty($attributes['title'])) ? '" data-sib-notitle="true' : '')
 . '" data-sib-st="0-start" class="simple_ical_block" >';
 //SimpleicalblockHelper::display_block($attributes);

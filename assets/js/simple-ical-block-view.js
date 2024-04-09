@@ -10,7 +10,7 @@ let titl;
 window.simpleIcalBlock = {...(window.simpleIcalBlock || {}), ...{
 	fetchFromRest: function(dobj, ni) {
 /*		fetch(endpoint, { */
-        let epg = endpoint + '&sibid=' + dobj.sibid + '&tzid_ui=' + dobj.tzid_ui;
+        let epg = endpoint + '&sibid=' + dobj.sibid + '&tzid_ui=' + dobj.tzid_ui + '&Itemid=' + dobj.Itemid;
         console.log(epg);
 		fetch(epg, {
 /*			method: "POST", */
@@ -43,6 +43,7 @@ window.simpleIcalBlock = {...(window.simpleIcalBlock || {}), ...{
 		let paramsObj = {"wptype": "REST", "tzid_ui":ptzid_ui};
 		for (let i = 0; i < nodeList.length; i++) {
 			paramsObj.sibid = nodeList[i].getAttribute('data-sib-id');
+			paramsObj.Itemid = nodeList[i].getAttribute('data-sib-maid');
 			nodeList[i].setAttribute('data-sib-st', 'f1');
 			this.fetchFromRest(paramsObj, nodeList[i]);
 		}
