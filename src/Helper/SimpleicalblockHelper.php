@@ -123,17 +123,14 @@ class SimpleicalblockHelper
         $params = $input->getArray();
         unset($params['option'],$params['module'],$params['method'],$params['view'],);
         if (empty($params['sibid'])) {
-            $content = '<p>' . 'Empty sibid. Not possible to get block content' .'</p>';
-            $content .= '<p>Input:' . print_r($input,true) . '</p>';
+            $content = '<p>' .  Text::_('Empty sibid. Not possible to get block content') .'</p>';
         } else {
             $mod = ModuleHelper::getModuleById($params['sibid']);
-//            $mod = ModuleHelper::getModuleList();
             if (empty($mod->params)) {
-                $content = '<p>' . ('Not yet possible to get block content') .'</p><p>Params:' . print_r($params,true) .'</p>';
+                $content = '<p>' .  Text::_('Module params not found. Not possible to get block content') .'</p>';
             } else {
                 $content = '';
                 ob_start();
-//                echo 'sibid:' . $params['sibid'] . ' $mod:' . print_r($mod,true) . PHP_EOL;
                 $attributes = self::render_attributes( array_merge( json_decode($mod->params, true), $params));
                 self::display_block($attributes);
                 $content = $content . ob_get_clean();
