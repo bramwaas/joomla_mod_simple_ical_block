@@ -131,8 +131,9 @@ class SimpleicalblockHelper
             } else {
                 $content = '';
                 ob_start();
-                $attributes = self::render_attributes( array_merge( json_decode($mod->params, true), $params));
-                self::display_block($attributes);
+                echo 'sibid:' . $params['sibid'] . ' $mod:' . print_r($mod,true) . PHP_EOL;
+//                $attributes = self::render_attributes( array_merge( json_decode($mod->params, true), $params));
+//                self::display_block($attributes);
                 $content = $content . ob_get_clean();
             }
         }

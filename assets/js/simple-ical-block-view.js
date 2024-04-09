@@ -10,7 +10,7 @@ let titl;
 window.simpleIcalBlock = {...(window.simpleIcalBlock || {}), ...{
 	fetchFromRest: function(dobj, ni) {
 /*		fetch(endpoint, { */
-        let epg = endpoint + '&sibid="' + dobj.sibid + '"&tzid_ui="' + dobj.tzid_ui + '"';
+        let epg = endpoint + '&sibid=' + dobj.sibid + '&tzid_ui=' + dobj.tzid_ui;
         console.log(epg);
 		fetch(epg, {
 /*			method: "POST", */
