@@ -9,11 +9,13 @@ let titl;
 
 window.simpleIcalBlock = {...(window.simpleIcalBlock || {}), ...{
 	fetchFromRest: function(dobj, ni) {
-		fetch(endpoint, {
-			method: "POST",
+/*		fetch(endpoint, { */
+		fetch(endpoint + '&sibid="' + dobj.sibid + '"&tzid_ui="' + dobj.tzid_ui + '"', {
+/*			method: "POST", */
+			method: "GET",
 			cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
 			headers: { "Content-Type": "application/json", },
-			body: JSON.stringify(dobj),
+/*			body: JSON.stringify(dobj), */
 		}).then((response) => {
 			if (!response.ok) {
 				throw new Error(`HTTP error, status = ${response.status}`);
@@ -24,6 +26,7 @@ window.simpleIcalBlock = {...(window.simpleIcalBlock || {}), ...{
 /*			if (ni.getAttribute('data-sib-notitle')) titl = ''; else titl = ni.querySelector( '[data-sib-t="true"]' ).outerHTML; 
 			ni.innerHTML = titl + res.content; */
 			ni.innerHTML = res.data.content;
+			console.log(res);
 		}
 		).catch((error) => {
 			console.log(error);
