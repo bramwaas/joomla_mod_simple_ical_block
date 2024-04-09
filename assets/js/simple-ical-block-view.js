@@ -21,8 +21,9 @@ window.simpleIcalBlock = {...(window.simpleIcalBlock || {}), ...{
 			return response.json();
 		}).then((res) => {
 			ni.setAttribute('data-sib-st', 'completed');
-			if (ni.getAttribute('data-sib-notitle')) titl = ''; else titl = ni.querySelector( '[data-sib-t="true"]' ).outerHTML;
-			ni.innerHTML = titl + res.content;
+/*			if (ni.getAttribute('data-sib-notitle')) titl = ''; else titl = ni.querySelector( '[data-sib-t="true"]' ).outerHTML; 
+			ni.innerHTML = titl + res.content; */
+			ni.innerHTML = res.data.content;
 		}
 		).catch((error) => {
 			console.log(error);
