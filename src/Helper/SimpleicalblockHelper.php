@@ -124,6 +124,7 @@ class SimpleicalblockHelper
         unset($params['option'],$params['module'],$params['method'],$params['view'],);
         if (empty($params['sibid'])) {
             $content = '<p>' . 'Empty sibid. Not possible to get block content' .'</p>';
+            $content .= '<p>Input:' . print_r($input,true) . '</p>';
         } else {
             $mod = ModuleHelper::getModuleById($params['sibid']);
 //            $mod = ModuleHelper::getModuleList();

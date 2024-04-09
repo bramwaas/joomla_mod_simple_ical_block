@@ -23,24 +23,23 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
+$maid = $app->getMenu()->getActive()->id;
+$maid = (empty($maid)) ? '' : $maid;
 $wa  = $document->getWebAssetManager();
 
 $wa->registerAndUseScript('simple-ical-block-view.js', 'mod_simple_ical_block/simple-ical-block-view.js', ['version'=>'2.4.0'],  ['defer' => TRUE],[]);
 
 $wa->addInlineScript(
-    '(window.simpleIcalBlock=window.simpleIcalBlock || {}).restRoot = "' . Uri::root() . 'index.php?option=com_ajax"',
+    '(window.simpleIcalBlock=window.simpleIcalBlock || {}).restRoot = "' . Uri::root() . 'index.php?option=com_ajax&Itemid=' . $maid . '"',
      ['position' => 'before', 'name' => 'define.restRoot'], [],[]
     );
 //$wa->useScript('simple-ical-block-view.js');
 //$wa->usePreset('ps.mod_simple_ical_block');
-$maid = $app->getMenu()->getActive()->id;
 
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 
-echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid'] . '" data-sib-maid="' . $maid
-//. ((empty($attributes['title'])) ? '" data-sib-notitle="true' : '')
+echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid']
 . '" data-sib-st="0-start" class="simple_ical_block" >';
-//SimpleicalblockHelper::display_block($attributes);
 echo '<p>' . Text::_('MOD_SIMPLEICALBLOCK_PROCESSING') . '</p>';
 echo '</div>';
 

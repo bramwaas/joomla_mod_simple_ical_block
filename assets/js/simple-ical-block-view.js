@@ -10,7 +10,7 @@ let titl;
 window.simpleIcalBlock = {...(window.simpleIcalBlock || {}), ...{
 	fetchFromRest: function(dobj, ni) {
 /*		fetch(endpoint, { */
-        let epg = endpoint + '&sibid=' + dobj.sibid + '&tzid_ui=' + dobj.tzid_ui + '&Itemid=' + dobj.Itemid;
+        let epg = endpoint + '&sibid=' + dobj.sibid + '&tzid_ui=' + dobj.tzid_ui;
         console.log(epg);
 		fetch(epg, {
 /*			method: "POST", */
@@ -25,8 +25,6 @@ window.simpleIcalBlock = {...(window.simpleIcalBlock || {}), ...{
 			return response.json();
 		}).then((res) => {
 			ni.setAttribute('data-sib-st', 'completed');
-/*			if (ni.getAttribute('data-sib-notitle')) titl = ''; else titl = ni.querySelector( '[data-sib-t="true"]' ).outerHTML; 
-			ni.innerHTML = titl + res.content; */
 			ni.innerHTML = res.data.content;
 			console.log(res);
 		}
@@ -43,7 +41,6 @@ window.simpleIcalBlock = {...(window.simpleIcalBlock || {}), ...{
 		let paramsObj = {"wptype": "REST", "tzid_ui":ptzid_ui};
 		for (let i = 0; i < nodeList.length; i++) {
 			paramsObj.sibid = nodeList[i].getAttribute('data-sib-id');
-			paramsObj.Itemid = nodeList[i].getAttribute('data-sib-maid');
 			nodeList[i].setAttribute('data-sib-st', 'f1');
 			this.fetchFromRest(paramsObj, nodeList[i]);
 		}
