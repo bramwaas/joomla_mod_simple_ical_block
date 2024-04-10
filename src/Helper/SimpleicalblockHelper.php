@@ -68,9 +68,7 @@ class SimpleicalblockHelper
      * @var array
      */
     static $default_block_attributes = [
-        'wptype' => 'block',
         'sibid' => '',
-        'postid' => '0',
         'calendar_id' => '',
         'event_count' => 10,
         'event_period' => 92,
@@ -92,18 +90,15 @@ class SimpleicalblockHelper
         'no_events' => '',
         'clear_cache_now' => false,
         'period_limits' => '1',
-        'rest_utzui' => '',
         'className' => '',
         'anchorId' => '',
-        'before_widget' => '<div id="%1$s" %2$s>',
-        'after_widget'  => '</div>',
         'before_title'  => '<h3 class="widget-title block-title">',
         'after_title'   => '</h3>'
         
     ];
     /**
-     * call Ajax component.
-     * Get block content wth sibid, postid, and client timezone from request
+     * call Rest / Ajax component.
+     * Get block content wth sibid, (active menu Itemid,) postid, and client timezone from request
      *
      * @param Input object $input $app-> 
      * 
@@ -123,11 +118,11 @@ class SimpleicalblockHelper
         $params = $input->getArray();
         unset($params['option'],$params['module'],$params['method'],$params['view'],);
         if (empty($params['sibid'])) {
-            $content = '<p>' .  Text::_('Empty sibid. Not possible to get block content') .'</p>';
+            $content = '<p>' .  Text::_('MOD_SIMPLEICALBLOCK_EMPTYSIBID') .'</p>';
         } else {
             $mod = ModuleHelper::getModuleById($params['sibid']);
             if (empty($mod->params)) {
-                $content = '<p>' .  Text::_('Module params not found. Not possible to get block content') .'</p>';
+                $content = '<p>' .  Text::_('MOD_SIMPLEICALBLOCK_NOPARAMS') .'</p>';
             } else {
                 $content = '';
                 ob_start();

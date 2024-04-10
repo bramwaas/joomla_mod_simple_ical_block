@@ -5,19 +5,15 @@
  * v2.4.0
 **/
 const endpoint = window.simpleIcalBlock.restRoot + "&module=simple_ical_block&method=get&format=json";
-let titl;
+let titl,epg;
 
 window.simpleIcalBlock = {...(window.simpleIcalBlock || {}), ...{
 	fetchFromRest: function(dobj, ni) {
-/*		fetch(endpoint, { */
-        let epg = endpoint + '&sibid=' + dobj.sibid + '&tzid_ui=' + dobj.tzid_ui;
-        console.log(epg);
+        epg = endpoint + '&sibid=' + dobj.sibid + '&tzid_ui=' + dobj.tzid_ui;
 		fetch(epg, {
-/*			method: "POST", */
 			method: "GET",
 			cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
 			headers: { "Content-Type": "application/json", },
-/*			body: JSON.stringify(dobj), */
 		}).then((response) => {
 			if (!response.ok) {
 				throw new Error(`HTTP error, status = ${response.status}`);

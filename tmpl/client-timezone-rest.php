@@ -15,7 +15,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * 2.4.0 Created as placeholder for Ajax (or Rest) service
+ * 2.4.0 Created as placeholder for Rest (or Ajax) service
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -27,14 +27,11 @@ $maid = $app->getMenu()->getActive()->id;
 $maid = (empty($maid)) ? '' : $maid;
 $wa  = $document->getWebAssetManager();
 
-$wa->registerAndUseScript('simple-ical-block-view.js', 'mod_simple_ical_block/simple-ical-block-view.js', ['version'=>'2.4.0'],  ['defer' => TRUE],[]);
-
+$wa->usePreset('ps.mod_simple_ical_block');
 $wa->addInlineScript(
     '(window.simpleIcalBlock=window.simpleIcalBlock || {}).restRoot = "' . Uri::root() . 'index.php?option=com_ajax&Itemid=' . $maid . '"',
      ['position' => 'before', 'name' => 'define.restRoot'], [],[]
     );
-//$wa->useScript('simple-ical-block-view.js');
-//$wa->usePreset('ps.mod_simple_ical_block');
 
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
 
