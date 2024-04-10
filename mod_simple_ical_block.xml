@@ -6,7 +6,7 @@
     	</include>
   	</compatibility>
 	<name>Simple iCal Block</name>
-	<creationDate>10-04-2024</creationDate>	
+	<creationDate>11-04-2024</creationDate>	
 	<author>A.H.C. Waasdorp</author>
 	<copyright>Copyright (C) 2022 - 2024 A.H.C. Waasdorp, All rights reserved.</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
@@ -21,7 +21,6 @@
 		<filename module="mod_simple_ical_block">mod_simple_ical_block.php</filename>
 		<filename>mod_simple_ical_block.xml</filename>
 		<filename>index.html</filename>
-		<filename>joomla.asset.json</filename>
 		<folder>assets</folder>
 		<folder>language</folder>
 		<folder>src</folder>
