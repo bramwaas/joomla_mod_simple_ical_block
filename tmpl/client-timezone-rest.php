@@ -26,7 +26,10 @@ use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 $maid = $app->getMenu()->getActive()->id;
 $maid = (empty($maid)) ? '' : $maid;
 
-$wa->usePreset('ps.simple-ical-block');
+$wa->registerAndUseScript('simple-ical-block-view.js', 'mod_simple_ical_block/simple-ical-block-view.js', ['version'=>'2.4.0'],  ['defer' => TRUE],[]);
+//$wa->useScript('simple-ical-block-view.js');
+
+//$wa->usePreset('ps.simple-ical-block');
 $wa->addInlineScript(
     '(window.simpleIcalBlock=window.simpleIcalBlock || {}).restRoot = "' . Uri::root() . 'index.php?option=com_ajax&Itemid=' . $maid . '"',
      ['position' => 'before', 'name' => 'define.restRoot'], [],[]
