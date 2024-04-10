@@ -25,9 +25,8 @@ use Joomla\CMS\Uri\Uri;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 $maid = $app->getMenu()->getActive()->id;
 $maid = (empty($maid)) ? '' : $maid;
-$wa  = $document->getWebAssetManager();
 
-$wa->usePreset('ps.mod_simple_ical_block');
+$wa->usePreset('ps.simple-ical-block');
 $wa->addInlineScript(
     '(window.simpleIcalBlock=window.simpleIcalBlock || {}).restRoot = "' . Uri::root() . 'index.php?option=com_ajax&Itemid=' . $maid . '"',
      ['position' => 'before', 'name' => 'define.restRoot'], [],[]
