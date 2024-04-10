@@ -29,7 +29,7 @@ $asset_dir =  "media/mod_simple_ical_block/";
 if ($joomlaverge4) {
     $wa  = $document->getWebAssetManager();
     $wr = $wa->getRegistry();
-    $wr->addRegistryFile('joomla.asset.json');
+    $wr->addRegistryFile('media/mod_simple_ical_block/joomla.asset.json');
     
 require ModuleHelper::getLayoutPath('mod_simple_ical_block', $params->get('layout','default'));
 }
