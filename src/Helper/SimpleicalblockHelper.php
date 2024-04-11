@@ -28,7 +28,7 @@
  * 2.1.4 add closing HTML output after eventlist or when no events are available. 
  * 2.2.1 20240123 don't display description line when excerpt-length = 0
  * 2.3.0 Moved display_block() and $allowed_tags to this class to accommodate calls from Ajax/REST service
- * 2.4.0 added getAjax function 
+ * 2.4.0 added getAjax function. str_replace('Etc/GMT ','Etc/GMT+' for some UTC-... timezonesettings. 
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
@@ -170,6 +170,13 @@ class SimpleicalblockHelper
         echo '<!-- Timezone Start tzid_ui:' . $attributes['tzid_ui'] . ' -->' .PHP_EOL;
         try {
             $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
+        } catch (\Exception $exc) {}
+        if (empty($attributes['tz_ui']))
+            try {
+                
+                $attributes['tzid_ui'] = str_replace('Etc/GMT ','Etc/GMT+',$attributes['tzid_ui']);
+                echo '<!-- Timezone ApE tzid_ui:' . $attributes['tzid_ui'] . ' -->' .PHP_EOL;
+                $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
         } catch (\Exception $exc) {}
         if (empty($attributes['tz_ui']))
             try {

@@ -32,7 +32,8 @@
  * 2.3.0 limit events after caching. process the different types of period endpoints (Time of day, Whole day). 
  *   Modulo 4 for period_limits (default 1 Whole day, whole day; 2 Time of day, Wd; 3 Td, Td; 0 Wd, Td)
  *   Add unescape \\ to \ and improve \, to ,   \; to ;  chars that should be escaped following the text specification. 
- * 2.4.0 exclude DTEND from event that is evend ends before (<) DTEND in stead of at (<=) DTEND. removed modulo 4   
+ * 2.4.0 exclude DTEND from event that is evend ends before (<) DTEND in stead of at (<=) DTEND. removed modulo 4
+ *   Checks if time zone ID with Etc/GMT 'replaced by'Etc/GMT+' is a Iana timezone then return this timezone.
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -752,8 +753,9 @@ END:VCALENDAR';
     /**
      * Checks if Zero time (timezone UTC)
      * Checks if a time zone ID is a Iana timezone then return this timezone.
-     * If empty return timezone from WP
      * Checks if time zone ID is windows timezone then return this timezone
+     * Checks if time zone ID with Etc/GMT 'replaced by'Etc/GMT+' is a Iana timezone then return this timezone.
+     * If empty return timezone from WP
      * If nothing istrue return timezone from WP
      * If timezone string from WP doesn't make a good timezone return UTC timezone.
      *
@@ -770,6 +772,10 @@ END:VCALENDAR';
         if (isset($timezone)) return $timezone;
         try {
             if (isset(self::$windowsTimeZonesMap[$ptzid])) $timezone = new \DateTimeZone(self::$windowsTimeZonesMap[$ptzid]);
+        } catch (\Exception $exc) {}
+        if (isset($timezone)) return $timezone;
+        try {
+            if (!empty($ptzid)) $timezone = new \DateTimeZone(str_replace('Etc/GMT ','Etc/GMT+',$ptzid));
         } catch (\Exception $exc) {}
         if (isset($timezone)) return $timezone;
         try {
@@ -972,6 +978,11 @@ END:VCALENDAR';
         $cachecontroller = new OutputController($options);
         if (! empty($instance['tzid_ui']))
             try {
+                $instance['tz_ui'] = new \DateTimeZone($instance['tzid_ui']);
+            } catch (\Exception $exc) {}
+        if (empty($instance['tz_ui']) && (! empty($instance['tzid_ui'])))
+            try {
+                $instance['tzid_ui'] = str_replace('Etc/GMT ','Etc/GMT+',$instance['tzid_ui']);
                 $instance['tz_ui'] = new \DateTimeZone($instance['tzid_ui']);
             } catch (\Exception $exc) {}
         if (empty($instance['tz_ui']))
