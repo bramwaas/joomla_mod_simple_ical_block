@@ -167,19 +167,22 @@ class SimpleicalblockHelper
      */
     static function display_block($attributes)
     {
-//        $old_timezone = date_default_timezone_get();
+        echo '<!-- Timezone Start tzid_ui:' . $attributes['tzid_ui'] . ' -->' .PHP_EOL;
         try {
             $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
         } catch (\Exception $exc) {}
         if (empty($attributes['tz_ui']))
             try {
                 $attributes['tzid_ui'] = Factory::getApplication()->get('offset');
+                echo '<!-- Timezone App tzid_ui:' . $attributes['tzid_ui'] . ' -->' .PHP_EOL;
                 $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
         } catch (\Exception $exc) {}
         if (empty($attributes['tz_ui'])) {
             $attributes['tzid_ui'] = 'UTC';
+            echo '<!-- Timezone UTC tzid_ui:' . $attributes['tzid_ui'] . ' -->' .PHP_EOL;
             $attributes['tz_ui'] = new \DateTimeZone('UTC');
         }
+        echo '<!-- Timezone RESULT tz_ui:' . print_r($attributes['tz_ui'],true) . ' -->' .PHP_EOL;
         $layout = (isset($attributes['sib_layout'])) ? intval($attributes['sib_layout']) : 3;
         $dflg = $attributes['dateformat_lg'];
         $dflgend =$attributes['dateformat_lgend'];
