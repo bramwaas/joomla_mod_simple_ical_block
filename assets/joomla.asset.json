@@ -14,17 +14,7 @@
       "attributes" : {
         "defer": true
       }
-    },
-    {
-      "name": "ps.simple-ical-block",
-      "description": "Default css and scripts for this module",
-      "type": "preset",
-      "uri": "",
-      "version": "2.4.0",
-      "dependencies": [
-        "simple-ical-block-view.js#script"
-      ]
     }
-	
+
   ]
 }
