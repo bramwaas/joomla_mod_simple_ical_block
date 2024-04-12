@@ -259,7 +259,7 @@ class SimpleicalblockHelper
                     }
                     }
                     $e->description = str_replace("\n", '<br>', strip_tags($e->description,self::$allowed_tags) );
-                    echo   $e->description ,(strrpos($e->description, '<br>') === (strlen($e->description) - 4)) ? '' : '<br>';
+                    echo '<span class="dsc">', $e->description ,(strrpos($e->description, '<br>') === (strlen($e->description) - 4)) ? '' : '<br>', '</span>';
                 }
                 if ($e->startisdate === false && date('yz', $e->start) === date('yz', $e->end))	{
                     echo '<span class="time">', strip_tags($e_dtstart->format($dftstart, true, true), self::$allowed_tags),
