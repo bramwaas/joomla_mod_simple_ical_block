@@ -15,20 +15,16 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * 2.4.0 Created as placeholder for Rest (or Ajax) service
+ * 2.4.0 Created as placeholder for Rest (or Ajax) service. Add inline script for restRoot and load view-script via dependency.
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
-use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
-$maid = $app->getMenu()->getActive()->id;
-$maid = (empty($maid)) ? '' : $maid;
 
-//$wa->usePreset('ps.simple-ical-block');
 $wa->addInlineScript(
-    '(window.simpleIcalBlock=window.simpleIcalBlock || {}).restRoot = "' . Uri::root() . 'index.php?option=com_ajax&Itemid=' . $maid . '"',
+    '(window.simpleIcalBlock=window.simpleIcalBlock || {}).restRoot = "' . Uri::root() . 'index.php?option=com_ajax&Itemid=' . (($app->getMenu()->getActive()->id) ?? '') . '"',
     ['position' => 'before', 'name' => 'define.restRoot'], [],['simple-ical-block-view.js']
     );
 
