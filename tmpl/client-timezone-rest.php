@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Id: rest_ph.php
+ * @version $Id: client-timezone-rest.php
  * @package simpleicalblock
  * @subpackage simpleicalblock Module
  * @copyright Copyright (C) 2024 -2024 simpleicalblock, All rights reserved.

@@ -38,8 +38,7 @@
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
-use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
+
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 
 $attributes = SimpleicalblockHelper::render_attributes( $params->toArray());

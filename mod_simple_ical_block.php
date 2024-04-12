@@ -14,8 +14,6 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\ModuleHelper;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Uri\Uri;
 
 
 $joomlaverge4 = (version_compare(JVERSION, '4.0', '>='));
@@ -24,7 +22,6 @@ $document = $app->getDocument();
 $params->set('sibid',  $module->id);
 $params->set('clear_cache_now', FALSE); // only clear transient on save in admin.
 $direction = $document->direction;
-$asset_dir =  "media/mod_simple_ical_block/";
 
 if ($joomlaverge4) {
     $wa  = $document->getWebAssetManager();
