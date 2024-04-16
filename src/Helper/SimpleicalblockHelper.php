@@ -167,7 +167,6 @@ class SimpleicalblockHelper
      */
     static function display_block($attributes)
     {
-        echo '<!-- Timezone Start tzid_ui:' . $attributes['tzid_ui'] . ' -->' .PHP_EOL;
         try {
             $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
         } catch (\Exception $exc) {}
@@ -175,21 +174,17 @@ class SimpleicalblockHelper
             try {
                 
                 $attributes['tzid_ui'] = str_replace('Etc/GMT ','Etc/GMT+',$attributes['tzid_ui']);
-                echo '<!-- Timezone ApE tzid_ui:' . $attributes['tzid_ui'] . ' -->' .PHP_EOL;
                 $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
         } catch (\Exception $exc) {}
         if (empty($attributes['tz_ui']))
             try {
                 $attributes['tzid_ui'] = Factory::getApplication()->get('offset');
-                echo '<!-- Timezone App tzid_ui:' . $attributes['tzid_ui'] . ' -->' .PHP_EOL;
                 $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
         } catch (\Exception $exc) {}
         if (empty($attributes['tz_ui'])) {
             $attributes['tzid_ui'] = 'UTC';
-            echo '<!-- Timezone UTC tzid_ui:' . $attributes['tzid_ui'] . ' -->' .PHP_EOL;
             $attributes['tz_ui'] = new \DateTimeZone('UTC');
         }
-        echo '<!-- Timezone RESULT tz_ui:' . print_r($attributes['tz_ui'],true) . ' -->' .PHP_EOL;
         $layout = (isset($attributes['sib_layout'])) ? intval($attributes['sib_layout']) : 3;
         $dflg = $attributes['dateformat_lg'];
         $dflgend =$attributes['dateformat_lgend'];
@@ -202,7 +197,6 @@ class SimpleicalblockHelper
         $sflgia = $attributes['suffix_lgia_class'];
         $data = IcsParser::getData($attributes);
         if (!empty($data) && is_array($data)) {
-//            date_default_timezone_set($tzid_ui);
             echo '<ul class="list-group' .  $attributes['suffix_lg_class'] . ' simple-ical-widget">';
             $curdate = '';
             foreach($data as $e) {
@@ -248,7 +242,6 @@ class SimpleicalblockHelper
                     echo '<span>', $evdate, $evdtsum, '</span>';
                 }
                 echo '<div class="ical_details' .  $sflgia . (('a' == $attributes['tag_sum'] ) ? ' collapse' : '') . '" id="',  $itemid, '">';
-                echo '<!-- $excerptlength:' . $excerptlength . '. -->';
                 if(!empty($e->description) && trim($e->description) > '' && $excerptlength !== 0) {
                     if ($excerptlength !== '' && strlen($e->description) > $excerptlength) {$e->description = substr($e->description, 0, $excerptlength + 1);
                     if (rtrim($e->description) !== $e->description) {$e->description = substr($e->description, 0, $excerptlength);}
@@ -277,7 +270,6 @@ class SimpleicalblockHelper
                 echo '</ul></li>';
             }
             echo '</ul>';
-//            date_default_timezone_set($old_timezone);
             echo strip_tags($attributes['after_events'],self::$allowed_tags);
         }
         else {
