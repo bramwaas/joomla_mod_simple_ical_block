@@ -1,15 +1,18 @@
+# joomla_mod_simple_ical_block
+
+Block module that displays events from a public google calendar or iCal file.
+
 === Simple iCal Block ===
 Plugin name: Simple iCal Block
 Contributors: bramwaas
 Tags: Event Calendar, Google Calendar, iCal, Events, Block, Calendar, iCalendar, Outlook, iCloud
 Requires at least Joomla: 4.0
-Tested up to: 5.0.1
+Tested up to: 5.0.3
 Requires PHP: 7
 Stable tag: trunk
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
  
-Block module that displays events from a public google calendar or iCal file.
  
 == Description ==
 
@@ -147,6 +150,8 @@ background-color: gray;
 * Gets calendar events via iCal url or google calendar ID
 * Merge more calendars into one module/block
 * Displays selected number of events, or events in a selected period from now as listgroup-items
+* Displays only events in a selected period with a length of the setting "Number of days after today with events" from now limited by the time of the day or the beginning of the day at the start and the and of the at the end.
+* Displays events in timezone of Joomla setting, or in Clients timezone with javascript REST call fetched from the clients browser.
 * Displays event start-date and summary; toggle details, description, start-, end-time, location. 
 * Displays most common repeating events 
 * Frequency Yearly, Monthly, Weekly, Dayly (not parsed Hourly, Minutely ...), INTERVAL (default 1), WKST (default MO)
@@ -209,6 +214,7 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 * works with Joomla 4 or higher.
 
 == Changelog ==
+* 2.4.0 Tie moving display events window created by Now and 'Number of days after today' to the display time instead of the data-retrieve/cache time. Make it possible to let the window start at 0H00 and end at 23H59 local time of the startdate and enddate of the window in addition to the current solution where both ends are at the time of the day the data is displayed/retrieved. Add &lt;span class="dsc"&gt; to description output to make it easier to refer to in css. Remove HTML for block title when title is empty. Add unescape \\ to \ and improve \, to ,   \; to ;  chars that should be escaped following the text specification. Tested with J5.0.3 and J4.4.3.    
 * 2.2.1 20240123 after an issue of black88mx6 in WP support forum: don't display description line when excerpt-length = 0
 * 2.2.0 after an issue of gonzob (@gonzob) in WP support forum: 'Bug with repeating events
 ' improved handling of EXDATE so that also the first event of a recurrent set can be excluded.   

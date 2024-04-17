@@ -6,13 +6,13 @@
     	</include>
   	</compatibility>
 	<name>Simple iCal Block</name>
-	<creationDate>23-01-2024</creationDate>	
+	<creationDate>17-04-2024</creationDate>	
 	<author>A.H.C. Waasdorp</author>
 	<copyright>Copyright (C) 2022 - 2024 A.H.C. Waasdorp, All rights reserved.</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<authorEmail>contact@waasdorpsoekhan.nl</authorEmail>
 	<authorUrl>http://www.waasdorpsoekhan.nl</authorUrl>
-	<version>2.2.1</version>
+	<version>2.4.0</version>
 	<description><![CDATA[<div class="sib-info" style="color: #3f48cc;"><p><img class="sib-img" src="../modules/mod_simple_ical_block/assets/simpleicalicon128x128.svg" style="display: inline-block; width: 2em; height:auto; margin-right: 0.5em;"/>Simple iCal Calendar Events Block</p></div>
 	]]></description>
 	<namespace path="src">WaasdorpSoekhan\Module\Simpleicalblock</namespace>
@@ -20,12 +20,19 @@
  	<files>
 		<filename module="mod_simple_ical_block">mod_simple_ical_block.php</filename>
 		<filename>mod_simple_ical_block.xml</filename>
+		<filename>helper.php</filename>
 		<filename>index.html</filename>
 		<folder>assets</folder>
 		<folder>language</folder>
 		<folder>src</folder>
 		<folder>tmpl</folder>
 	</files>
+	<media destination="mod_simple_ical_block" folder="assets">
+		<filename>joomla.asset.json</filename>
+		<!-- folder>css</folder -->
+		<folder>js</folder>
+	</media>
+	<!-- scriptfile>mod_wsacarousel.script.php</scriptfile -->
 
 	<config>
 		<fields name="params"  
@@ -53,6 +60,12 @@
 			<fieldset name="advanced">
 				<field name="transient_time" type="number" min="2" max="1440" default="60"  label="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME" description="MOD_SIMPLEICALBLOCK_TRANSIENT_TIME_DESC" hint="60" />
 				<field name="excerptlength" type="text" default="" label="MOD_SIMPLEICALBLOCK_EXCERPTL" description="MOD_SIMPLEICALBLOCK_EXCERPTL_DESC" />
+				<field name="period_limits" type="list" default="1" label="MOD_SIMPLEICALBLOCK_PER_LIMITS" description="MOD_SIMPLEICALBLOCK_PER_LIMITS_DESC">
+					<option value="1">MOD_SIMPLEICALBLOCK_PER_LIMITS_DD</option>
+					<option value="2">MOD_SIMPLEICALBLOCK_PER_LIMITS_TD</option>
+					<option value="3">MOD_SIMPLEICALBLOCK_PER_LIMITS_TT</option>
+					<option value="4">MOD_SIMPLEICALBLOCK_PER_LIMITS_DT</option>
+				</field>
 				<field name="tag_sum" type="list" default="div" label="MOD_SIMPLEICALBLOCK_TAG_SUM" description="MOD_SIMPLEICALBLOCK_TAG_SUM_DESC">
 					<option value="a">MOD_SIMPLEICALBLOCK_TAG_SUM_A</option>
 					<option value="b">MOD_SIMPLEICALBLOCK_TAG_SUM_B</option>
@@ -132,9 +145,9 @@
 					label="MOD_SIMPLEICALBLOCK_PR_EVENTS"
 					description="MOD_SIMPLEICALBLOCK_EVENT_PERIOD_HELP"
  					 />
-				<field name="startwsum_help"  type="note" 
-					label="MOD_SIMPLEICALBLOCK_STARTWSUM"
-					description="MOD_SIMPLEICALBLOCK_STARTWSUM_HELP"
+				<field name="sib_layout_help"  type="note" 
+					label="MOD_SIMPLEICALBLOCK_LAYOUT"
+					description="MOD_SIMPLEICALBLOCK_SIB_LAYOUT_HELP"
  					 />
 				<field name="dateformat_lg_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_DF_LG"
@@ -170,6 +183,10 @@
 				<field name="excerptlength_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_EXCERPTL"
 					description="MOD_SIMPLEICALBLOCK_EXCERPTLENGTH_HELP"
+ 					 />
+				<field name="period_limits_help"  type="note" 
+					label="MOD_SIMPLEICALBLOCK_PER_LIMITS"
+					description="MOD_SIMPLEICALBLOCK_PER_LIMITS_HELP"
  					 />
 				<field name="tag_sum_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_TAG_SUM"
