@@ -6,7 +6,7 @@
     	</include>
   	</compatibility>
 	<name>Simple iCal Block</name>
-	<creationDate>17-04-2024</creationDate>	
+	<creationDate>24-04-2024</creationDate>	
 	<author>A.H.C. Waasdorp</author>
 	<copyright>Copyright (C) 2022 - 2024 A.H.C. Waasdorp, All rights reserved.</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
@@ -18,12 +18,13 @@
 	<namespace path="src">WaasdorpSoekhan\Module\Simpleicalblock</namespace>
 		<!-- Site Main File Copy Section -->
  	<files>
-		<filename module="mod_simple_ical_block">mod_simple_ical_block.php</filename>
+		<!-- filename module="mod_simple_ical_block">mod_simple_ical_block.php</filename -->
 		<filename>mod_simple_ical_block.xml</filename>
 		<filename>helper.php</filename>
 		<filename>index.html</filename>
 		<folder>assets</folder>
 		<folder>language</folder>
+		<folder module="mod_simple_ical_block">services</folder>
 		<folder>src</folder>
 		<folder>tmpl</folder>
 	</files>
