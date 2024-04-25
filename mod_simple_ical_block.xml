@@ -6,7 +6,7 @@
     	</include>
   	</compatibility>
 	<name>Simple iCal Block</name>
-	<creationDate>24-04-2024</creationDate>	
+	<creationDate>25-04-2024</creationDate>	
 	<author>A.H.C. Waasdorp</author>
 	<copyright>Copyright (C) 2022 - 2024 A.H.C. Waasdorp, All rights reserved.</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
@@ -33,7 +33,7 @@
 		<!-- folder>css</folder -->
 		<folder>js</folder>
 	</media>
-	<!-- scriptfile>mod_wsacarousel.script.php</scriptfile -->
+	<scriptfile>mod_simple_ical_block.script.php</scriptfile>
 
 	<config>
 		<fields name="params"  
