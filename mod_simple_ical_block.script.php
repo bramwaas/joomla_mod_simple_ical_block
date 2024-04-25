@@ -15,7 +15,7 @@ use Joomla\CMS\Filesystem\Path;
 use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Language\Text;
 
-class mod_wsacarouselInstallerScript
+class mod_simple_ical_blockInstallerScript
 {
     /**
      * Constructor
