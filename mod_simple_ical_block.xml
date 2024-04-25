@@ -22,6 +22,7 @@
 		<filename>mod_simple_ical_block.xml</filename>
 		<filename>helper.php</filename>
 		<filename>index.html</filename>
+		<filename>README.md</filename>
 		<folder>assets</folder>
 		<folder>language</folder>
 		<folder module="mod_simple_ical_block">services</folder>
