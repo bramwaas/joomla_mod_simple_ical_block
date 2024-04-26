@@ -37,7 +37,7 @@ class mod_simple_ical_blockInstallerScript
     public function preflight($route, InstallerAdapter $adapter)
     {
         $first_message = true;
-        $paths = ['/modules/mod_simple_ical_block/css', '/modules/mod_simple_ical_block/js'];
+        $paths = ['/modules/mod_simple_ical_block/assets', '/modules/mod_simple_ical_block/css', '/modules/mod_simple_ical_block/js'];
         foreach($paths as $path) {
 
             if (Folder::exists(JPATH_ROOT . $path) && Folder::delete(JPATH_ROOT . $path)) {
