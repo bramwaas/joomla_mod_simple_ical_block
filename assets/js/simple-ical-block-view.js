@@ -2,7 +2,7 @@
  * simple-ical-block-view.js
  * view simple-ical-block output with extra client parameter tzid_ui using Ajax 
  * restRoot for endpoint passed via inlinescript and this script in enqueue_block_assets 
- * v2.4.0
+ * v2.4.1
 **/
 const endpoint = window.simpleIcalBlock.restRoot + "&module=simple_ical_block&method=get&format=json";
 let titl,epg;
@@ -22,7 +22,7 @@ window.simpleIcalBlock = {...(window.simpleIcalBlock || {}), ...{
 		}).then((res) => {
 			ni.setAttribute('data-sib-st', 'completed');
 			ni.innerHTML = res.data.content;
-			console.log(res);
+//			console.log(res);
 		}
 		).catch((error) => {
 			console.log(error);
