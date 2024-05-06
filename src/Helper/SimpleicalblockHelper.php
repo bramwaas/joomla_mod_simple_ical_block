@@ -90,6 +90,7 @@ class SimpleicalblockHelper
         'no_events' => '',
         'clear_cache_now' => false,
         'period_limits' => '1',
+        'tzid_ui' => '',
         'className' => '',
         'anchorId' => '',
         'before_title'  => '<h3 class="widget-title block-title">',
@@ -172,7 +173,6 @@ class SimpleicalblockHelper
         } catch (\Exception $exc) {}
         if (empty($attributes['tz_ui']))
             try {
-                
                 $attributes['tzid_ui'] = str_replace('Etc/GMT ','Etc/GMT+',$attributes['tzid_ui']);
                 $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
         } catch (\Exception $exc) {}
@@ -201,7 +201,7 @@ class SimpleicalblockHelper
             $curdate = '';
             foreach($data as $e) {
                 $idlist = explode("@", $e->uid );
-                $itemid = 'b' . $attributes['blockid'] . '_' . $idlist[0];
+                $itemid = 'b' . $attributes['sibid'] . '_' . $idlist[0];
                 $e_dtstart = new Jdate ($e->start);
                 $e_dtstart->setTimezone($attributes['tz_ui']);
                 $e_dtend = new Jdate ($e->end);
