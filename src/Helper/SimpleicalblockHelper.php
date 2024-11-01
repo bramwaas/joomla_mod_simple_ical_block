@@ -29,6 +29,7 @@
  * 2.2.1 20240123 don't display description line when excerpt-length = 0
  * 2.3.0 Moved display_block() and $allowed_tags to this class to accommodate calls from Ajax/REST service
  * 2.4.0 added getAjax function. str_replace('Etc/GMT ','Etc/GMT+' for some UTC-... timezonesettings. 
+ * 2.5.0 Add filter and display support for categories.
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
@@ -50,6 +51,26 @@ use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
 class SimpleicalblockHelper
 {
     const SIB_ATTR = 'simple_ical_block_attrs';
+    /**
+     * tags allowed for summary
+     *
+     * @var array
+     */
+    static $allowed_tags_sum = [
+        'a',
+        'b',
+        'div',
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'i',
+        'span',
+        'strong',
+        'u'
+    ];
     
     /*
      * @var array allowed tags for text-output
@@ -58,10 +79,6 @@ class SimpleicalblockHelper
         'b','big','blockquote', 'br','button', 'caption','cite','code','col',
         'details', 'div', 'em', 'fieldset', 'figcaption', 'figure', 'footer', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','hr',
         'i', 'img', 'li', 'label', 'legend', 'ol', 'p','q', 'section', 'small', 'span','strike', 'strong', 'u','ul'] ;
-    /*
-     * @var array allowed tags for summary
-     */
-    private static $allowed_tags_sum = ['a', 'b', 'div', 'h4', 'h5', 'h6', 'i', 'span', 'strong', 'u'] ;
     /**
      * default value for block_attributes (or instance)
      *
@@ -73,6 +90,9 @@ class SimpleicalblockHelper
         'event_count' => 10,
         'event_period' => 92,
         'transient_time' => 60,
+        'categories_filter_op' => '',
+        'categories_filter' => '',
+        'categories_display' => '',      
         'sib_layout' => 3,
         'dateformat_lg' => '',
         'dateformat_lgend' => '',
@@ -168,6 +188,7 @@ class SimpleicalblockHelper
      */
     static function display_block($attributes)
     {
+        $sn = 0;
         try {
             $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
         } catch (\Exception $exc) {}
@@ -186,15 +207,23 @@ class SimpleicalblockHelper
             $attributes['tz_ui'] = new \DateTimeZone('UTC');
         }
         $layout = (isset($attributes['sib_layout'])) ? intval($attributes['sib_layout']) : 3;
-        $dflg = $attributes['dateformat_lg'];
-        $dflgend =$attributes['dateformat_lgend'];
-        $dftsum =$attributes['dateformat_tsum'];
-        $dftsend = $attributes['dateformat_tsend'];
-        $dftstart = $attributes['dateformat_tstart'];
-        $dftend = $attributes['dateformat_tend'];
+        $dflg = (isset($attributes['dateformat_lg'])) ? $attributes['dateformat_lg'] : 'l jS \of F';
+        $dflgend = (isset($attributes['dateformat_lgend'])) ? $attributes['dateformat_lgend'] : '';
+        $dftsum = (isset($attributes['dateformat_tsum'])) ? $attributes['dateformat_tsum'] : 'G:i ';
+        $dftsend = (isset($attributes['dateformat_tsend'])) ? $attributes['dateformat_tsend'] : '';
+        $dftstart = (isset($attributes['dateformat_tstart'])) ? $attributes['dateformat_tstart'] : 'G:i';
+        $dftend = (isset($attributes['dateformat_tend'])) ? $attributes['dateformat_tend'] : ' - G:i ';
         $excerptlength = (isset($attributes['excerptlength']) && ' ' < trim($attributes['excerptlength']) ) ? (int) $attributes['excerptlength'] : '' ;
         $sflgi = $attributes['suffix_lgi_class'];
         $sflgia = $attributes['suffix_lgia_class'];
+        if (empty($attributes['categories_display'])) {
+            $cat_disp = false;
+        } else {
+           $cat_disp = true;
+           $cat_sep = '</small>'.$attributes['categories_display'].'<small>';
+        }
+        if (! in_array($attributes['tag_sum'], self::$allowed_tags_sum))
+            $attributes['tag_sum'] = 'a';
         $data = IcsParser::getData($attributes);
         if (!empty($data) && is_array($data)) {
             echo '<ul class="list-group' .  $attributes['suffix_lg_class'] . ' simple-ical-widget">';
@@ -208,8 +237,17 @@ class SimpleicalblockHelper
                 $e_dtend->setTimezone($attributes['tz_ui']);
                 $e_dtend_1 = new Jdate ($e->end -1);
                 $e_dtend_1->setTimezone($attributes['tz_ui']);
-                $cal_class = ((!empty($e->cal_class)) ? ' ' . SimpleicalblockHelper::sanitize_html_class($e->cal_class): '');
                 $evdate = strip_tags($e_dtstart->format($dflg, true, true) , self::$allowed_tags);
+                $ev_class =  ((!empty($e->cal_class)) ? ' ' . SimpleicalblockHelper::sanitize_html_class($e->cal_class): '');
+                $cat_list = '';
+                if (!empty($e->categories)) {
+                    $ev_class = $ev_class . ' ' . implode( ' ', array_map( "sanitize_html_class", $e->categories ));
+                    if ($cat_disp) { 
+                        $cat_list = wp_kses('<div class="categories"><small>'
+                            . implode($cat_sep,str_replace("\n", '<br>', $e->categories ))
+                            . '</small></div>', 'post');
+                    }
+                }
                 if ( !$attributes['allowhtml']) {
                     if (!empty($e->summary)) $e->summary = htmlspecialchars($e->summary);
                     if (!empty($e->description)) $e->description = htmlspecialchars($e->description);
@@ -220,11 +258,13 @@ class SimpleicalblockHelper
                 }
                 $evdtsum = (($e->startisdate === false) ? strip_tags($e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true), self::$allowed_tags) : '');
                 if ($layout < 2 && $curdate != $evdate) {
-                    if  ($curdate != '') { echo '</ul></li>';}
-                    echo '<li class="list-group-item' .  $sflgi . ' head">' .
+                    if  ($curdate != '') {
+                    	 echo '</ul></li>';
+                    }
+                    echo '<li class="list-group-item' .  $sflgi . $ev_class . ' head">' .
                         '<span class="ical-date">' . ucfirst($evdate) . '</span><ul class="list-group' .  $attributes['suffix_lg_class'] . '">';
                 }
-                echo '<li class="list-group-item' .  $sflgi . $cal_class . '">';
+                echo '<li class="list-group-item' .  $sflgi . $ev_class . '">';
                 if ($layout == 3 && $curdate != $evdate) {
                     echo '<span class="ical-date">' . ucfirst($evdate) . '</span>' . (('a' == $attributes['tag_sum'] ) ? '<br>': '');
                 }
@@ -241,7 +281,7 @@ class SimpleicalblockHelper
                 if ($layout == 2)	{
                     echo '<span>', $evdate, $evdtsum, '</span>';
                 }
-                echo '<div class="ical_details' .  $sflgia . (('a' == $attributes['tag_sum'] ) ? ' collapse' : '') . '" id="',  $itemid, '">';
+                echo $cat_list . '<div class="ical_details' .  $sflgia . (('a' == $attributes['tag_sum'] ) ? ' collapse' : '') . '" id="',  $itemid, '">';
                 if(!empty($e->description) && trim($e->description) > '' && $excerptlength !== 0) {
                     if ($excerptlength !== '' && strlen($e->description) > $excerptlength) {$e->description = substr($e->description, 0, $excerptlength + 1);
                     if (rtrim($e->description) !== $e->description) {$e->description = substr($e->description, 0, $excerptlength);}
