@@ -29,7 +29,9 @@
  * 2.2.1 20240123 don't display description line when excerpt-length = 0
  * 2.3.0 Moved display_block() and $allowed_tags to this class to accommodate calls from Ajax/REST service
  * 2.4.0 added getAjax function. str_replace('Etc/GMT ','Etc/GMT+' for some UTC-... timezonesettings. 
- * 2.5.0 Add filter and display support for categories.
+ * 2.5.0 Add filter and display support for categories. copied sanitize_html_class to ... clss for multiple classses and
+ *  removed allowed space from original (to use for one class)
+ *  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
@@ -170,10 +172,10 @@ class SimpleicalblockHelper
             $block_attributes
             );
         if (!in_array($block_attributes['tag_sum'], self::$allowed_tags_sum)) $block_attributes['tag_sum'] = 'a';
-        $block_attributes['suffix_lg_class'] = self::sanitize_html_class($block_attributes['suffix_lg_class']);
-        $block_attributes['suffix_lgi_class'] = self::sanitize_html_class($block_attributes['suffix_lgi_class']);
-        $block_attributes['suffix_lgia_class'] = self::sanitize_html_class($block_attributes['suffix_lgia_class']);
-        $block_attributes['anchorId'] = self::sanitize_html_class($block_attributes['anchorId'], 'simpleicalblock' . $block_attributes['sibid']);
+        $block_attributes['suffix_lg_class'] = self::sanitize_html_clss($block_attributes['suffix_lg_class']);
+        $block_attributes['suffix_lgi_class'] = self::sanitize_html_clss($block_attributes['suffix_lgi_class']);
+        $block_attributes['suffix_lgia_class'] = self::sanitize_html_clss($block_attributes['suffix_lgia_class']);
+        $block_attributes['anchorId'] = self::sanitize_html_clss($block_attributes['anchorId'], 'simpleicalblock' . $block_attributes['sibid']);
         
        
        return $block_attributes;
@@ -238,14 +240,14 @@ class SimpleicalblockHelper
                 $e_dtend_1 = new Jdate ($e->end -1);
                 $e_dtend_1->setTimezone($attributes['tz_ui']);
                 $evdate = strip_tags($e_dtstart->format($dflg, true, true) , self::$allowed_tags);
-                $ev_class =  ((!empty($e->cal_class)) ? ' ' . SimpleicalblockHelper::sanitize_html_class($e->cal_class): '');
+                $ev_class =  ((!empty($e->cal_class)) ? ' ' . self::sanitize_html_clss($e->cal_class): '');
                 $cat_list = '';
                 if (!empty($e->categories)) {
-                    $ev_class = $ev_class . ' ' . implode( ' ', array_map( "sanitize_html_class", $e->categories ));
+                    $ev_class = $ev_class . ' ' . implode( ' ', array_map( "self::sanitize_html_class", $e->categories ));
                     if ($cat_disp) { 
-                        $cat_list = wp_kses('<div class="categories"><small>'
+                        $cat_list = strip_tags('<div class="categories"><small>'
                             . implode($cat_sep,str_replace("\n", '<br>', $e->categories ))
-                            . '</small></div>', 'post');
+                            . '</small></div>', self::$allowed_tags);
                     }
                 }
                 if ( !$attributes['allowhtml']) {
@@ -320,7 +322,27 @@ class SimpleicalblockHelper
         
     }
     /**
-     * copied from WP sanitize_html_class, and added space as allowed character to accomadate multiple classes in one string.
+     * copied from WP sanitize_html_class, and added space as allowed character to accomodate multiple classes in one string.
+     * Strips the string down to A-Z, ,a-z,0-9,_,-. If this results in an empty string then it will return the alternative value supplied.
+     *
+     * @param string $class
+     * @param string $fallback
+     * @return string sanitized class or fallback.
+     */
+    static function sanitize_html_clss( $class, $fallback = '' ) {
+        // Strip out any %-encoded octets.
+        $sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', $class );
+        
+        // Limit to A-Z, ' ', a-z, 0-9, '_', '-'.
+        $sanitized = preg_replace( '/[^A-Z a-z0-9_-]/', '', $sanitized );
+        
+        if ( '' === $sanitized && $fallback ) {
+            return  $fallback;
+        }
+        return $sanitized;
+    }
+    /**
+     * copied from WP sanitize_html_class. (only for one class)
      * Strips the string down to A-Z,a-z,0-9,_,-. If this results in an empty string then it will return the alternative value supplied.
      *
      * @param string $class
@@ -331,8 +353,8 @@ class SimpleicalblockHelper
         // Strip out any %-encoded octets.
         $sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', $class );
         
-        // Limit to A-Z, ' ', a-z, 0-9, '_', '-'.
-        $sanitized = preg_replace( '/[^A-Z a-z0-9_-]/', '', $sanitized );
+        // Limit to A-Z, a-z, 0-9, '_', '-'.
+        $sanitized = preg_replace( '/[^A-Za-z0-9_-]/', '', $sanitized );
         
         if ( '' === $sanitized && $fallback ) {
             return  $fallback;
