@@ -86,7 +86,7 @@ class SimpleicalblockHelper
     /*
      * @var array allowed attributes for text-output
      */
-    static $allowed_attrs = ['href', 'title', 'cite', 'datetime'] ;
+    static $allowed_attrs = ['href', 'title', 'cite', 'datetime', 'role'] ;
     /*
      * @var class InputFilter to initialize it only once.
      */
@@ -252,7 +252,7 @@ class SimpleicalblockHelper
                 $e_dtend->setTimezone($attributes['tz_ui']);
                 $e_dtend_1 = new Jdate ($e->end -1);
                 $e_dtend_1->setTimezone($attributes['tz_ui']);
-                $evdate = strip_tags($e_dtstart->format($dflg, true, true) , self::$allowed_tags);
+                $evdate = self::$input_fl->clean($e_dtstart->format($dflg, true, true) , 'HTML');
                 $ev_class =  ((!empty($e->cal_class)) ? ' ' . self::sanitize_html_clss($e->cal_class): '');
                 $cat_list = '';
                 if (!empty($e->categories)) {
@@ -260,9 +260,9 @@ class SimpleicalblockHelper
                         array_map( "WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper::sanitize_html_class"
                         , $e->categories ));
                     if ($cat_disp) { 
-                        $cat_list = strip_tags('<div class="categories"><small>'
+                        $cat_list = self::$input_fl->clean('<div class="categories"><small>'
                             . implode($cat_sep,str_replace("\n", '<br>', $e->categories ))
-                            . '</small></div>', self::$allowed_tags);
+                            . '</small></div>', 'HTML');
                     }
                 }
                 if ( !$attributes['allowhtml']) {
@@ -271,9 +271,8 @@ class SimpleicalblockHelper
                     if (!empty($e->location)) $e->location = htmlspecialchars($e->location);
                 }
                 if (date('yz', $e->start) != date('yz', $e->end)) {
-                    $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags( $e_dtend_1->format($dflgend, true, true) , self::$allowed_tags));
+                    $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . self::$input_fl->clean( $e_dtend_1->format($dflgend, true, true) , 'HTML'));
                 }
-                echo PHP_EOL .'<!-- old evdtsum:' .  (($e->startisdate === false) ? strip_tags($e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true), self::$allowed_tags) : '') . '-->' .PHP_EOL;
                 $evdtsum = (($e->startisdate === false) ? self::$input_fl->clean($e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true), 'HTML') : '');
                 if ($layout < 2 && $curdate != $evdate) {
                     if  ($curdate != '') {
@@ -293,7 +292,7 @@ class SimpleicalblockHelper
                     echo $evdtsum;
                 }
                 if(!empty($e->summary)) {
-                    echo str_replace("\n", '<br>', strip_tags($e->summary,self::$allowed_tags));
+                    echo str_replace("\n", '<br>', self::$input_fl->clean($e->summary,'HTML'));
                 }
                 echo	'</' . $attributes['tag_sum'] . '>' ;
                 if ($layout == 2)	{
@@ -309,18 +308,17 @@ class SimpleicalblockHelper
                     {$e->description = substr($e->description, 0, $excerptlength);}
                     }
                     }
-                    echo PHP_EOL .'<!-- old desc:' . str_replace("\n", '<br>', strip_tags($e->description,self::$allowed_tags) ) . '-->' .PHP_EOL;
                     $e->description = str_replace("\n", '<br>', self::$input_fl->clean($e->description,'HTML') );
                     echo '<span class="dsc">', $e->description ,(strrpos($e->description, '<br>') === (strlen($e->description) - 4)) ? '' : '<br>', '</span>';
                 }
                 if ($e->startisdate === false && date('yz', $e->start) === date('yz', $e->end))	{
-                    echo '<span class="time">', strip_tags($e_dtstart->format($dftstart, true, true), self::$allowed_tags),
-                    '</span><span class="time">', strip_tags($e_dtend->format($dftend, true, true) , self::$allowed_tags), '</span> ' ;
+                    echo '<span class="time">', self::$input_fl->clean($e_dtstart->format($dftstart, true, true), 'HTML'),
+                    '</span><span class="time">', self::$input_fl->clean($e_dtend->format($dftend, true, true) , 'HTML'), '</span> ' ;
                 } else {
                     echo '';
                 }
                 if(!empty($e->location)) {
-                    echo  '<span class="location">', str_replace("\n", '<br>', strip_tags($e->location,self::$allowed_tags)) , '</span>';
+                    echo  '<span class="location">', str_replace("\n", '<br>', self::$input_fl->clean($e->location,'HTML')) , '</span>';
                 }
                 echo '</div></li>';
                 $curdate =  $evdate;
@@ -329,10 +327,10 @@ class SimpleicalblockHelper
                 echo '</ul></li>';
             }
             echo '</ul>';
-            echo strip_tags($attributes['after_events'],self::$allowed_tags);
+            echo self::$input_fl->clean($attributes['after_events'],'HTML');
         }
         else {
-            echo strip_tags($attributes['no_events'],self::$allowed_tags);
+            echo self::$input_fl->clean($attributes['no_events'],'HTML');
             
         }
         echo '<br class="clear" />';
