@@ -30,7 +30,9 @@
  * 2.3.0 Moved display_block() and $allowed_tags to this class to accommodate calls from Ajax/REST service
  * 2.4.0 added getAjax function. str_replace('Etc/GMT ','Etc/GMT+' for some UTC-... timezonesettings. 
  * 2.5.0 Add filter and display support for categories. copied sanitize_html_class to ... clss for multiple classses and
- *  removed allowed space from original (to use for one class)
+ *  removed allowed space from original (to use for one class); replace strip_tags(... allowed_html) by InputFilter::clean(..., 'HTML')
+ *  to add a liitle more security by also filtering attributes like wp_kses make allowed_html and allowed _attrs  more
+ *  comparable with wp_kses_allowed_html  
  *  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
@@ -43,6 +45,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Response\JsonResponse;
+use Joomla\Filter\InputFilter;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
 
 /**
@@ -73,14 +76,21 @@ class SimpleicalblockHelper
         'strong',
         'u'
     ];
-    
     /*
      * @var array allowed tags for text-output
      */
     static $allowed_tags = ['a','abbr', 'acronym', 'address','area','article', 'aside','audio',
-        'b','big','blockquote', 'br','button', 'caption','cite','code','col',
+        'b','big','blockquote', 'br','button', 'caption','cite','code','col', 'del',
         'details', 'div', 'em', 'fieldset', 'figcaption', 'figure', 'footer', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','hr',
-        'i', 'img', 'li', 'label', 'legend', 'ol', 'p','q', 'section', 'small', 'span','strike', 'strong', 'u','ul'] ;
+        'i', 'img', 'li', 'label', 'legend', 'ol', 'p','q', 's', 'section', 'small', 'span','strike', 'strong', 'u','ul'] ;
+    /*
+     * @var array allowed attributes for text-output
+     */
+    static $allowed_attrs = ['href', 'title', 'cite', 'datetime'] ;
+    /*
+     * @var class InputFilter to initialize it only once.
+     */
+    static $input_fl = null;
     /**
      * default value for block_attributes (or instance)
      *
@@ -190,6 +200,9 @@ class SimpleicalblockHelper
      */
     static function display_block($attributes)
     {
+        if (empty(self::$input_fl)) {
+          self::$input_fl = new InputFilter(self::$allowed_tags, self::$allowed_attrs, InputFilter::ONLY_ALLOW_DEFINED_TAGS, InputFilter::ONLY_ALLOW_DEFINED_ATTRIBUTES);
+        }
         $sn = 0;
         try {
             $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
@@ -243,7 +256,9 @@ class SimpleicalblockHelper
                 $ev_class =  ((!empty($e->cal_class)) ? ' ' . self::sanitize_html_clss($e->cal_class): '');
                 $cat_list = '';
                 if (!empty($e->categories)) {
-                    $ev_class = $ev_class . ' ' . implode( ' ', array_map( "self::sanitize_html_class", $e->categories ));
+                    $ev_class = $ev_class . ' ' . implode( ' ',
+                        array_map( "WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper::sanitize_html_class"
+                        , $e->categories ));
                     if ($cat_disp) { 
                         $cat_list = strip_tags('<div class="categories"><small>'
                             . implode($cat_sep,str_replace("\n", '<br>', $e->categories ))
@@ -258,7 +273,8 @@ class SimpleicalblockHelper
                 if (date('yz', $e->start) != date('yz', $e->end)) {
                     $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . strip_tags( $e_dtend_1->format($dflgend, true, true) , self::$allowed_tags));
                 }
-                $evdtsum = (($e->startisdate === false) ? strip_tags($e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true), self::$allowed_tags) : '');
+                echo PHP_EOL .'<!-- old evdtsum:' .  (($e->startisdate === false) ? strip_tags($e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true), self::$allowed_tags) : '') . '-->' .PHP_EOL;
+                $evdtsum = (($e->startisdate === false) ? self::$input_fl->clean($e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true), 'HTML') : '');
                 if ($layout < 2 && $curdate != $evdate) {
                     if  ($curdate != '') {
                     	 echo '</ul></li>';
@@ -293,7 +309,8 @@ class SimpleicalblockHelper
                     {$e->description = substr($e->description, 0, $excerptlength);}
                     }
                     }
-                    $e->description = str_replace("\n", '<br>', strip_tags($e->description,self::$allowed_tags) );
+                    echo PHP_EOL .'<!-- old desc:' . str_replace("\n", '<br>', strip_tags($e->description,self::$allowed_tags) ) . '-->' .PHP_EOL;
+                    $e->description = str_replace("\n", '<br>', self::$input_fl->clean($e->description,'HTML') );
                     echo '<span class="dsc">', $e->description ,(strrpos($e->description, '<br>') === (strlen($e->description) - 4)) ? '' : '<br>', '</span>';
                 }
                 if ($e->startisdate === false && date('yz', $e->start) === date('yz', $e->end))	{
