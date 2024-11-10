@@ -194,6 +194,18 @@
 					label="MOD_SIMPLEICALBLOCK_EXCERPTL"
 					description="MOD_SIMPLEICALBLOCK_EXCERPTLENGTH_HELP"
  					 />
+				<field name="categories_filter_op_help"  type="note" 
+					label="MOD_SIMPLEICALBLOCK_CAT_FL_OP"
+					description="MOD_SIMPLEICALBLOCK_CAT_FL_OP_HELP"
+ 					 />
+				<field name="categories_filter_help"  type="note" 
+					label="MOD_SIMPLEICALBLOCK_CAT_FILTER"
+					description="MOD_SIMPLEICALBLOCK_CAT_FILTER_HELP"
+ 					 />
+				<field name="categories_display_help"  type="note" 
+					label="MOD_SIMPLEICALBLOCK_CAT_DSP"
+					description="MOD_SIMPLEICALBLOCK_CAT_DSP_HELP"
+ 					 />
 				<field name="period_limits_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_PER_LIMITS"
 					description="MOD_SIMPLEICALBLOCK_PER_LIMITS_HELP"

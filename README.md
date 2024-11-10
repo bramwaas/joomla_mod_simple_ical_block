@@ -32,6 +32,7 @@ These are great, but as soon as you want to make a few adjustments to the stylin
 * Choose date / time format that best suits your website in settings screen.
 * Displays per event DTSTART, DTEND, SUMMARY, LOCATION and DESCRIPTION. DTSTART is required other components are optional. 
 * Displays most common repeating events. Frequency Yearly, Monthly, Weekly, Dayly (not Hourly, Minutely and smaller periods)    
+* Basic support for filter on Categories Warning: MS Outlook does not share categories via iCal now. Google and iCloud calendar don't support categories at all. So this will not work with these calendars.   
 
 Adjusted settings for start with summary:  
 Start with summary.: "true"  
@@ -45,8 +46,9 @@ Tag for summary: "strong"
   
 == Installation ==
 
-* Do the usual setup procedure... you know... downloading from github system/install/extensions/Upload package file... activating.   
-Or find the url on github and use System/Install/Extensions/Install from URL
+* Do the usual setup procedure System/(Install )Extensions/Install from Web, find 'Simple iCal Block' follow the standard procedure to install the module from here,   
+Or find the url on github and use System/(Install )Extensions/Install from URL
+Or download from github and then  system/(Install )extensions/Upload package file... activating.   
 * Then add the module on the desired position with Conten/Site modules/New or System/Mange/Sitemodules/New
 * If you want the block in the content area enable plugin Content - Load Modules in System/Manage/Plugins and first create a position in your article content   
   as described in the plugin.
@@ -94,8 +96,7 @@ Then publish it as  an ICS link and use this link address. (something like https
 [More details on Microsoft Office support](https://support.office.com/en-us/article/share-your-calendar-in-outlook-on-the-web-7ecef8ae-139c-40d9-bae2-a23977ee58d5)
 
 = How to use Apple Calendar (iCloud Mac/ios)? =
-Choose the calendar you want to share. On the line of that calendar click on the radio symbol (a dot with three quart circles) right in that line. In the pop up Calendar Sharing check the box Public Calendar. You see the url below something like webcal://p99-caldav.icloud.com/published/2/MTQxNzk0NDA2NjE0MTc5AAAAAXt2Dy6XXXXXPXXxuZnTLDV9xr6A6_m4r_GU83Qj. Click on Copy Link and OK. Paste that in the "Calendar ID, or iCal URL" field of the block.   
-[More details on the MacObserver](https://www.macobserver.com/tips/quick-tip/icloud-configure-public-calendar)
+Choose the calendar you want to share (in browser layout on the left panel). On that calendar's line, click the show calendar information icon (a person cropped into a circle) on the right side of the line. In the pop up Calendar Sharing check the box Public Calendar. You see the url below something like webcal://p59-caldav.icloud.com/published/2/MTQxNzk0NDA2NjE0MTc5AAAAAXt2Dy6XXXXXPXXxuZnTLDV9xr6A6_m3r_GU33Qj. Click on Copy Link and OK. Paste that in the "Calendar ID, or iCal URL" field of the widget (before version 1.3.1 you had to change webcal in https)    
 
 = Error: cURL error 28: Operation timed out after 5000 milliseconds with 0 bytes received =
 
@@ -105,6 +106,14 @@ Probably the calendar is not public (yet), you can copy the link before the agen
 
 There are no events found within the selection. Test e.g. with an appointment for the next day and refresh the cache or wait till the cache is refreshed.
 Check if you can download the ics file you have designated in the block with a browser. At least if it is a text file with the first line "BEGIN:VCALENDAR" and further lines "BEGIN:VEVENT" and lines "END:VEVENT".   
+
+= I only see the title of the calendar, and the text 'Processing' even after waiting more the a minute, or a message &#61 Code: undefined &#61;	Msg: HTTP error, status &#61; 500  =
+
+Probably you have chosen the setting "Use Client timezone settings, with REST" in "Use client timezone settings". With this setting active, at first the widget will be presented as a placeholder with only the title and the text processing. In the HTML of this placeholder are also some ID\'s as parameters for the javascript REST call to fetch the content after the page is loaded. This fetch is not executed (correct).   
+To work correct Javascript must be enabled in a browser with version newer than 2016 but not in Internet Explorer.  
+This is probably caused because the javascript view file with the fetch command is not loaded e.g. in the editor of Elementor or an other pagebuilder that tries to show a preview of the widget but does not load the necessary Javascript. This is a known issue, you could work around it by first set "Use WordPress timezone settings, no REST" until you are satisfied with all the other settings and then set "Use Client timezone ...".
+If you change the Sibid without clicking the Update button, the new Sibid may already be saved in the plugin options for the REST call, but not in the block attributes. If you still click Update, the problem will be resolved.   
+The REST call might also have failed by other reasons, then another try would probably solve the issue, but I have never seen that in testing.   
 
 = Can I use an event calendar that only uses days, not times, like a holiday calendar? =
 
@@ -144,6 +153,29 @@ background-color: gray;
 }
 /*end additional CSS for Simple-ical-Block-1 */
 ~~~
+
+= How do I filter on categories =
+
+Warning: the plugin only supports categories that are available in the iCal file. Microsoft Outlook does support categories but does not share them via the ical file.
+When the ical contains categories there are three options in the advanced section to use them.
+      
+-- Categories Filter Operator:
+Here you can choose how to compare the filter categories with the event categories.  
+- empty no filtering.
+- ANY is true if at least one of the elements of the filter set is present in the event set, or in other words the filter set intersects the event set, the intersection contains at least one element. This seems to me to be the most practical operator.  
+- ALL is true if all elements of the filter set exist in the event set, or in other words, the intersection contains the same number of elements as the filter set. The event set can contain other elements.  
+- NOTANY is true if ANY is NOT true. The intersection is empty.
+- NOTALL is true if ALL is NOT true. The intersection contains fewer elements than the filter set.   
+- A special case are events without categories. In the filter, the plugin handles this as if the category were a null string ("").        
+     
+-- Categories Filter List:
+- List of filter categories separated by a comma (not in double quotes). If a category contains a comma, you must add a backslash (\,) to it. A null string is created as a category if nothing is entered in the list or if the list ends with a comma, or if there are two comma separators immediately next to each other.             
+- Categories (at least in this plugin) behave like simple tags and have no intrinsic meaning or relationship. So if you want to select all events with category flower, rose or tulip, you have to add them all to the filter list. With category flower, you don't automatically select rose and tulip too    
+  
+-- Display categories with separator:
+- Here you can choose to display the list of event categories after the summary and with what separator. If you leave this field empty, the list will not be displayed.
+
+If the event contains categories, the list of categories of this event cleaned as classes (removed spaces etc.) is added to the  html-classes of the event (to the list-group-item). 
 
 == Documentation ==
 
@@ -214,8 +246,7 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 * works with Joomla 4 or higher.
 
 == Changelog ==
-* 2.5.0 add support for filter and display categories. replace strip_tags(...) by InputFilter::clean(...)
-*  to improve security by also filtering attributes like wp_kses 
+* 2.5.0 add support for filter and display categories. replace strip_tags(...) by InputFilter::clean(...) to improve security by also filtering attributes like wp_kses    
 * 2.4.1 Convert modules to service provider. Remove some small flaws like php warnings and JS console.log 
 * 2.4.0 Tie moving display events window created by Now and 'Number of days after today' to the display time instead of the data-retrieve/cache time. Make it possible to let the window start at 0H00 and end at 23H59 local time of the startdate and enddate of the window in addition to the current solution where both ends are at the time of the day the data is displayed/retrieved. Add &lt;span class="dsc"&gt; to description output to make it easier to refer to in css. Remove HTML for block title when title is empty. Add unescape \\ to \ and improve \, to ,   \; to ;  chars that should be escaped following the text specification. Tested with J5.0.3 and J4.4.3.    
 * 2.2.1 20240123 after an issue of black88mx6 in WP support forum: don't display description line when excerpt-length = 0
