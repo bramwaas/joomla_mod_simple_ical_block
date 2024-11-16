@@ -6,7 +6,7 @@
     	</include>
   	</compatibility>
 	<name>Simple iCal Block</name>
-	<creationDate>02-11-2024</creationDate>	
+	<creationDate>16-11-2024</creationDate>	
 	<author>A.H.C. Waasdorp</author>
 	<copyright>Copyright (C) 2022 - 2024 A.H.C. Waasdorp, All rights reserved.</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
@@ -74,8 +74,8 @@
 					<option value="NOTANY">MOD_SIMPLEICALBLOCK_CAT_FL_OP_NOTANY</option>
 					<option value="NOTALL">MOD_SIMPLEICALBLOCK_CAT_FL_OP_NOTALL</option>
 				</field>
-				<field name="categories_filter" type="text" default="" label="MOD_SIMPLEICALBLOCK_CAT_FILTER" description="MOD_SIMPLEICALBLOCK_CAT_FILTER_DESC" />
-				<field name="categories_display" type="text" default="" label="MOD_SIMPLEICALBLOCK_CAT_DSP" description="MOD_SIMPLEICALBLOCK_CAT_DSP_DESC" />
+				<field name="categories_filter" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_CAT_FILTER" description="MOD_SIMPLEICALBLOCK_CAT_FILTER_DESC" />
+				<field name="categories_display" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_CAT_DSP" description="MOD_SIMPLEICALBLOCK_CAT_DSP_DESC" />
 				<field name="tag_sum" type="list" default="div" label="MOD_SIMPLEICALBLOCK_TAG_SUM" description="MOD_SIMPLEICALBLOCK_TAG_SUM_DESC">
 					<option value="a">MOD_SIMPLEICALBLOCK_TAG_SUM_A</option>
 					<option value="b">MOD_SIMPLEICALBLOCK_TAG_SUM_B</option>
