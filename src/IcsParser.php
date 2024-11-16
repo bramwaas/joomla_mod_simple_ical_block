@@ -34,6 +34,9 @@
  *   Add unescape \\ to \ and improve \, to ,   \; to ;  chars that should be escaped following the text specification. 
  * 2.4.0 exclude DTEND from event that is evend ends before (<) DTEND in stead of at (<=) DTEND. removed modulo 4
  *   Checks if time zone ID with Etc/GMT 'replaced by'Etc/GMT+' is a Iana timezone then return this timezone.
+ * 2.5.0 Add filter and display support for categories. Add function self::unescTextList to explode items in Categories list to array 
+ * while retaining , or ; when escaped with \ and use the same function for list of url's and input filter categorie list. 
+ * use temporary replace \\ by chr(20) and replace chr(20) by \ instead of explode and implode to prevent use of \\ as unescape char.
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -55,33 +58,47 @@ class IcsParser {
      */
     private static $example_events = 'BEGIN:VCALENDAR
 BEGIN:VEVENT
-DTSTART:20240127T150000
-DTEND:20240127T160000
+DTSTART:20240928T150000
+DTEND:20240928T160000
 RRULE:FREQ=WEEKLY;INTERVAL=3;BYDAY=SU,WE,SA
 UID:a-1
 DESCRIPTION:Description event every 3 weeks sunday wednesday and saturday. T
- est A-Z.\nLine 2 of description.
+ est A-Z.\nLine 2 of description. Category flower
 LOCATION:Located at home \, or somewhere else
-SUMMARY: Every 3 weeks sunday\\wednesday \\ saturday
+SUMMARY: Every 3 weeks sunday \\ wednesday \\\\ saturday
+CATEGORIES:Flower
 END:VEVENT
 BEGIN:VEVENT
-DTSTART:20240129T143000
-DTEND:20240129T153000
+DTSTART:20240929T143000
+DTEND:20240929T153000
 RRULE:FREQ=MONTHLY;COUNT=24;BYMONTHDAY=29
 UID:a-2
-DESCRIPTION:Monthly day 29
+DESCRIPTION:Monthly day 29\nCategory Rose\, (with comma in category. test on
+  semicolon and double quote and comma \; " \, .
 LOCATION:
 SUMMARY:Example\; Monthly day 29
+CATEGORIES:Rose\,
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20240127
+DTSTART;VALUE=DATE:20240928
 //DTEND;VALUE=DATE:20240128
 DURATION:P1DT23H59M60S
 RRULE:FREQ=MONTHLY;COUNT=13;BYDAY=4SA
 UID:a-3
-DESCRIPTION:Example Monthly 4th weekend
+DESCRIPTION:Example Monthly 4th weekend\ncategories:
+ flower,Red Rose,Tulip
 LOCATION:Loc. unknown
 SUMMARY:X Monthly 4th weekend
+CATEGORIES:flower,Red Rose,Tulip
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241015T143000
+DTEND:20241015T153000
+RRULE:FREQ=MONTHLY;COUNT=24;BYMONTHDAY=29
+UID:a-4
+DESCRIPTION:Monthly day 29, without category
+LOCATION:
+SUMMARY:Monthly day 29
 END:VEVENT
 END:VCALENDAR';
     
@@ -260,6 +277,13 @@ END:VCALENDAR';
      */
     protected $event_cache = 0;
    /**
+     * Timestamp of the start time fo parsing, set by parse function.
+     *
+     * @var    int
+     * @since  1.5.1
+     */
+    protected $p_start= NULL;
+    /**
      * Timestamp period enddate calculated from today and event_period
      *
      * @var   int
@@ -280,13 +304,6 @@ END:VCALENDAR';
      * @since  2.2.0
      */
     protected $replaceevents = [];
-    /**
-     * Timestamp of the start time fo parsing, set by parse function.
-     *
-     * @var    int
-     * @since  1.5.1
-     */
-    protected $p_start= NULL;
     /**
      * The timezone string from the configuration.
      *
@@ -659,22 +676,51 @@ END:VCALENDAR';
     }
 /*
      * Limit events to the first event_count events in the event - period/window.
+     * filter against categories filter.
  * Events are already sorted
  * 
      * @param  array of objects $data_events events parsed or cached.
-     * $param int timestamp $p_start start datetime of period/window with events displayed
-     * $param int timestamp $p_end (not included) end datetime of period/window with events displayed
+     * @param int timestamp $p_start start datetime of period/window with events displayed
+     * @param int timestamp $p_end (not included) end datetime of period/window with events displayed
      * @param  int $e_count limits the maximum number of events  
+     * @param stringt $cat_filter comma separated list of categories to compare (intersect) with events categories   
+     * @param string  $cat_filter_op Operator to asses result of intersection from a list or '' for no filtering.
      *
  * @return  array       remaining event objects.
  */
-    static function getFutureEvents($data_events, $p_start, $p_end, $e_count ) {
+    static function getFutureEvents($data_events, $p_start, $p_end, $e_count, $cat_filter = '', $cat_filter_op = '' ) {
         // 
+        if (!empty($cat_filter_op))  {
+            $cat_filter_ary = array_map("strtolower",(empty($cat_filter)) ? [''] : self::unescTextList($cat_filter));
+            $cat_filter_ln = count($cat_filter_ary);
+        }
         $newEvents = array();
         $i=0;
         foreach ($data_events as $e) {
+            if (empty($cat_filter_op)) {
+                $cat_filter_result = true; // no filter
+            }  else {
+                $cat_is_cnt = count(array_intersect($cat_filter_ary,(array_map("strtolower",($e->categories) ?? ['']))));
+                switch ($cat_filter_op) {
+                    case "ANY":
+                    $cat_filter_result = (0 < $cat_is_cnt);
+                    break;
+                    case "ALL":
+                        $cat_filter_result = ($cat_filter_ln == $cat_is_cnt);
+                    break;
+                    case "NOTANY":
+                        $cat_filter_result = (0 == $cat_is_cnt);
+                    break;
+                    case "NOTALL":
+                        $cat_filter_result = ($cat_filter_ln != $cat_is_cnt);
+                    break;
+                    default:
+                        $cat_filter_result = false;
+                }
+            }
             if (($p_start) < $e->end
                 && $p_end > $e->start 
+                && $cat_filter_result
                 ) {
                     $i++;
                     if ($i > $e_count) {
@@ -755,8 +801,8 @@ END:VCALENDAR';
      * Checks if a time zone ID is a Iana timezone then return this timezone.
      * Checks if time zone ID is windows timezone then return this timezone
      * Checks if time zone ID with Etc/GMT 'replaced by'Etc/GMT+' is a Iana timezone then return this timezone.
-     * If empty return timezone from WP
-     * If nothing istrue return timezone from WP
+     * If empty return timezone from application
+     * If nothing istrue return timezone from application
      * If timezone string from WP doesn't make a good timezone return UTC timezone.
      *
      * @param  string $ptzid (timezone ID)
@@ -894,6 +940,9 @@ END:VCALENDAR';
                         $eventObj->recuridisdate = $isdate;
                         $eventObj->recurid = $this->parseIcsDateTime($value, $tzid);
                         break;
+                    case "CATEGORIES":
+                        $eventObj->categories = $value;
+                        break;
                 }
             }else { // count($list) <= 1
                 if (strlen($l) > 1) {
@@ -908,6 +957,9 @@ END:VCALENDAR';
                         case "LOCATION":
                             $eventObj->location .= $desc;
                             break;
+                        case "CATEGORIES":
+                            $eventObj->categories .= $desc;
+                            break;
                     }
                 }
             }
@@ -915,6 +967,7 @@ END:VCALENDAR';
         if (!empty($eventObj->summary)) {$eventObj->summary = self::unescText($eventObj->summary);}
         if (!empty($eventObj->description)) {$eventObj->description = self::unescText($eventObj->description);}
         if (!empty($eventObj->location)) {$eventObj->location = self::unescText($eventObj->location);}
+        if (!empty($eventObj->categories)) {$eventObj->categories = self::unescTextList($eventObj->categories);}
         if (!isset($eventObj->end)) {
             if (isset($eventObj->duration)) {
                 $timezone = new \DateTimeZone((isset($eventObj->tzid)&& $eventObj->tzid !== '') ? $eventObj->tzid : $this->timezone_string);
@@ -946,11 +999,27 @@ END:VCALENDAR';
      */
     static function unescText($t)
     {
-        $a = explode('\\\\',$t);
-        foreach ($a as &$l){
-            $l = str_replace(['\;', '\,', '\n', '\N'], [';', ',', "\n", "\n"], $l);
+        $l = str_replace(['\\\\', '\,', '\;', '\n', '\N'], [chr(20), ',', ';', "\n", "\n"], $t);
+        return   str_replace(chr(20), '\\', $l);
+        ;
+    }
+    /**
+     * Split comma separated list of strings in aray, keep \ escaped comma and semicolon.
+     * Removes escape backslash from  \\ to \ and improve \, to ,   \; to ;
+     * replaces \n or \N by char 0x0A that may be converted in <br> for html later.
+     *
+     * @param string $text text with escape slashes
+     *
+     * @return string array event objects
+     */
+    static function unescTextList($t)
+    {
+        $l = str_replace(['\\\\','\,','\;','\n','\N'], [chr(20),chr(17),';',"\n", "\n"], $t);
+        $b = explode(',', $l);
+        foreach ($b as &$l){
+            $l = str_replace([chr(20), chr(17) ], ['\\', ','], $l);
         }
-        return implode('\\', $a);
+        return $b;
     }
     /**
      * Gets data from calender or transient cache
@@ -962,6 +1031,8 @@ END:VCALENDAR';
      *    ['calendar_id'] id's or url's of the calendar(s) to fetch data
      *    ['event_count'] max number of events to return
      *    ['event_period'] max number of days after now to fetch events.
+     *    ['categories_filter'] list of categories to filter on, with type of filtering in first item
+     *    ['categories_filter_op'] filter operator, if empty no filtering on categories.
      *
      * @return array event objects
      */
@@ -1018,7 +1089,7 @@ END:VCALENDAR';
                 $cachecontroller->store($data, $cacheId, $cachegroup );
             }
         }
-        return self::getFutureEvents($data, $p_start, $p_end, $instance['event_count']);
+        return self::getFutureEvents($data, $p_start, $p_end, $instance['event_count'], (($instance['categories_filter'])??''), (($instance['categories_filter_op'])??''));
     }
     /**
      * Fetches from calender using calendar_ids and event_period
@@ -1026,13 +1097,12 @@ END:VCALENDAR';
      *    ['calendar_id']  id or url of the calender to fetch data
      *    ['event_count']  max number of events to return
      *    ['event_period'] max number of days after now to fetch events.
-     *
      * @return array event objects
      */
     function fetch()
     {
         $cal_ord = 0;
-        foreach (explode(',', $this->calendar_ids) as $cal)
+        foreach (self::unescTextList($this->calendar_ids) as $cal)
         {
             $calary = explode(';', $cal, 2);
             $cal_id = trim($calary[0]," \n\r\t\v\x00\x22");
