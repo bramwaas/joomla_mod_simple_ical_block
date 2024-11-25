@@ -246,6 +246,7 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 * works with Joomla 4 or higher.
 
 == Changelog ==
+* 2.5.1 solve issue #29 "Joomla Version 5.2.1" by Grey-Sheep replaced default "1" for setting "Categories Filter Operator" by "" "No filter". And tested with clean Joomla 5.2.1. and new install of the module.  
 * 2.5.0 add support for filter and display categories. replace strip_tags(...) by InputFilter::clean(...) to improve security by also filtering attributes like wp_kses    
 * 2.4.1 Convert modules to service provider. Remove some small flaws like php warnings and JS console.log 
 * 2.4.0 Tie moving display events window created by Now and 'Number of days after today' to the display time instead of the data-retrieve/cache time. Make it possible to let the window start at 0H00 and end at 23H59 local time of the startdate and enddate of the window in addition to the current solution where both ends are at the time of the day the data is displayed/retrieved. Add &lt;span class="dsc"&gt; to description output to make it easier to refer to in css. Remove HTML for block title when title is empty. Add unescape \\ to \ and improve \, to ,   \; to ;  chars that should be escaped following the text specification. Tested with J5.0.3 and J4.4.3.    
