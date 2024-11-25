@@ -67,7 +67,7 @@
 					<option value="3">MOD_SIMPLEICALBLOCK_PER_LIMITS_TT</option>
 					<option value="4">MOD_SIMPLEICALBLOCK_PER_LIMITS_DT</option>
 				</field>
-				<field name="categories_filter_op" type="list" default="1" label="MOD_SIMPLEICALBLOCK_CAT_FL_OP" description="MOD_SIMPLEICALBLOCK_CAT_FL_OP_DESC">
+				<field name="categories_filter_op" type="list" default="" label="MOD_SIMPLEICALBLOCK_CAT_FL_OP" description="MOD_SIMPLEICALBLOCK_CAT_FL_OP_DESC">
 					<option value="">MOD_SIMPLEICALBLOCK_CAT_FL_OP_NO</option>
 					<option value="ANY">MOD_SIMPLEICALBLOCK_CAT_FL_OP_ANY</option>
 					<option value="ALL">MOD_SIMPLEICALBLOCK_CAT_FL_OP_ALL</option>
