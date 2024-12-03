@@ -14,14 +14,14 @@
 //namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
-use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper; // as ModSimpleicalblockHelper;
+use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalHelper; // as ModSimpleicalblockHelper;
 
 /**
  * extension of SimpleicalblockHelper to conform to com_ajax naming conventions
  *
  * @since  2.4.0
  */
-class ModSimpleicalblockHelper extends SimpleicalblockHelper
+class ModSimpleicalblockHelper extends SimpleicalHelper
 {
 
 }

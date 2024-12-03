@@ -16,19 +16,20 @@
  * (at your option) any later version.
  *
  * 2.4.0 Created as placeholder for Rest (or Ajax) service. Add inline script for restRoot and load view-script via dependency.
+ * 2.5.2 rename SimpleicalblockHelper to SimpleicalHelper 
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
-use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
+use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalHelper;
 
 $wa->addInlineScript(
     '(window.simpleIcalBlock=window.simpleIcalBlock || {}).restRoot = "' . Uri::root() . 'index.php?option=com_ajax&Itemid=' . (($app->getMenu()->getActive()->id) ?? '') . '"',
     ['position' => 'before', 'name' => 'define.restRoot'], [],['simple-ical-block-view.js']
     );
 
-$attributes = SimpleicalblockHelper::render_attributes( $params->toArray());
+$attributes = SimpleicalHelper::render_attributes( $params->toArray());
 
 echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid']
 . '" data-sib-st="0-start" class="simple_ical_block" >';
