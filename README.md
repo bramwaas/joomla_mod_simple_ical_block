@@ -246,6 +246,8 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 * works with Joomla 4 or higher.
 
 == Changelog ==
+* 2.5.2 solve issue #31 "Assets Directory Not Copied On Install" by dautrich by adding simpleicalicon128x128 to media filelist and correct reference in description from ../modules/mod_simple_ical_block/assets/... to ../media/mod_simple_ical_block/...
+* renamed SimpleicalblockHelper to SimpleicalHelper and moved functions common with WP to top for easier comparing.
 * 2.5.1 solve issue #29 "Joomla Version 5.2.1" by Grey-Sheep replaced default "1" for setting "Categories Filter Operator" by "" "No filter". And tested with clean Joomla 5.2.1. and new install of the module.  
 * 2.5.0 add support for filter and display categories. replace strip_tags(...) by InputFilter::clean(...) to improve security by also filtering attributes like wp_kses    
 * 2.4.1 Convert modules to service provider. Remove some small flaws like php warnings and JS console.log 
