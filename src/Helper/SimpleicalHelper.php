@@ -197,7 +197,7 @@ class SimpleicalHelper
                     $cat_list = '';
                     if (!empty($e->categories)) {
                         $ev_class = $ev_class . ' ' . implode( ' ',
-                            array_map( "WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper::sanitize_html_class"
+                            array_map( "WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalHelper::sanitize_html_class"
                                 , $e->categories ));
                         if ($cat_disp) {
                             $cat_list = self::$input_fl->clean('<div class="categories"><small>'
