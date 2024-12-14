@@ -6,14 +6,14 @@
     	</include>
   	</compatibility>
 	<name>Simple iCal Block</name>
-	<creationDate>11-12-2024</creationDate>	
+	<creationDate>14-12-2024</creationDate>	
 	<author>A.H.C. Waasdorp</author>
 	<copyright>Copyright (C) 2022 - 2024 A.H.C. Waasdorp, All rights reserved.</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<authorEmail>contact@waasdorpsoekhan.nl</authorEmail>
 	<authorUrl>http://www.waasdorpsoekhan.nl</authorUrl>
-	<version>2.5.2</version>
-	<description><![CDATA[<div class="sib-info" style="color: #3f48cc;"><p><img class="sib-img" src="../media/mod_simple_ical_block/simpleicalicon128x128.svg" style="display: inline-block; width: 2em; height:auto; margin-right: 0.5em;"/>Simple iCal Calendar Events Block</p></div>
+	<version>2.5.3</version>
+	<description><![CDATA[<div class="sib-info" style="color: #3f48cc;"><p><img class="sib-img" src="../media/mod_simple_ical_block/icons/simpleicalicon128x128.svg" style="display: inline-block; width: 2em; height:auto; margin-right: 0.5em;"/>Simple iCal Calendar Events Block</p></div>
 	]]></description>
 	<namespace path="src">WaasdorpSoekhan\Module\Simpleicalblock</namespace>
 		<!-- Site Main File Copy Section -->
@@ -29,8 +29,7 @@
 	</files>
 	<media destination="mod_simple_ical_block" folder="assets">
 		<filename>joomla.asset.json</filename>
-		<filename>simpleicalicon128x128.svg</filename>
-		<!-- folder>css</folder -->
+		<folder>icons</folder>
 		<folder>js</folder>
 	</media>
 	<scriptfile>mod_simple_ical_block.script.php</scriptfile>
