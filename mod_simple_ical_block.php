@@ -28,6 +28,7 @@ if ($joomlaverge4) {
     $wr = $wa->getRegistry();
     $wr->addRegistryFile('media/mod_simple_ical_block/joomla.asset.json');
 if ($params->get('add_collapse_code',0)) HTMLHelper::_('bootstrap.collapse');
+/*
 switch ($params->get('title_collapse_toggle','')) {
     case 'collapse':
         $module->set('title',  '<a data-bs-toggle="collapse" href="#' .$params->get('anchorId') . '" role="button" aria-expanded="false" aria-controls="collapseMod">>' . $module->get('title','') . '</a>');        
@@ -36,7 +37,7 @@ switch ($params->get('title_collapse_toggle','')) {
         $module->set('title',  '<a data-bs-toggle="collapse" href="#' .$params->get('anchorId') . '" role="button" aria-expanded="true" aria-controls="collapseMod">>' . $module->get('title','') . '</a>');
         break;
 }
-
+*/
 require ModuleHelper::getLayoutPath('mod_simple_ical_block', $params->get('layout','default'));
 }
 else {
