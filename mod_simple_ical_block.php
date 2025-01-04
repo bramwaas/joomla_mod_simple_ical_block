@@ -37,8 +37,6 @@ switch ($params->get('title_collapse_toggle','')) {
         break;
 }
 
-if () HTMLHelper::_('bootstrap.collapse');
-
 require ModuleHelper::getLayoutPath('mod_simple_ical_block', $params->get('layout','default'));
 }
 else {
