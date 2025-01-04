@@ -35,7 +35,8 @@
  * 2.1.4 add closing HTML output after eventlist or when no events are available.    
  * 2.2.1 20240123 don't display description line when excerpt-length = 0
  * 2.3.0 Moved display_block() and $allowed_tags to SimpleicalblockHelper class to accommodate calls from REST service
- * 2.5.2 rename SimpleicalblockHelper to SimpleicalHelper 
+ * 2.5.2 rename SimpleicalblockHelper to SimpleicalHelper
+ * 2.5.4 add title collapse toggle attributes to wrapper div 
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -44,7 +45,7 @@ use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalHelper;
 
 $attributes = SimpleicalHelper::render_attributes( $params->toArray());
 
-echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid'] . '" ' . ' class="simple_ical_block ' . $attributes('title_collapse_toggle'). '" >';
+echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid'] . '" ' . ' class="simple_ical_block ' . $attributes['title_collapse_toggle']. '" >';
 SimpleicalHelper::display_block($attributes);
 echo '</div>';
 

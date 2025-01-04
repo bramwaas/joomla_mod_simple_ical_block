@@ -17,6 +17,8 @@
  *
  * 2.4.0 Created as placeholder for Rest (or Ajax) service. Add inline script for restRoot and load view-script via dependency.
  * 2.5.2 rename SimpleicalblockHelper to SimpleicalHelper 
+ * 2.5.4 add title collapse toggle attributes to wrapper div 
+
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -32,7 +34,7 @@ $wa->addInlineScript(
 $attributes = SimpleicalHelper::render_attributes( $params->toArray());
 
 echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid']
-. '" data-sib-st="0-start" class="simple_ical_block ' . $attributes('title_collapse_toggle'). '" >';
+. '" data-sib-st="0-start" class="simple_ical_block ' . $attributes['title_collapse_toggle']. '" >';
 echo '<p>' . Text::_('MOD_SIMPLEICALBLOCK_PROCESSING') . '</p>';
 echo '</div>';
 
