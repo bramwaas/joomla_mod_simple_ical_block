@@ -4,8 +4,9 @@
  * @package     simpleicalblock
  * @subpackage  mod_simple_ical_block
  *
- * @copyright   Copyright (C) 2022 -2024 A.H.C. Waasdorp, All rights reserved.
+ * @copyright   Copyright (C) 2022 -2025 A.H.C. Waasdorp, All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * 2.5.4
  */
 
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Dispatcher;
@@ -14,6 +15,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Dispatcher\AbstractModuleDispatcher;
 use Joomla\CMS\Helper\HelperFactoryAwareInterface;
 use Joomla\CMS\Helper\HelperFactoryAwareTrait;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 
 // phpcs:disable PSR1.Files.SideEffects
@@ -42,7 +44,18 @@ class Dispatcher extends AbstractModuleDispatcher implements HelperFactoryAwareI
     protected function getLayoutData()
     {
         $data = parent::getLayoutData();
+        
+        if (!empty($data['params']->get('add_collapse_code',''))) HTMLHelper::_('bootstrap.collapse');
+        switch ($data['params']->get('title_collapse_toggle','')) {
+         case 'collapse':
+             $data['module']->title = ('<a data-bs-toggle="collapse" href="#' .$data['params']->get('anchorId') . '" role="button" aria-expanded="false" aria-controls="collapseMod">' . $data['module']->title . '</a>');
+         break;
+         case 'collapse show':
+             $data['module']->title = ('<a data-bs-toggle="collapse" href="#' .$data['params']->get('anchorId') . '" role="button" aria-expanded="true" aria-controls="collapseMod">' . $data['module']->title . '</a>');
+         break;
+         }
 
+        
         $data['params']->set('sibid', $data['module']->id);
         $data['params']->set('clear_cache_now', FALSE); // only clear transient on save in admin.
         $data['direction'] = $data['app']->getDocument()->direction;
