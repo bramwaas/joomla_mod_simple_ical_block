@@ -3,7 +3,7 @@
  * @version $Id: default.php
  * @package simpleicalblock
  * @subpackage simpleicalblock Module
- * @copyright Copyright (C) 2022 -2024 simpleicalblock, All rights reserved.
+ * @copyright Copyright (C) 2022 -2025 simpleicalblock, All rights reserved.
  * @license GNU General Public License version 3 or later
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl
@@ -44,7 +44,7 @@ use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalHelper;
 
 $attributes = SimpleicalHelper::render_attributes( $params->toArray());
 
-echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid'] . '" ' . ' class="simple_ical_block" >';
+echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid'] . '" ' . ' class="simple_ical_block ' . $attributes('title_collapse_toggle'). '" >';
 SimpleicalHelper::display_block($attributes);
 echo '</div>';
 

@@ -2,7 +2,7 @@
 /**
  * @package     simple_ical_block
  * @subpackage  mod_simple_ical_block  Module
- * @copyright Copyright (C) 2022 - 2024 AHC Waasdorp, All rights reserved.
+ * @copyright Copyright (C) 2022 - 2025 AHC Waasdorp, All rights reserved.
  * @license     GNU General Public License version 3 or later
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl
@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\ModuleHelper;
-
+use Joomla\CMS\HTML\HTMLHelper;
 
 $joomlaverge4 = (version_compare(JVERSION, '4.0', '>='));
 $app = Factory::getApplication();
@@ -27,7 +27,18 @@ if ($joomlaverge4) {
     $wa  = $document->getWebAssetManager();
     $wr = $wa->getRegistry();
     $wr->addRegistryFile('media/mod_simple_ical_block/joomla.asset.json');
-    
+if ($params->get('add_collapse_code',0)) HTMLHelper::_('bootstrap.collapse');
+switch ($params->get('title_collapse_toggle','')) {
+    case 'collapse':
+        $module->set('title',  '<a data-bs-toggle="collapse" href="#' .$params->get('anchorId') . '" role="button" aria-expanded="false" aria-controls="collapseMod">>' . $module->get('title','') . '</a>');        
+        break;
+    case 'collapse show':
+        $module->set('title',  '<a data-bs-toggle="collapse" href="#' .$params->get('anchorId') . '" role="button" aria-expanded="true" aria-controls="collapseMod">>' . $module->get('title','') . '</a>');
+        break;
+}
+
+if () HTMLHelper::_('bootstrap.collapse');
+
 require ModuleHelper::getLayoutPath('mod_simple_ical_block', $params->get('layout','default'));
 }
 else {

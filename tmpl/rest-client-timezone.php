@@ -3,7 +3,7 @@
  * @version $Id: client-timezone-rest.php
  * @package simpleicalblock
  * @subpackage simpleicalblock Module
- * @copyright Copyright (C) 2024 -2024 simpleicalblock, All rights reserved.
+ * @copyright Copyright (C) 2024 -2025 simpleicalblock, All rights reserved.
  * @license GNU General Public License version 3 or later
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl
@@ -32,7 +32,7 @@ $wa->addInlineScript(
 $attributes = SimpleicalHelper::render_attributes( $params->toArray());
 
 echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid']
-. '" data-sib-st="0-start" class="simple_ical_block" >';
+. '" data-sib-st="0-start" class="simple_ical_block ' . $attributes('title_collapse_toggle'). '" >';
 echo '<p>' . Text::_('MOD_SIMPLEICALBLOCK_PROCESSING') . '</p>';
 echo '</div>';
 
