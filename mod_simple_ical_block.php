@@ -27,7 +27,7 @@ if ($joomlaverge4) {
     $wa  = $document->getWebAssetManager();
     $wr = $wa->getRegistry();
     $wr->addRegistryFile('media/mod_simple_ical_block/joomla.asset.json');
-if ($params->get('add_collapse_code',0)) HTMLHelper::_('bootstrap.collapse');
+//if ($params->get('add_collapse_code',0)) HTMLHelper::_('bootstrap.collapse');
 /*
 switch ($params->get('title_collapse_toggle','')) {
     case 'collapse':
