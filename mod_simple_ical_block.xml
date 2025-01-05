@@ -255,6 +255,10 @@
 					label="MOD_SIMPLEICALBLOCK_ANCHORID"
 					description="MOD_SIMPLEICALBLOCK_ANCHORID_HELP"
  					 />
+				<field name="collapse_help"  type="note" 
+					label="MOD_SIMPLEICALBLOCK_COLL_LBL"
+					description="MOD_SIMPLEICALBLOCK_COLL_HELP"
+ 					 />
 				<field name="title_collapse_toggle_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_TITLE_COLL_TGL"
 					description="MOD_SIMPLEICALBLOCK_TITLE_COLL_TGL_HELP"
