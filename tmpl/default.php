@@ -36,7 +36,7 @@
  * 2.2.1 20240123 don't display description line when excerpt-length = 0
  * 2.3.0 Moved display_block() and $allowed_tags to SimpleicalblockHelper class to accommodate calls from REST service
  * 2.5.2 rename SimpleicalblockHelper to SimpleicalHelper
- * 2.5.4 add title collapse toggle attributes to wrapper div 
+ * 2.5.3 add title collapse toggle attributes to wrapper div 
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');

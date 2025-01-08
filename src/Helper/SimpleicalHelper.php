@@ -3,7 +3,7 @@
  * @version $Id: SimpleicalHelper.php 
  * @package simpleicalblock
  * @subpackage simpleicalblock Module
- * @copyright Copyright (C) 2022 -2024 A.H.C. Waasdorp, All rights reserved.
+ * @copyright Copyright (C) 2022 -2025 A.H.C. Waasdorp, All rights reserved.
  * @license GNU General Public License version 3 or later
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl

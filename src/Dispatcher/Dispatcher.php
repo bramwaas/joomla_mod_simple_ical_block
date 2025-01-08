@@ -6,7 +6,7 @@
  *
  * @copyright   Copyright (C) 2022 -2025 A.H.C. Waasdorp, All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
- * 2.5.4
+ * 2.5.3
  */
 
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Dispatcher;
