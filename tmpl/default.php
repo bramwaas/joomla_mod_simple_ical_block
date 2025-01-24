@@ -44,8 +44,10 @@ defined('_JEXEC') or die ('Restricted access');
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalHelper;
 
 $attributes = SimpleicalHelper::render_attributes( $params->toArray());
+$secho = '';
 
 echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid'] . '" ' . ' class="simple_ical_block ' . $attributes['title_collapse_toggle']. '" >';
-SimpleicalHelper::display_block($attributes);
+ SimpleicalHelper::display_block($attributes,$secho);
+ echo $secho;
 echo '</div>';
 
