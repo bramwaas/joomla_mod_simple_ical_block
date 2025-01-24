@@ -35,7 +35,8 @@
  *  comparable with wp_kses_allowed_html  
  * 2.5.2 renamed SimpleicalblockHelper to SimpleicalHelper and moved functions common with WP to top
  * 2.6.0 improve security by following Wordpress Plugin Check recommendations. 
- * Replace echo by $secho in &$secho param a.o. in display_block, to simplify escaping output by replacing multiple echoes by one. 
+ * Replace echo by $secho in &$secho param a.o. in display_block, to simplify escaping output by replacing multiple echoes by one.
+ * clean all echoed output to safe HTML 
  *  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
@@ -143,9 +144,9 @@ class SimpleicalHelper
      */
     static function display_block($attributes, &$secho)
     {
-        if (empty(self::$input_fl)) {
-            self::$input_fl = new InputFilter(self::$allowed_tags, self::$allowed_attrs, InputFilter::ONLY_ALLOW_DEFINED_TAGS, InputFilter::ONLY_ALLOW_DEFINED_ATTRIBUTES);
-        }
+//         if (empty(self::$input_fl)) {
+//             self::$input_fl = new InputFilter(self::$allowed_tags, self::$allowed_attrs, InputFilter::ONLY_ALLOW_DEFINED_TAGS, InputFilter::ONLY_ALLOW_DEFINED_ATTRIBUTES);
+//         }
         $sn = 0;
         try {
             $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
@@ -169,8 +170,8 @@ class SimpleicalHelper
         $dflgend = (isset($attributes['dateformat_lgend'])) ? $attributes['dateformat_lgend'] : '';
         $dftsum = (isset($attributes['dateformat_tsum'])) ? $attributes['dateformat_tsum'] : 'G:i ';
         $dftsend = (isset($attributes['dateformat_tsend'])) ? $attributes['dateformat_tsend'] : '';
-        $dftstart = (isset($attributes['dateformat_tstart'])) ? $attributes['dateformat_tstart'] : 'G:i';
-        $dftend = (isset($attributes['dateformat_tend'])) ? $attributes['dateformat_tend'] : ' - G:i ';
+//         $dftstart = (isset($attributes['dateformat_tstart'])) ? $attributes['dateformat_tstart'] : 'G:i';
+//         $dftend = (isset($attributes['dateformat_tend'])) ? $attributes['dateformat_tend'] : ' - G:i ';
         $excerptlength = (isset($attributes['excerptlength']) && ' ' < trim($attributes['excerptlength']) ) ? (int) $attributes['excerptlength'] : '' ;
         $sflgi = $attributes['suffix_lgi_class'];
         $sflgia = $attributes['suffix_lgia_class'];
@@ -199,7 +200,7 @@ class SimpleicalHelper
                     $e_dtend->setTimezone($attributes['tz_ui']);
                     $e_dtend_1 = new Jdate ($e->end -1);
                     $e_dtend_1->setTimezone($attributes['tz_ui']);
-                    $evdate = self::$input_fl->clean($e_dtstart->format($dflg, true, true) , 'HTML');
+                    $evdate = $e_dtstart->format($dflg, true, true);
                     $ev_class =  ((!empty($e->cal_class)) ? ' ' . self::sanitize_html_clss($e->cal_class): '');
                     $cat_list = '';
                     if (!empty($e->categories)) {
@@ -372,10 +373,28 @@ class SimpleicalHelper
 //                $secho = $secho . ob_get_clean();
             }
         }
+        $secho = self::clean_output($secho);
         $data = [
-            'content' => $content ,
+            'content' => $secho ,
             'params' => $params
         ];
         return $data;
     }
+    /**
+     * Clean output
+     *
+     * since 2.6.0
+     *
+     * @param string $output utput to clean
+     * 
+     * @return string escaped HTML output to render for the block (frontend)
+     */
+    static function clean_output($output)
+    {
+        if (empty(self::$input_fl)) {
+            self::$input_fl = new InputFilter(self::$allowed_tags, self::$allowed_attrs, InputFilter::ONLY_ALLOW_DEFINED_TAGS, InputFilter::ONLY_ALLOW_DEFINED_ATTRIBUTES);
+        }
+        return self::$input_fl->clean($output,'HTML');
+    }
+    
 }
