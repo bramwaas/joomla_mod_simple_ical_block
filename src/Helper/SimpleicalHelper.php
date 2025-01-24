@@ -90,7 +90,7 @@ class SimpleicalHelper
     /*
      * @var array allowed attributes for text-output
      */
-    static $allowed_attrs = ['href', 'title', 'cite', 'datetime', 'role'] ;
+    static $allowed_attrs = ['id', 'class', 'href', 'title', 'cite', 'datetime', 'role', 'data-sib-id', 'data-sib-st'] ;
     /*
      * @var class InputFilter to initialize it only once.
      */

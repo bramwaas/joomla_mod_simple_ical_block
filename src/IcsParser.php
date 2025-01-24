@@ -1089,13 +1089,15 @@ END:VCALENDAR';
             $p_end = $pdt_start->modify("+$ep day")->getTimestamp();
         }
         //        if ($instance['clear_cache_now']) $cachecontroller->cache->remove($cacheId, $cachegroup);
-        if(false === ( $data = $cachecontroller->get( $cacheId, $cachegroup))) {
+        if(false === ( $ipd = $cachecontroller->get( $cacheId, $cachegroup))) {
             $parser = new IcsParser($instance['calendar_id'], ($instance['transient_time'] / 60), $instance['event_period'], $instance['tzid_ui'] );
             $data = $parser->fetch( );
+            $ipd = ['data'=>$data, 'messages'=>$parser->messages];
             // do not cache data if fetching failed
             if ($data) {
-                $cachecontroller->store($data, $cacheId, $cachegroup );
+                $cachecontroller->store($ipd, $cacheId, $cachegroup );
             }
+        }
         if ( ! array_key_exists('data', $ipd)) {
             $ipd = ['data'=>$ipd, 'messages'=>[]];
         }
@@ -1131,10 +1133,11 @@ END:VCALENDAR';
                     continue ;
                 }
                 if (200 != $httpResponse->code) {
-                    echo '<!-- ' . $url . ' not found ' . 'fall back to https:// -->';
+                    $this->messages[] = '<!-- ' . $url . ' not found ' . 'fall back to https:// -->';
                     try {
                         $httpResponse =  $http->get('https://' . explode('://', $url)[1]);
                         if (200 != $httpResponse->code) {
+                            $this->messages[] = 'Simple iCal Block: '. $httpResponse->code;
                             continue ;
 	                    }
                     } catch(\Exception $exc) {
