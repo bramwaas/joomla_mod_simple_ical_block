@@ -1,7 +1,7 @@
 <?php
 /**
  * a simple ICS parser.
- * @copyright Copyright (C) 2022 - 2024 Bram Waasdorp. All rights reserved.
+ * @copyright Copyright (C) 2022 - 2025 Bram Waasdorp. All rights reserved.
  * @license GNU General Public License version 3 or later
  *
  * note that this class does not implement all ICS functionality.
@@ -37,6 +37,7 @@
  * 2.5.0 Add filter and display support for categories. Add function self::unescTextList to explode items in Categories list to array 
  * while retaining , or ; when escaped with \ and use the same function for list of url's and input filter categorie list. 
  * use temporary replace \\ by chr(20) and replace chr(20) by \ instead of explode and implode to prevent use of \\ as unescape char.
+ * 2.6.0 escaping error messages.
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -311,6 +312,13 @@ END:VCALENDAR';
      * @since  2.0.0
      */
     protected $timezone_string = 'UTC';
+    /**
+     * The array of messages during execution. To echo in the calling routine if needed, to remove echoing in this class.
+     *
+     * @var    array array of message strings
+     * @since  2.6.0
+     */
+    public $messages = [];
     /**
      * Constructor.
      *
@@ -1088,8 +1096,11 @@ END:VCALENDAR';
             if ($data) {
                 $cachecontroller->store($data, $cacheId, $cachegroup );
             }
+        if ( ! array_key_exists('data', $ipd)) {
+            $ipd = ['data'=>$ipd, 'messages'=>[]];
         }
-        return self::getFutureEvents($data, $p_start, $p_end, $instance['event_count'], (($instance['categories_filter'])??''), (($instance['categories_filter_op'])??''));
+        return ['data'=>self::getFutureEvents($ipd['data'], $p_start, $p_end, $instance['event_count'], (($instance['categories_filter'])??''), (($instance['categories_filter_op'])??'')),
+            'messages'=>$ipd['messages']];
     }
     /**
      * Fetches from calender using calendar_ids and event_period

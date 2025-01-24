@@ -252,6 +252,8 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 * works with Joomla 4 or higher.
 
 == Changelog ==
+* 2.6.0 Improved protection against xss attacks in accordance with changes made to wp-plugin following a reported XSS vulnerability in the wp-plugin. Checked with Wordpress Plugin Check (PCP). Fixed this vulnerability and other PCP errors and warnings, as required by Wordpress to remain in the plugin directory.     
+Replace echo with $secho in &$secho parameter e.g. in display_block, to simplify escaping output by replacing multiple echoes with one.   
 * 2.5.3 In response to issue #35 'naming calendars to filter them in front end' by Joomlafun. Started simplifying (bootstrap) collapse triggered by title.    
 * 2.5.2 solve issue #31 "Assets Directory Not Copied On Install" by dautrich by adding simpleicalicon128x128 to media filelist and correct reference in description from ../modules/mod_simple_ical_block/assets/... to ../media/mod_simple_ical_block/...
 * renamed SimpleicalblockHelper to SimpleicalHelper and moved functions common with WP to top for easier comparing.
