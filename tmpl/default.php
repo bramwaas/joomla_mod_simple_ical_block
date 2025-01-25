@@ -49,7 +49,6 @@ $secho = '';
 
 $secho .= '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid'] . '" ' . ' class="simple_ical_block ' . $attributes['title_collapse_toggle']. '" >';
 SimpleicalHelper::display_block($attributes,$secho);
-$secho .= $secho;
 $secho .= '</div>';
 echo SimpleicalHelper::clean_output($secho);
 
