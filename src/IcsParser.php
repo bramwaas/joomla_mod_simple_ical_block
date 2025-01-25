@@ -1137,7 +1137,7 @@ END:VCALENDAR';
                     try {
                         $httpResponse =  $http->get('https://' . explode('://', $url)[1]);
                         if (200 != $httpResponse->code) {
-                            $this->messages[] = 'Simple iCal Block: '. $httpResponse->code;
+                            $this->messages[] = 'Simple iCal Block: '. $httpResponse->code . ': ' . $httpResponse->body;
                             continue ;
 	                    }
                     } catch(\Exception $exc) {
