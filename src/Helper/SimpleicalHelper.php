@@ -148,6 +148,8 @@ class SimpleicalHelper
         'data-bs-title',
         'data-bs-trigger',
         'data-bs-viewport',
+        'data-toggle',
+        'data-target',
         'data-sib-id',
         'data-sib-st',
         'datetime',
