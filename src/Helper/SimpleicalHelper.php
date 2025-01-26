@@ -289,7 +289,7 @@ class SimpleicalHelper
                         if (!empty($e->description)) $e->description = htmlspecialchars($e->description);
                         if (!empty($e->location)) $e->location = htmlspecialchars($e->location);
                     }
-                    if (gmdate('yz', $e->start) != gmdate('yz', $e->end)) {
+                    if (date('yz', $e->start) != date('yz', $e->end)) {
                         $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . $e_dtend_1->format($dflgend, true, true));
                     }
                     $evdtsum = (($e->startisdate === false) ? $e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true) : '');
@@ -328,8 +328,8 @@ class SimpleicalHelper
                         $secho .= '<span class="dsc">'. $e->description. ((strrpos($e->description, '<br>') === (strlen($e->description) - 4)) ? '' : '<br>'). '</span>';
                     }
                     if ($e->startisdate === false && date('yz', $e->start) === date('yz', $e->end))	{
-                        $secho .= '<span class="time">' . $e_dtstart->format($dftstart, true, true).
-                        '</span><span class="time">' . $e_dtend->format($dftend, true, true). '</span> ' ;
+                        $secho .= '<span class="time">' . ($e_dtstart->format($dftstart, true, true)).
+                        '</span><span class="time">' . ($e_dtend->format($dftend, true, true)). '</span> ' ;
                     } else {
                         $secho .= '';
                     }
