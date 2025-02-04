@@ -9,7 +9,7 @@ Tags: Event Calendar, Google Calendar, iCal, Events, Block, Calendar, iCalendar,
 Requires at least Joomla: 4.0
 Tested up to: 5.2
 Requires PHP: 7
-Stable tag: trunk
+Stable tag: 2.6.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
  
