@@ -386,7 +386,7 @@ class SimpleicalHelper
         $block_attributes['suffix_lg_class'] = self::sanitize_html_clss($block_attributes['suffix_lg_class']);
         $block_attributes['suffix_lgi_class'] = self::sanitize_html_clss($block_attributes['suffix_lgi_class']);
         $block_attributes['suffix_lgia_class'] = self::sanitize_html_clss($block_attributes['suffix_lgia_class']);
-        $block_attributes['anchorId'] = self::sanitize_html_clss($block_attributes['anchorId'], 'simpleicalblock' . $block_attributes['sibid']);
+//        $block_attributes['anchorId'] = self::sanitize_html_clss($block_attributes['anchorId'], 'simpleicalblock' . $block_attributes['sibid']);
         
         
         return $block_attributes;
@@ -433,17 +433,15 @@ class SimpleicalHelper
         $params = $input->getArray();
         unset($params['option'],$params['module'],$params['method'],$params['view'],);
         if (empty($params['sibid'])) {
-            $content = '<p>' .  Text::_('MOD_SIMPLEICALBLOCK_EMPTYSIBID') .'</p>';
+            $secho = '<p>' .  Text::_('MOD_SIMPLEICALBLOCK_EMPTYSIBID') .'</p>';
         } else {
             $mod = ModuleHelper::getModuleById($params['sibid']);
             if (empty($mod->params)) {
-                $content = '<p>' .  Text::_('MOD_SIMPLEICALBLOCK_NOPARAMS') .'</p>';
+                $secho = '<p>' .  Text::_('MOD_SIMPLEICALBLOCK_NOPARAMS') .'</p>';
             } else {
                 $secho = '';
-//                ob_start();
                 $attributes = self::render_attributes( array_merge( json_decode($mod->params, true), $params));
                 self::display_block($attributes, $secho);
-//                $secho = $secho . ob_get_clean();
             }
         }
         $secho = self::clean_output($secho);
