@@ -1,7 +1,7 @@
 <?php
 /**
  * a simple ICS parser.
- * @copyright Copyright (C) 2022 - 2024 Bram Waasdorp. All rights reserved.
+ * @copyright Copyright (C) 2022 - 2025 Bram Waasdorp. All rights reserved.
  * @license GNU General Public License version 3 or later
  *
  * note that this class does not implement all ICS functionality.
@@ -37,6 +37,7 @@
  * 2.5.0 Add filter and display support for categories. Add function self::unescTextList to explode items in Categories list to array 
  * while retaining , or ; when escaped with \ and use the same function for list of url's and input filter categorie list. 
  * use temporary replace \\ by chr(20) and replace chr(20) by \ instead of explode and implode to prevent use of \\ as unescape char.
+ * 2.6.0 escaping error messages.
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -311,6 +312,13 @@ END:VCALENDAR';
      * @since  2.0.0
      */
     protected $timezone_string = 'UTC';
+    /**
+     * The array of messages during execution. To echo in the calling routine if needed, to remove echoing in this class.
+     *
+     * @var    array array of message strings
+     * @since  2.6.0
+     */
+    public $messages = [];
     /**
      * Constructor.
      *
@@ -1081,15 +1089,20 @@ END:VCALENDAR';
             $p_end = $pdt_start->modify("+$ep day")->getTimestamp();
         }
         //        if ($instance['clear_cache_now']) $cachecontroller->cache->remove($cacheId, $cachegroup);
-        if(false === ( $data = $cachecontroller->get( $cacheId, $cachegroup))) {
+        if(false === ( $ipd = $cachecontroller->get( $cacheId, $cachegroup))) {
             $parser = new IcsParser($instance['calendar_id'], ($instance['transient_time'] / 60), $instance['event_period'], $instance['tzid_ui'] );
             $data = $parser->fetch( );
+            $ipd = ['data'=>$data, 'messages'=>$parser->messages];
             // do not cache data if fetching failed
             if ($data) {
-                $cachecontroller->store($data, $cacheId, $cachegroup );
+                $cachecontroller->store($ipd, $cacheId, $cachegroup );
             }
         }
-        return self::getFutureEvents($data, $p_start, $p_end, $instance['event_count'], (($instance['categories_filter'])??''), (($instance['categories_filter_op'])??''));
+        if ( ! array_key_exists('data', $ipd)) {
+            $ipd = ['data'=>$ipd, 'messages'=>[]];
+        }
+        return ['data'=>self::getFutureEvents($ipd['data'], $p_start, $p_end, $instance['event_count'], (($instance['categories_filter'])??''), (($instance['categories_filter_op'])??'')),
+            'messages'=>$ipd['messages']];
     }
     /**
      * Fetches from calender using calendar_ids and event_period
@@ -1120,10 +1133,11 @@ END:VCALENDAR';
                     continue ;
                 }
                 if (200 != $httpResponse->code) {
-                    echo '<!-- ' . $url . ' not found ' . 'fall back to https:// -->';
+                    $this->messages[] = '<!-- ' . $url . ' not found ' . 'fall back to https:// -->';
                     try {
                         $httpResponse =  $http->get('https://' . explode('://', $url)[1]);
                         if (200 != $httpResponse->code) {
+                            $this->messages[] = 'Simple iCal Block: '. $httpResponse->code . ': ' . $httpResponse->body;
                             continue ;
 	                    }
                     } catch(\Exception $exc) {

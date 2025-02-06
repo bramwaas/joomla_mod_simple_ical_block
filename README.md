@@ -7,9 +7,9 @@ Plugin name: Simple iCal Block
 Contributors: bramwaas
 Tags: Event Calendar, Google Calendar, iCal, Events, Block, Calendar, iCalendar, Outlook, iCloud
 Requires at least Joomla: 4.0
-Tested up to: 5.0.3
+Tested up to: 5.2
 Requires PHP: 7
-Stable tag: trunk
+Stable tag: 2.6.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
  
@@ -26,7 +26,7 @@ These are great, but as soon as you want to make a few adjustments to the stylin
 
 * Calendar block module to display appointments/events of a public Google calendar or other iCal file.
 * Small footprint, uses only Google ID of the calendar, or ICS link for Outlook, or Url of iCal file, to get event information via iCal
-* Merge more calendars into one module/block
+* Merge multiple calendars into one module/block, each with its own associated HTML class if desired     
 * Manage events in Google Calendar, or other iCalendar source NOT in this module
 * Fully adaptable to your website with CSS. Output in unordered list with Bootstrap 4 or 5 listgroup classes and toggle for collapsed details.
 * Choose date / time format that best suits your website in settings screen.
@@ -177,6 +177,11 @@ Here you can choose how to compare the filter categories with the event categori
 
 If the event contains categories, the list of categories of this event cleaned as classes (removed spaces etc.) is added to the  html-classes of the event (to the list-group-item). 
 
+= How to hide/collapse (parts of) the module =
+
+If the template does not supports the bootstrap collapse component choose yes for 'Add collapse code'. So that the necessary code is available. Choose 'start collapsed' or 'start open' in the select list of 'Title as collapse toggle', or make your own 'Collapse toggle button in a custom (html) module e.g.: &lt;button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".sib1" aria-expanded="false" aria-controls="collapseExample"&gt; Button to collapse/toggle class sib1 &lt;/button&gt; where sib1 is the class you want to show/collapse. Add also a class collapse to the html tag with the class sib1, or add classes collapse and show to theis tag and change aria-expanded="false" in aria-expanded="true" in the custom html module. For a more detailed explanation see [bootstrap collapse](https://getbootstrap.com/docs/5.3/components/collapse/) or [Using Bootstrap Components in Joomla 4](https://docs.joomla.org/J4.x:Using_Bootstrap_Components_in_Joomla_4)<br>Attention, if the component is already present, adding it may undo the operation (toggling twice will return you to the starting situation)           
+ 
+
 == Documentation ==
 
 * Gets calendar events via iCal url or google calendar ID
@@ -191,7 +196,8 @@ If the event contains categories, the list of categories of this event cleaned a
 * By day month, monthday or setpos (BYDAY, BYMONTH, BYMONTHDAY, BYSETPOS) no other by...   
   (not parsed: BYWEEKNO, BYYEARDAY, BYHOUR, BYMINUTE, RDATE)
 * Exclude events on EXDATE from recurrence set (after evaluating BYSETPOS)
-* Respects Timezone and Day Light Saving time. Build and tested with Iana timezones as used in php, Google, and Apple now also tested with Microsoft timezones and unknown timezones. For unknown timezone-names using the default timezone of te site  (probably the local timezone set in Joomla administration).  
+* Respects Timezone and Day Light Saving time. Build and tested with Iana timezones as used in php, Google, and Apple now also tested with Microsoft timezones and unknown timezones. For unknown timezone-names using the default timezone of te site  (probably the local timezone set in Joomla administration). 
+* If template does not support Bootstrap collapse get the required js and css and use this functionality to toggle visibillity of (parts of) the module see [bootstrap collapse](https://getbootstrap.com/docs/5.3/components/collapse/)      
 
 === Recurrent events, Timezone,  Daylight Saving Time ===
 
@@ -246,6 +252,9 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 * works with Joomla 4 or higher.
 
 == Changelog ==
+* 2.6.0 Improved protection against xss attacks in accordance with changes made to wp-plugin following a reported XSS vulnerability in the wp-plugin. Checked with Wordpress Plugin Check (PCP). Fixed this vulnerability and other PCP errors and warnings, as required by Wordpress to remain in the plugin directory.     
+Replace echo with $secho in &$secho parameter e.g. in display_block, to simplify escaping output by replacing multiple echoes with one.   
+* 2.5.3 In response to issue #35 'naming calendars to filter them in front end' by Joomlafun. Started simplifying (bootstrap) collapse triggered by title.    
 * 2.5.2 solve issue #31 "Assets Directory Not Copied On Install" by dautrich by adding simpleicalicon128x128 to media filelist and correct reference in description from ../modules/mod_simple_ical_block/assets/... to ../media/mod_simple_ical_block/...
 * renamed SimpleicalblockHelper to SimpleicalHelper and moved functions common with WP to top for easier comparing.
 * 2.5.1 solve issue #29 "Joomla Version 5.2.1" by Grey-Sheep replaced default "1" for setting "Categories Filter Operator" by "" "No filter". And tested with clean Joomla 5.2.1. and new install of the module.  

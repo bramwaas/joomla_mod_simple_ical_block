@@ -3,7 +3,7 @@
  * @version $Id: client-timezone-rest.php
  * @package simpleicalblock
  * @subpackage simpleicalblock Module
- * @copyright Copyright (C) 2024 -2024 simpleicalblock, All rights reserved.
+ * @copyright Copyright (C) 2024 -2025 simpleicalblock, All rights reserved.
  * @license GNU General Public License version 3 or later
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl
@@ -17,6 +17,8 @@
  *
  * 2.4.0 Created as placeholder for Rest (or Ajax) service. Add inline script for restRoot and load view-script via dependency.
  * 2.5.2 rename SimpleicalblockHelper to SimpleicalHelper 
+ * 2.5.3 add title collapse toggle attributes to wrapper div 
+ * 2.6.0 clean all output to safe HTML 
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -30,9 +32,11 @@ $wa->addInlineScript(
     );
 
 $attributes = SimpleicalHelper::render_attributes( $params->toArray());
+$secho = '';
+$secho .= '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid']
+. '" data-sib-st="0-start" class="simple_ical_block ' . $attributes['title_collapse_toggle']. '" >';
+$secho .= '<p>' . Text::_('MOD_SIMPLEICALBLOCK_PROCESSING') . '</p>';
+$secho .= '</div>';
+echo SimpleicalHelper::clean_output($secho);
 
-echo '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid']
-. '" data-sib-st="0-start" class="simple_ical_block" >';
-echo '<p>' . Text::_('MOD_SIMPLEICALBLOCK_PROCESSING') . '</p>';
-echo '</div>';
 
