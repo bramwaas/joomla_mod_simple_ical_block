@@ -37,6 +37,7 @@
  * 2.6.0 improve security by following Wordpress Plugin Check recommendations. 
  * Replace echo by $secho in &$secho param a.o. in display_block, to simplify escaping output by replacing multiple echoes by one.
  * clean all echoed output to safe HTML 
+ * 2.7.0 Remove toggle to allow safe html in summary and description, save html is always allowed now.
  *  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
@@ -194,7 +195,7 @@ class SimpleicalHelper
         'suffix_lg_class' => '',
         'suffix_lgi_class' => ' py-0',
         'suffix_lgia_class' => '',
-        'allowhtml' => false,
+        'allowhtml' => true,
         'after_events' => '',
         'no_events' => '',
         'clear_cache_now' => false,
@@ -285,11 +286,6 @@ class SimpleicalHelper
                                 . implode($cat_sep,str_replace("\n", '<br>', $e->categories ))
                                 . '</small></div>';
                         }
-                    }
-                    if ( !$attributes['allowhtml']) {
-                        if (!empty($e->summary)) $e->summary = htmlspecialchars($e->summary);
-                        if (!empty($e->description)) $e->description = htmlspecialchars($e->description);
-                        if (!empty($e->location)) $e->location = htmlspecialchars($e->location);
                     }
                     if (date('yz', $e->start) != date('yz', $e->end)) {
                         $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . $e_dtend_1->format($dflgend, true, true));

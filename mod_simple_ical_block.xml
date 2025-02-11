@@ -6,13 +6,13 @@
     	</include>
   	</compatibility>
 	<name>Simple iCal Block</name>
-	<creationDate>06-02-2025</creationDate>	
+	<creationDate>11-02-2025</creationDate>	
 	<author>A.H.C. Waasdorp</author>
 	<copyright>Copyright (C) 2022 - 2025 A.H.C. Waasdorp, All rights reserved.</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<authorEmail>contact@waasdorpsoekhan.nl</authorEmail>
 	<authorUrl>http://www.waasdorpsoekhan.nl</authorUrl>
-	<version>2.6.0</version>
+	<version>2.7.0</version>
 	<description><![CDATA[<div class="sib-info" style="color: #3f48cc;"><p><img class="sib-img" src="../media/mod_simple_ical_block/icons/simpleicalicon128x128.svg" style="display: inline-block; width: 2em; height:auto; margin-right: 0.5em;"/>Simple iCal Calendar Events Block</p></div>
 	]]></description>
 	<namespace path="src">WaasdorpSoekhan\Module\Simpleicalblock</namespace>
@@ -74,6 +74,11 @@
 					<option value="NOTALL">MOD_SIMPLEICALBLOCK_CAT_FL_OP_NOTALL</option>
 				</field>
 				<field name="categories_filter" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_CAT_FILTER" description="MOD_SIMPLEICALBLOCK_CAT_FILTER_DESC" />
+				<field name="add_sum_catflt" type="radio" layout="joomla.form.field.radio.switcher"
+				class="switcher btn-group" default="0" label="MOD_SIMPLEICALBLOCK_ADDSUMCATFLT" description="MOD_SIMPLEICALBLOCK_ADDSUMCATFLT_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
 				<field name="categories_display" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_CAT_DSP" description="MOD_SIMPLEICALBLOCK_CAT_DSP_DESC" />
 				<field name="tag_sum" type="list" default="div" label="MOD_SIMPLEICALBLOCK_TAG_SUM" description="MOD_SIMPLEICALBLOCK_TAG_SUM_DESC">
 					<option value="a">MOD_SIMPLEICALBLOCK_TAG_SUM_A</option>
@@ -90,11 +95,6 @@
 				<field name="suffix_lg_class" type="text" default="" label="MOD_SIMPLEICALBLOCK_SFLG" description="MOD_SIMPLEICALBLOCK_SFLG_DESC" />
 				<field name="suffix_lgi_class" type="text" default=" py-0" label="MOD_SIMPLEICALBLOCK_SFLGI" description="MOD_SIMPLEICALBLOCK_SFLGI_DESC" />
 				<field name="suffix_lgia_class" type="text" default="" label="MOD_SIMPLEICALBLOCK_SFLGIA" description="MOD_SIMPLEICALBLOCK_SFLGIA_DESC" />
-				<field name="allowhtml" type="radio" layout="joomla.form.field.radio.switcher"
-				class="switcher btn-group" default="0" label="MOD_SIMPLEICALBLOCK_ALLOWHTML" description="MOD_SIMPLEICALBLOCK_ALLOWHTML_DESC" >
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
 				<field name="after_events" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_AFTER_EVENTS" description="MOD_SIMPLEICALBLOCK_AFTER_EVENTS_DESC" />
 				<field name="no_events" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_NO_EVENTS" description="MOD_SIMPLEICALBLOCK_NO_EVENTS_DESC" />
 				<field name="clear_cache_now" type="radio" layout="joomla.form.field.radio.switcher"
@@ -211,6 +211,10 @@
 					label="MOD_SIMPLEICALBLOCK_CAT_FILTER"
 					description="MOD_SIMPLEICALBLOCK_CAT_FILTER_HELP"
  					 />
+				<field name="add_sum_catflt_help"  type="note" 
+					label="MOD_SIMPLEICALBLOCK_ADDSUMCATFLT"
+					description="MOD_SIMPLEICALBLOCK_ADDSUMCATFLT_HELP"
+ 					 />
 				<field name="categories_display_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_CAT_DSP"
 					description="MOD_SIMPLEICALBLOCK_CAT_DSP_HELP"
@@ -234,10 +238,6 @@
 				<field name="suffix_lgia_class_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_SFLGIA"
 					description="MOD_SIMPLEICALBLOCK_SUFFIX_LGIA_CLASS_HELP"
- 					 />
-				<field name="allowhtml_help"  type="note" 
-					label="MOD_SIMPLEICALBLOCK_ALLOWHTML"
-					description="MOD_SIMPLEICALBLOCK_ALLOWHTML_HELP"
  					 />
 				<field name="after_events_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_AFTER_EVENTS"
