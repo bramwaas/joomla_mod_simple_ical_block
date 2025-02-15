@@ -38,7 +38,7 @@
  * Replace echo by $secho in &$secho param a.o. in display_block, to simplify escaping output by replacing multiple echoes by one.
  * clean all echoed output to safe HTML 
  * 2.7.0 Remove toggle to allow safe html in summary and description, save html is always allowed now.
- *  
+ * Sameday as logical and calculated with localtime instead of gmdate.          
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
@@ -275,6 +275,7 @@ class SimpleicalHelper
                     $e_dtend_1 = new Jdate ($e->end -1);
                     $e_dtend_1->setTimezone($attributes['tz_ui']);
                     $evdate = $e_dtstart->format($dflg, true, true);
+                    $sameday = ($e_dtstart->format('yz', true, true) === $e_dtend->format('yz', true, true));
                     $ev_class =  ((!empty($e->cal_class)) ? ' ' . self::sanitize_html_clss($e->cal_class): '');
                     $cat_list = '';
                     if (!empty($e->categories)) {
@@ -287,7 +288,7 @@ class SimpleicalHelper
                                 . '</small></div>';
                         }
                     }
-                    if (date('yz', $e->start) != date('yz', $e->end)) {
+                    if (! $sameday) {
                         $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . $e_dtend_1->format($dflgend, true, true));
                     }
                     $evdtsum = (($e->startisdate === false) ? $e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true) : '');
@@ -325,7 +326,7 @@ class SimpleicalHelper
                         $e->description = str_replace("\n", '<br>', $e->description);
                         $secho .= '<span class="dsc">'. $e->description. ((strrpos($e->description, '<br>') === (strlen($e->description) - 4)) ? '' : '<br>'). '</span>';
                     }
-                    if ($e->startisdate === false && date('yz', $e->start) === date('yz', $e->end))	{
+                    if ($e->startisdate === false && $sameday)	{
                         $secho .= '<span class="time">' . ($e_dtstart->format($dftstart, true, true)).
                         '</span><span class="time">' . ($e_dtend->format($dftend, true, true)). '</span> ' ;
                     } else {
