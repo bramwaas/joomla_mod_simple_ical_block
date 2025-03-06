@@ -38,7 +38,8 @@
  * Replace echo by $secho in &$secho param a.o. in display_block, to simplify escaping output by replacing multiple echoes by one.
  * clean all echoed output to safe HTML 
  * 2.7.0 Remove toggle to allow safe html in summary and description, save html is always allowed now.
- * Sameday as logical and calculated with localtime instead of gmdate.          
+ * Sameday as logical and calculated with localtime instead of gmdate. Move display_block back to default lay-out to improve support for override
+ *           
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
@@ -47,6 +48,7 @@ defined('_JEXEC') or die ('Restricted access');
 
 use Joomla\CMS\Date\Date as Jdate;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Response\JsonResponse;
@@ -215,13 +217,11 @@ class SimpleicalHelper
      * @param array $attributes
      * @param string &$secho (reference to $secho), output to echo in calling function, to simplify escaping output by replacing multiple echoes by one 
      *            Saved attribute/option values from database.
+     *  NOT USED only as fallback for old or missing lay_out templates,  
      */
-    static function display_block($attributes, &$secho)
+static function display_block($attributes, &$secho)
     {
-//         if (empty(self::$input_fl)) {
-//             self::$input_fl = new InputFilter(self::$allowed_tags, self::$allowed_attrs, InputFilter::ONLY_ALLOW_DEFINED_TAGS, InputFilter::ONLY_ALLOW_DEFINED_ATTRIBUTES);
-//         }
-        $sn = 0;
+        $secho .= '<!-- db270 fallback for old or missing lay_out templates since v2.7.0 (march 2025). -->';
         try {
             $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
         } catch (\Exception $exc) {}
@@ -383,8 +383,6 @@ class SimpleicalHelper
         $block_attributes['suffix_lg_class'] = self::sanitize_html_clss($block_attributes['suffix_lg_class']);
         $block_attributes['suffix_lgi_class'] = self::sanitize_html_clss($block_attributes['suffix_lgi_class']);
         $block_attributes['suffix_lgia_class'] = self::sanitize_html_clss($block_attributes['suffix_lgia_class']);
-//        $block_attributes['anchorId'] = self::sanitize_html_clss($block_attributes['anchorId'], 'simpleicalblock' . $block_attributes['sibid']);
-        
         
         return $block_attributes;
     }
@@ -438,7 +436,15 @@ class SimpleicalHelper
             } else {
                 $secho = '';
                 $attributes = self::render_attributes( array_merge( json_decode($mod->params, true), $params));
-                self::display_block($attributes, $secho);
+                $path = ModuleHelper::getLayoutPath($mod->module, str_ireplace(['ajax-', 'rest-'] ,['',''], $attributes['layout']));
+                if (is_file( $path)) {
+                    $noecho = true;
+                    require $path;
+                }
+                else{
+                    self::display_block($attributes, $secho);
+                }
+                 $secho .= '<p>' .  $path . 'bestaat? ' . $fe . '</p>';
             }
         }
         $secho = self::clean_output($secho);
