@@ -38,7 +38,9 @@
  * 2.5.2 rename SimpleicalblockHelper to SimpleicalHelper
  * 2.5.3 add title collapse toggle attributes to wrapper div
  * 2.6.0 clean all output to safe HTML 
- * 2.7.0 Move display_block back to default lay-out to improve support for override  
+ * 2.7.0 Enable to add words of summary to categories for filtering. Move display_block back to default layout to improve support for override
+ *   and use layout template with original name without 'rest-' or 'ajax-' for rest output to make that also overridable. Add support for
+ *   details/summary tag combination.    
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -48,9 +50,9 @@ use Joomla\CMS\Factory;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalHelper;
 
-$secho = ($secho) ?: '';
+if (empty($secho)) {  $secho = ''; }
+$secho .= '<p hidden>d270</p>';
 if (empty($noecho) ) {
-    echo '<!-- d270 -->'; 
     $attributes = SimpleicalHelper::render_attributes( $params->toArray());
     $secho .= '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid'] . '" ' . ' class="simple_ical_block ' . $attributes['title_collapse_toggle']. '" >';
 }
@@ -104,7 +106,7 @@ if (empty($noecho) ) {
     $ipd = IcsParser::getData($attributes);
     $data = $ipd['data'];
     foreach ($ipd['messages'] as $msg) {
-        $secho .= '<!-- ' . $msg . ' -->';
+        $secho .= '<p hidden>' . $msg . ' </p>';
     }
     if (!empty($data) && is_array($data)) {
         $secho .= '<ul class="list-group' . $attributes['suffix_lg_class'] . ' simple-ical-widget" > ';
@@ -146,6 +148,12 @@ if (empty($noecho) ) {
             if ($layout == 3 && $curdate != $evdate) {
                 $secho .= '<span class="ical-date">' . ucfirst($evdate) . '</span>' . (('a' == $attributes['tag_sum']) ? '<br>' : '');
             }
+
+            if ('summary' == $attributes['tag_sum']) {
+                $secho .= $cat_list . '<details class="ical_details' . $sflgia . '" id="'. $itemid. '">';
+            }
+            
+            
             $secho .=  '<' . $attributes['tag_sum'] . ' class="ical_summary' . $sflgia . (('a' == $attributes['tag_sum']) ? '" data-toggle="collapse" data-bs-toggle="collapse" href="#' . $itemid . '" aria-expanded="false" aria-controls="' . $itemid . '">' : '">');
             if ($layout != 2)	{
                 $secho .= $evdtsum;
@@ -157,7 +165,11 @@ if (empty($noecho) ) {
             if ($layout == 2)	{
                 $secho .= '<span>'. $evdate . $evdtsum . '</span>';
             }
-            $secho .= $cat_list . '<div class="ical_details' . $sflgia . (('a' == $attributes['tag_sum']) ? ' collapse' : '') . '" id="'. $itemid. '">';
+            
+            if ('summary' != $attributes['tag_sum']) {
+                $secho .= $cat_list . '<div class="ical_details' . $sflgia . (('a' == $attributes['tag_sum']) ? ' collapse' : '') . '" id="'. $itemid. '">';
+            }
+            
             if(!empty($e->description) && trim($e->description) > '' && $excerptlength !== 0) {
                 if ($excerptlength !== '' && strlen($e->description) > $excerptlength) {$e->description = substr($e->description, 0, $excerptlength + 1);
                 if (rtrim($e->description) !== $e->description) {$e->description = substr($e->description, 0, $excerptlength);}
@@ -179,7 +191,11 @@ if (empty($noecho) ) {
             if(!empty($e->location)) {
                 $secho .= '<span class="location">'. str_replace("\n", '<br>', $e->location). '</span>';
             }
-            $secho .= '</div></li>';
+            if ('summary' == $attributes['tag_sum']) {
+                $secho .= '</details></li>';
+            } else {
+                $secho .= '</div></li>';
+            }
             $curdate =  $evdate;
         }
         if ($layout < 2 ) {

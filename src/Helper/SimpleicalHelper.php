@@ -38,13 +38,13 @@
  * Replace echo by $secho in &$secho param a.o. in display_block, to simplify escaping output by replacing multiple echoes by one.
  * clean all echoed output to safe HTML 
  * 2.7.0 Remove toggle to allow safe html in summary and description, save html is always allowed now.
- * Sameday as logical and calculated with localtime instead of gmdate. Move display_block back to default lay-out to improve support for override
+ * Sameday as logical and calculated with localtime instead of gmdate. Move display_block back to default layout to improve support for override
+ * and use layout template with original name without 'rest-' or 'ajax-' for rest output. Add support for details/summary tag combination.
  *           
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
-
 
 use Joomla\CMS\Date\Date as Jdate;
 use Joomla\CMS\Factory;
@@ -115,6 +115,7 @@ class SimpleicalHelper
         'span',
         'strike',
         'strong',
+        'summary',
         'u',
         'ul'
     ];
@@ -221,7 +222,7 @@ class SimpleicalHelper
      */
 static function display_block($attributes, &$secho)
     {
-        $secho .= '<!-- db270 fallback for old or missing lay_out templates since v2.7.0 (march 2025). -->';
+        $secho .= '<p hidden>db270 fallback for old or missing lay_out templates since v2.7.0 (march 2025).</p>';
         try {
             $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
         } catch (\Exception $exc) {}
@@ -260,7 +261,7 @@ static function display_block($attributes, &$secho)
             $ipd = IcsParser::getData($attributes);
             $data = $ipd['data'];
             foreach ($ipd['messages'] as $msg) {
-                $secho .= '<!-- ' . $msg . ' -->';
+                $secho .= '<p hidden>' . $msg . ' </p>';
             }
             if (!empty($data) && is_array($data)) {
                 $secho .= '<ul class="list-group' . $attributes['suffix_lg_class'] . ' simple-ical-widget" > ';
@@ -408,8 +409,9 @@ static function display_block($attributes, &$secho)
     }
     /**
      * call Rest / Ajax component.
-     * Get block content wth sibid, (active menu Itemid,) postid, and client timezone from request
-     *
+     * Get block content wth sibid, (= active menu Itemid,)  and client timezone from request
+     * use layout template with templatename wthout 'rest-' or 'ajax-' or default.
+     * 
      * @param Input object $input $app-> 
      * 
      * @return JsonResponse object $data 
@@ -419,8 +421,8 @@ static function display_block($attributes, &$secho)
      *  "data":     ["content": {null| string: content of module},
      *               "params":  {null| array: used params ] 
      * ]
-     * sinc 2.4.0
-     *
+     * since 2.4.0
+     * 
      */
     public static function getAjax()
     {   
@@ -437,14 +439,14 @@ static function display_block($attributes, &$secho)
                 $secho = '';
                 $attributes = self::render_attributes( array_merge( json_decode($mod->params, true), $params));
                 $path = ModuleHelper::getLayoutPath($mod->module, str_ireplace(['ajax-', 'rest-'] ,['',''], $attributes['layout']));
+                $noecho = true;
                 if (is_file( $path)) {
-                    $noecho = true;
                     require $path;
                 }
                 else{
                     self::display_block($attributes, $secho);
                 }
-                 $secho .= '<p>' .  $path . 'bestaat? ' . $fe . '</p>';
+                 $secho .= '<p hidden>' .  $path . 'bestaat? ' . $fe . '</p>';
             }
         }
         $secho = self::clean_output($secho);

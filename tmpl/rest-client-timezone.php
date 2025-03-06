@@ -32,7 +32,9 @@ $wa->addInlineScript(
     );
 
 $attributes = SimpleicalHelper::render_attributes( $params->toArray());
-$secho = '';
+if (empty($secho)) { $secho = '';}
+$secho .= '<p hidden>r270</p>';
+
 $secho .= '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid']
 . '" data-sib-st="0-start" class="simple_ical_block ' . $attributes['title_collapse_toggle']. '" >';
 $secho .= '<p>' . Text::_('MOD_SIMPLEICALBLOCK_PROCESSING') . '</p>';
