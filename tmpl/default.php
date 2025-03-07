@@ -51,7 +51,7 @@ use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalHelper;
 
 if (empty($secho)) {  $secho = ''; }
-$secho .= '<p hidden>d270</p>';
+$secho .= '<p hidden="">d270</p>';
 if (empty($noecho) ) {
     $attributes = SimpleicalHelper::render_attributes( $params->toArray());
     $secho .= '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid'] . '" ' . ' class="simple_ical_block ' . $attributes['title_collapse_toggle']. '" >';
@@ -106,7 +106,7 @@ if (empty($noecho) ) {
     $ipd = IcsParser::getData($attributes);
     $data = $ipd['data'];
     foreach ($ipd['messages'] as $msg) {
-        $secho .= '<p hidden>' . $msg . ' </p>';
+        $secho .= '<p hidden="">' . $msg . ' </p>';
     }
     if (!empty($data) && is_array($data)) {
         $secho .= '<ul class="list-group' . $attributes['suffix_lg_class'] . ' simple-ical-widget" > ';
