@@ -37,7 +37,7 @@
  * 2.6.0 improve security by following Wordpress Plugin Check recommendations. 
  * Replace echo by $secho in &$secho param a.o. in display_block, to simplify escaping output by replacing multiple echoes by one.
  * clean all echoed output to safe HTML
- * 2.6.1 added cast $class to string in sanitize_html_clss and sanitize_html_class after issue #39 of joomlafun
+ * 2.6.1 added cast $class to string in sanitize_html_clss and sanitize_html_class after, defaults for new collapse fields issue #39 of joomlafun
  *  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
@@ -203,9 +203,10 @@ class SimpleicalHelper
         'tzid_ui' => '',
         'className' => '',
         'anchorId' => '',
+   		'title_collapse_toggle' => '',
+		'add_collapse_code' => false,
         'before_title'  => '<h3 class="widget-title block-title">',
         'after_title'   => '</h3>'
-        
     ];
     /**
      * Front-end display of module, block or widget.
