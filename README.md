@@ -252,6 +252,7 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 * works with Joomla 4 or higher.
 
 == Changelog ==
+* 2.6.1 added cast $class to string in sanitize_html_clss and sanitize_html_class after issue #39 of joomlafun
 * 2.6.0 Improved protection against xss attacks in accordance with changes made to wp-plugin following a reported XSS vulnerability in the wp-plugin. Checked with Wordpress Plugin Check (PCP). Fixed this vulnerability and other PCP errors and warnings, as required by Wordpress to remain in the plugin directory.     
 Replace echo with $secho in &$secho parameter e.g. in display_block, to simplify escaping output by replacing multiple echoes with one.   
 * 2.5.3 In response to issue #35 'naming calendars to filter them in front end' by Joomlafun. Started simplifying (bootstrap) collapse triggered by title.    
