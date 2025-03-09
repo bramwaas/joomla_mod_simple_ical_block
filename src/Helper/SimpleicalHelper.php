@@ -37,10 +37,10 @@
  * 2.6.0 improve security by following Wordpress Plugin Check recommendations. 
  * Replace echo by $secho in &$secho param a.o. in display_block, to simplify escaping output by replacing multiple echoes by one.
  * clean all echoed output to safe HTML 
+ * 2.6.1 added cast $class to string in sanitize_html_clss and sanitize_html_class after, defaults for new collapse fields issue #39 of joomlafun
  * 2.7.0 Remove toggle to allow safe html in summary and description, save html is always allowed now.
  * Sameday as logical and calculated with localtime instead of gmdate. Move display_block back to default layout to improve support for override
  * and use layout template with original name without 'rest-' or 'ajax-' for rest output. Add support for details/summary tag combination.
- *           
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
@@ -53,6 +53,7 @@ use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Response\JsonResponse;
 use Joomla\Filter\InputFilter;
+use Joomla\Registry\Registry;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
 
 /**
@@ -206,9 +207,10 @@ class SimpleicalHelper
         'tzid_ui' => '',
         'className' => '',
         'anchorId' => '',
+   		'title_collapse_toggle' => '',
+		'add_collapse_code' => false,
         'before_title'  => '<h3 class="widget-title block-title">',
         'after_title'   => '</h3>'
-        
     ];
     /**
      * Front-end display of module, block or widget.
@@ -359,7 +361,7 @@ static function display_block($attributes, &$secho)
      */
     static function sanitize_html_clss( $class, $fallback = '' ) {
         // Strip out any %-encoded octets.
-        $sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', $class );
+        $sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', (string) $class );
         
         // Limit to A-Z, ' ', a-z, 0-9, '_', '-'.
         $sanitized = preg_replace( '/[^A-Z a-z0-9_-]/', '', $sanitized );
@@ -397,7 +399,7 @@ static function display_block($attributes, &$secho)
      */
     static function sanitize_html_class( $class, $fallback = '' ) {
         // Strip out any %-encoded octets.
-        $sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', $class );
+        $sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', (string) $class );
         
         // Limit to A-Z, a-z, 0-9, '_', '-'.
         $sanitized = preg_replace( '/[^A-Za-z0-9_-]/', '', $sanitized );
@@ -425,20 +427,24 @@ static function display_block($attributes, &$secho)
      * 
      */
     public static function getAjax()
-    {   
-        $input = Factory::getApplication()->getInput();
-        $params = $input->getArray();
-        unset($params['option'],$params['module'],$params['method'],$params['view'],);
-        if (empty($params['sibid'])) {
+    {   $app = Factory::getApplication();
+        $input = $app->getInput();
+        $ippars = $input->getArray();
+        unset($ippars['option'],$ippars['module'],$ippars['method'],$ippars['view'],);
+        if (empty($ippars['sibid'])) {
             $secho = '<p>' .  Text::_('MOD_SIMPLEICALBLOCK_EMPTYSIBID') .'</p>';
         } else {
-            $mod = ModuleHelper::getModuleById($params['sibid']);
-            if (empty($mod->params)) {
+            $module = ModuleHelper::getModuleById($ippars['sibid']);
+            if (empty($module->params)) {
                 $secho = '<p>' .  Text::_('MOD_SIMPLEICALBLOCK_NOPARAMS') .'</p>';
             } else {
+                ob_start(); // remove echoed content old layout overrides
                 $secho = '';
-                $attributes = self::render_attributes( array_merge( json_decode($mod->params, true), $params));
-                $path = ModuleHelper::getLayoutPath($mod->module, str_ireplace(['ajax-', 'rest-'] ,['',''], $attributes['layout']));
+                $attributes = self::render_attributes( array_merge( json_decode($module->params, true), $ippars));
+                $params = new Registry($attributes); // for older layout overrides
+                $path = str_ireplace(['ajax-', 'rest-'] ,['',''], $attributes['layout']);
+                if ($attributes['layout'] == $path) $path = '_:default';
+                $path = ModuleHelper::getLayoutPath($module->module, $path );
                 $noecho = true;
                 if (is_file( $path)) {
                     require $path;
@@ -446,13 +452,13 @@ static function display_block($attributes, &$secho)
                 else{
                     self::display_block($attributes, $secho);
                 }
-                 $secho .= '<p hidden="">' .  $path . 'bestaat? ' . $fe . '</p>';
+                $oldecho = ob_get_clean();
             }
         }
         $secho = self::clean_output($secho);
         $data = [
             'content' => $secho ,
-            'params' => $params
+            'params' => $ippars
         ];
         return $data;
     }

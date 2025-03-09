@@ -254,6 +254,7 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 == Changelog ==
 * 2.7.0 Enable to add words of summary to categories for filtering (after issue #36 'Filtering by keyword' by gonzob for Joomla module).  Remove toggle to allow safe html in summary and description, save html is always allowed now. Move display_block back to default layout to improve support for override and use layout template with original name without 'rest-' or 'ajax-' for rest output to make that also overridable. Added support
 for details/summary tag combination. 
+* 2.6.1 added cast $class to string in sanitize_html_clss and sanitize_html_class after issue #39 of joomlafun
 * 2.6.0 Improved protection against xss attacks in accordance with changes made to wp-plugin following a reported XSS vulnerability in the wp-plugin. Checked with Wordpress Plugin Check (PCP). Fixed this vulnerability and other PCP errors and warnings, as required by Wordpress to remain in the plugin directory.     
 Replace echo with $secho in &$secho parameter e.g. in display_block, to simplify escaping output by replacing multiple echoes with one.   
 * 2.5.3 In response to issue #35 'naming calendars to filter them in front end' by Joomlafun. Started simplifying (bootstrap) collapse triggered by title.    

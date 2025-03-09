@@ -26,17 +26,20 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalHelper;
 
+if (!empty($wa)){
 $wa->addInlineScript(
     '(window.simpleIcalBlock=window.simpleIcalBlock || {}).restRoot = "' . Uri::root() . 'index.php?option=com_ajax&Itemid=' . (($app->getMenu()->getActive()->id) ?? '') . '"',
     ['position' => 'before', 'name' => 'define.restRoot'], [],['simple-ical-block-view.js']
     );
+$wa->addInlineStyle('.simple_ical_block p[hidden]{display:none  !important;}', ['name' => 'simple-ical-block-inline-style']);
+}
 
 $attributes = SimpleicalHelper::render_attributes( $params->toArray());
 if (empty($secho)) { $secho = '';}
-$secho .= '<p hidden="">r270</p>';
 
 $secho .= '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid']
 . '" data-sib-st="0-start" class="simple_ical_block ' . $attributes['title_collapse_toggle']. '" >';
+$secho .= '<p hidden="">r270</p>';
 $secho .= '<p>' . Text::_('MOD_SIMPLEICALBLOCK_PROCESSING') . '</p>';
 $secho .= '</div>';
 echo SimpleicalHelper::clean_output($secho);

@@ -40,7 +40,7 @@
  * 2.6.0 clean all output to safe HTML 
  * 2.7.0 Enable to add words of summary to categories for filtering. Move display_block back to default layout to improve support for override
  *   and use layout template with original name without 'rest-' or 'ajax-' for rest output to make that also overridable. Add support for
- *   details/summary tag combination.    
+ *   details/summary tag combination. Add inline style for hidden lines with version id or warnings.
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -50,13 +50,15 @@ use Joomla\CMS\Factory;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalHelper;
 
+if (!empty($wa))$wa->addInlineStyle('.simple_ical_block p[hidden]{display:none !important;}', ['name' => 'simple-ical-block-inline-style']);
 if (empty($secho)) {  $secho = ''; }
-$secho .= '<p hidden="">d270</p>';
+
 if (empty($noecho) ) {
     $attributes = SimpleicalHelper::render_attributes( $params->toArray());
     $secho .= '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid'] . '" ' . ' class="simple_ical_block ' . $attributes['title_collapse_toggle']. '" >';
 }
- //self::display_block($attributes,$secho);
+$secho .= '<p hidden="">d270</p>';
+//self::display_block($attributes,$secho);
 /**
  * Front-end display of module, block or widget.
  *
