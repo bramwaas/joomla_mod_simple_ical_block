@@ -36,7 +36,8 @@
  * 2.5.2 renamed SimpleicalblockHelper to SimpleicalHelper and moved functions common with WP to top
  * 2.6.0 improve security by following Wordpress Plugin Check recommendations. 
  * Replace echo by $secho in &$secho param a.o. in display_block, to simplify escaping output by replacing multiple echoes by one.
- * clean all echoed output to safe HTML 
+ * clean all echoed output to safe HTML
+ * 2.6.1 added cast $class to string in sanitize_html_clss and sanitize_html_class after, defaults for new collapse fields issue #39 of joomlafun
  *  
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
@@ -202,9 +203,10 @@ class SimpleicalHelper
         'tzid_ui' => '',
         'className' => '',
         'anchorId' => '',
+   		'title_collapse_toggle' => '',
+		'add_collapse_code' => false,
         'before_title'  => '<h3 class="widget-title block-title">',
         'after_title'   => '</h3>'
-        
     ];
     /**
      * Front-end display of module, block or widget.
@@ -361,7 +363,7 @@ class SimpleicalHelper
      */
     static function sanitize_html_clss( $class, $fallback = '' ) {
         // Strip out any %-encoded octets.
-        $sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', $class );
+        $sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', (string) $class );
         
         // Limit to A-Z, ' ', a-z, 0-9, '_', '-'.
         $sanitized = preg_replace( '/[^A-Z a-z0-9_-]/', '', $sanitized );
@@ -401,7 +403,7 @@ class SimpleicalHelper
      */
     static function sanitize_html_class( $class, $fallback = '' ) {
         // Strip out any %-encoded octets.
-        $sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', $class );
+        $sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', (string) $class );
         
         // Limit to A-Z, a-z, 0-9, '_', '-'.
         $sanitized = preg_replace( '/[^A-Za-z0-9_-]/', '', $sanitized );
