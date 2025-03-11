@@ -82,6 +82,7 @@ class SimpleicalHelper
         'i',
         'span',
         'strong',
+        'summary',
         'u'
     ];
     /*
@@ -202,6 +203,10 @@ class SimpleicalHelper
         'allowhtml' => true,
         'after_events' => '',
         'no_events' => '',
+        'categories_filter_op' => '',
+        'categories_filter' => '',
+        'categories_display' => '',
+        'add_sum_catflt' => false,
         'clear_cache_now' => false,
         'period_limits' => '1',
         'tzid_ui' => '',

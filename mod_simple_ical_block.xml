@@ -74,12 +74,12 @@
 					<option value="NOTALL">MOD_SIMPLEICALBLOCK_CAT_FL_OP_NOTALL</option>
 				</field>
 				<field name="categories_filter" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_CAT_FILTER" description="MOD_SIMPLEICALBLOCK_CAT_FILTER_DESC" />
+				<field name="categories_display" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_CAT_DSP" description="MOD_SIMPLEICALBLOCK_CAT_DSP_DESC" />
 				<field name="add_sum_catflt" type="radio" layout="joomla.form.field.radio.switcher"
 				class="switcher btn-group" default="0" label="MOD_SIMPLEICALBLOCK_ADDSUMCATFLT" description="MOD_SIMPLEICALBLOCK_ADDSUMCATFLT_DESC" >
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="categories_display" type="text" default="" filter="raw" label="MOD_SIMPLEICALBLOCK_CAT_DSP" description="MOD_SIMPLEICALBLOCK_CAT_DSP_DESC" />
 				<field name="tag_sum" type="list" default="div" label="MOD_SIMPLEICALBLOCK_TAG_SUM" description="MOD_SIMPLEICALBLOCK_TAG_SUM_DESC">
 					<option value="a">MOD_SIMPLEICALBLOCK_TAG_SUM_A</option>
 					<option value="b">MOD_SIMPLEICALBLOCK_TAG_SUM_B</option>
@@ -90,6 +90,7 @@
 					<option value="i">MOD_SIMPLEICALBLOCK_TAG_SUM_I</option>
 					<option value="span">MOD_SIMPLEICALBLOCK_TAG_SUM_SPAN</option>
 					<option value="strong">MOD_SIMPLEICALBLOCK_TAG_SUM_STRONG</option>
+					<option value="summary">MOD_SIMPLEICALBLOCK_TAG_SUM_SUMMARY</option>
 					<option value="u">MOD_SIMPLEICALBLOCK_TAG_SUM_U</option>
 				</field>
 				<field name="suffix_lg_class" type="text" default="" label="MOD_SIMPLEICALBLOCK_SFLG" description="MOD_SIMPLEICALBLOCK_SFLG_DESC" />
@@ -211,13 +212,13 @@
 					label="MOD_SIMPLEICALBLOCK_CAT_FILTER"
 					description="MOD_SIMPLEICALBLOCK_CAT_FILTER_HELP"
  					 />
-				<field name="add_sum_catflt_help"  type="note" 
-					label="MOD_SIMPLEICALBLOCK_ADDSUMCATFLT"
-					description="MOD_SIMPLEICALBLOCK_ADDSUMCATFLT_HELP"
- 					 />
 				<field name="categories_display_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_CAT_DSP"
 					description="MOD_SIMPLEICALBLOCK_CAT_DSP_HELP"
+ 					 />
+				<field name="add_sum_catflt_help"  type="note" 
+					label="MOD_SIMPLEICALBLOCK_ADDSUMCATFLT"
+					description="MOD_SIMPLEICALBLOCK_ADDSUMCATFLT_HELP"
  					 />
 				<field name="period_limits_help"  type="note" 
 					label="MOD_SIMPLEICALBLOCK_PER_LIMITS"

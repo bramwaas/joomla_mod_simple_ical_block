@@ -38,6 +38,7 @@
  * while retaining , or ; when escaped with \ and use the same function for list of url's and input filter categorie list. 
  * use temporary replace \\ by chr(20) and replace chr(20) by \ instead of explode and implode to prevent use of \\ as unescape char.
  * 2.6.0 escaping error messages.
+ * 2.7.0 when add_sum_catflt add words from summary to categories for filtering. No special code to allow safe html (always allowed)
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -683,20 +684,21 @@ END:VCALENDAR';
         } while($haveVevent);
     }
 /*
-     * Limit events to the first event_count events in the event - period/window.
-     * filter against categories filter.
+ * Limit events to the first event_count events in the event - period/window.
+ * filter against categories filter and words of summary when add_sum_catflt
  * Events are already sorted
  * 
-     * @param  array of objects $data_events events parsed or cached.
-     * @param int timestamp $p_start start datetime of period/window with events displayed
-     * @param int timestamp $p_end (not included) end datetime of period/window with events displayed
-     * @param  int $e_count limits the maximum number of events  
-     * @param stringt $cat_filter comma separated list of categories to compare (intersect) with events categories   
-     * @param string  $cat_filter_op Operator to asses result of intersection from a list or '' for no filtering.
-     *
+ * @param  array of objects $data_events events parsed or cached.
+ * @param int timestamp $p_start start datetime of period/window with events displayed
+ * @param int timestamp $p_end (not included) end datetime of period/window with events displayed
+ * @param  int $e_count limits the maximum number of events  
+ * @param stringt $cat_filter comma separated list of categories to compare (intersect) with events categories   
+ * @param string  $cat_filter_op Operator to asses result of intersection from a list or '' for no filtering.
+ * @param boolean $add_sum_catflt add words from summary to categories fro filtering
+ *
  * @return  array       remaining event objects.
  */
-    static function getFutureEvents($data_events, $p_start, $p_end, $e_count, $cat_filter = '', $cat_filter_op = '' ) {
+    static function getFutureEvents($data_events, $p_start, $p_end, $e_count, $cat_filter = '', $cat_filter_op = '', $add_sum_catflt = false ) {
         // 
         if (!empty($cat_filter_op))  {
             $cat_filter_ary = array_map("strtolower",(empty($cat_filter)) ? [''] : self::unescTextList($cat_filter));
@@ -708,7 +710,15 @@ END:VCALENDAR';
             if (empty($cat_filter_op)) {
                 $cat_filter_result = true; // no filter
             }  else {
-                $cat_is_cnt = count(array_intersect($cat_filter_ary,(array_map("strtolower",($e->categories) ?? ['']))));
+                $cat_ary = array_map("strtolower",(empty($e->categories)) ? ['']:$e->categories );
+                if ($add_sum_catflt){ 
+                    $cat_ary = array_merge($cat_ary,
+                    explode(',',strtolower(str_replace([' ', ',,'], [','], (string) $e->summary)))
+                    );
+                }
+                $e->description = ($e->description)?? '';
+                $e->description .= '<p hidden="">cat_ary=' .implode(',', $cat_ary). '</p>';
+                $cat_is_cnt = count(array_intersect($cat_filter_ary,($cat_ary)));
                 switch ($cat_filter_op) {
                     case "ANY":
                     $cat_filter_result = (0 < $cat_is_cnt);
@@ -1101,7 +1111,7 @@ END:VCALENDAR';
         if ( ! array_key_exists('data', $ipd)) {
             $ipd = ['data'=>$ipd, 'messages'=>[]];
         }
-        return ['data'=>self::getFutureEvents($ipd['data'], $p_start, $p_end, $instance['event_count'], (($instance['categories_filter'])??''), (($instance['categories_filter_op'])??'')),
+        return ['data'=>self::getFutureEvents($ipd['data'], $p_start, $p_end, $instance['event_count'], (($instance['categories_filter'])??''), (($instance['categories_filter_op'])??''), ($instance['add_sum_catflt']??false)),
             'messages'=>$ipd['messages']];
     }
     /**
