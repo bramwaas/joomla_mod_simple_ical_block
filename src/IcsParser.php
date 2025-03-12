@@ -38,7 +38,7 @@
  * while retaining , or ; when escaped with \ and use the same function for list of url's and input filter categorie list. 
  * use temporary replace \\ by chr(20) and replace chr(20) by \ instead of explode and implode to prevent use of \\ as unescape char.
  * 2.6.0 escaping error messages.
- * 2.7.0 when add_sum_catflt add words from summary to categories for filtering. No special code to allow safe html (always allowed)
+ * 2.7.0 when add_sum_catflt add words from summary to categories for filtering. 
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -716,8 +716,8 @@ END:VCALENDAR';
                     explode(',',strtolower(str_replace([' ', ',,'], [','], (string) $e->summary)))
                     );
                 }
-                $e->description = ($e->description)?? '';
-                $e->description .= '<p hidden="">cat_ary=' .implode(',', $cat_ary). '</p>';
+                if ('' == $cat_ary[0] && 1 < count($cat_ary)) { array_shift($cat_ary);
+                }
                 $cat_is_cnt = count(array_intersect($cat_filter_ary,($cat_ary)));
                 switch ($cat_filter_op) {
                     case "ANY":
