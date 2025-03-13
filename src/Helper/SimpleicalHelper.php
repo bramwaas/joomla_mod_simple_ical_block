@@ -8,8 +8,7 @@
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl
  * @developer A.H.C. Waasdorp
- *
- *
+ * 
  * simpleicalblock is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -443,26 +442,26 @@ static function display_block($attributes, &$secho)
             if (empty($module->params)) {
                 $secho = '<p>' .  Text::_('MOD_SIMPLEICALBLOCK_NOPARAMS') .'</p>';
             } else {
-                ob_start(); // remove echoed content old layout overrides
                 $secho = '';
                 $attributes = self::render_attributes( array_merge( json_decode($module->params, true), $ippars));
-                $params = new Registry($attributes); // for older layout overrides
-                $path = str_ireplace(['ajax-', 'rest-'] ,['',''], $attributes['layout']);
+                $params = new Registry($attributes); // for use in layout (overrides)
+                $path = str_ireplace(['ajax-', 'rest-'] ,['',''], (string) $attributes['layout']);
                 if ($attributes['layout'] == $path) $path = '_:default';
                 $path = ModuleHelper::getLayoutPath($module->module, $path );
-                $noecho = true;
+                $nohead = true;
                 if (is_file( $path)) {
+                    ob_start(); // catch echoed and cleaned layout output
                     require $path;
+                    $secho .= ob_get_clean();
                 }
                 else{
                     self::display_block($attributes, $secho);
+                    $secho = self::clean_output($secho);
                 }
-                $oldecho = ob_get_clean();
             }
         }
-        $secho = self::clean_output($secho);
         $data = [
-            'content' => $secho ,
+            'content' => $secho,
             'params' => $ippars
         ];
         return $data;

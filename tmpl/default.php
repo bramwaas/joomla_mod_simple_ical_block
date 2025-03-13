@@ -53,7 +53,7 @@ use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalHelper;
 if (!empty($wa))$wa->addInlineStyle('.simple_ical_block p[hidden]{display:none !important;}', ['name' => 'simple-ical-block-inline-style']);
 if (empty($secho)) {  $secho = ''; }
 
-if (empty($noecho) ) {
+if (empty($nohead) ) {
     $attributes = SimpleicalHelper::render_attributes( $params->toArray());
     $secho .= '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid'] . '" ' . ' class="simple_ical_block ' . $attributes['title_collapse_toggle']. '" >';
 }
@@ -211,9 +211,11 @@ $secho .= '<p hidden="">d270</p>';
     $secho .= '<br class="clear" />';
 }
 /* end display_block */
-if (empty($noecho)) {
+if (empty($nohead)) {
     $secho .= '</div>';
-    echo SimpleicalHelper::clean_output($secho);
 }
+
+echo SimpleicalHelper::clean_output($secho);
+$secho = '';
 
 
