@@ -39,7 +39,8 @@
  * 2.6.1 added cast $class to string in sanitize_html_clss and sanitize_html_class after, defaults for new collapse fields issue #39 of joomlafun
  * 2.7.0 Remove toggle to allow safe html in summary and description, save html is always allowed now.
  * Sameday as logical and calculated with localtime instead of gmdate. Move display_block back to default layout to improve support for override
- * and use layout template with original name without 'rest-' or 'ajax-' for rest output. Add support for details/summary tag combination.
+ * and use layout template with original name without 'rest-' or 'ajax-' for rest output. Add support for details/summary tag combination. Removed 
+ * ev_class from li head.
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
@@ -303,12 +304,17 @@ static function display_block($attributes, &$secho)
                         if  ($curdate != '') {
                             $secho .= '</ul></li>';
                         }
-                        $secho .= '<li class="list-group-item' . $sflgi . $ev_class . ' head">' . '<span class="ical-date">' . ucfirst($evdate) . '</span><ul class="list-group' . $attributes['suffix_lg_class'] . '">';
+                        $secho .= '<li class="list-group-item' . $sflgi . ' head">' . '<span class="ical-date">' . ucfirst($evdate) . '</span><ul class="list-group' . $attributes['suffix_lg_class'] . '">';
                     }
                     $secho .= '<li class="list-group-item' . $sflgi . $ev_class . '">';
                     if ($layout == 3 && $curdate != $evdate) {
                         $secho .= '<span class="ical-date">' . ucfirst($evdate) . '</span>' . (('a' == $attributes['tag_sum']) ? '<br>' : '');
                     }
+
+                    if ('summary' == $attributes['tag_sum']) {
+                        $secho .= $cat_list . '<details class="ical_details' . $sflgia . '" id="'. $itemid. '">';
+                    }
+                    
                     $secho .=  '<' . $attributes['tag_sum'] . ' class="ical_summary' . $sflgia . (('a' == $attributes['tag_sum']) ? '" data-toggle="collapse" data-bs-toggle="collapse" href="#' . $itemid . '" aria-expanded="false" aria-controls="' . $itemid . '">' : '">');
                     if ($layout != 2)	{
                         $secho .= $evdtsum;
@@ -320,7 +326,12 @@ static function display_block($attributes, &$secho)
                     if ($layout == 2)	{
                         $secho .= '<span>'. $evdate . $evdtsum . '</span>';
                     }
-                    $secho .= $cat_list . '<div class="ical_details' . $sflgia . (('a' == $attributes['tag_sum']) ? ' collapse' : '') . '" id="'. $itemid. '">';
+
+                    if ('summary' != $attributes['tag_sum']) {
+                        $secho .= $cat_list . '<div class="ical_details' . $sflgia . (('a' == $attributes['tag_sum']) ? ' collapse' : '') . '" id="'. $itemid. '">';
+                    }
+                    
+                    
                     if(!empty($e->description) && trim($e->description) > '' && $excerptlength !== 0) {
                         if ($excerptlength !== '' && strlen($e->description) > $excerptlength) {$e->description = substr($e->description, 0, $excerptlength + 1);
                         if (rtrim($e->description) !== $e->description) {$e->description = substr($e->description, 0, $excerptlength);}

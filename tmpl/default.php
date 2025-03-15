@@ -40,7 +40,7 @@
  * 2.6.0 clean all output to safe HTML 
  * 2.7.0 Enable to add words of summary to categories for filtering. Move display_block back to default layout to improve support for override
  *   and use layout template with original name without 'rest-' or 'ajax-' for rest output to make that also overridable. Add support for
- *   details/summary tag combination. Add inline style for hidden lines with version id or warnings.
+ *   details/summary tag combination. Add inline style for hidden lines with version id or warnings. Removed ev_class from li head.      
  */
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
@@ -144,7 +144,7 @@ $secho .= '<p hidden="">d270</p>';
                 if  ($curdate != '') {
                     $secho .= '</ul></li>';
                 }
-                $secho .= '<li class="list-group-item' . $sflgi . $ev_class . ' head">' . '<span class="ical-date">' . ucfirst($evdate) . '</span><ul class="list-group' . $attributes['suffix_lg_class'] . '">';
+                $secho .= '<li class="list-group-item' . $sflgi . ' head">' . '<span class="ical-date">' . ucfirst($evdate) . '</span><ul class="list-group' . $attributes['suffix_lg_class'] . '">';
             }
             $secho .= '<li class="list-group-item' . $sflgi . $ev_class . '">';
             if ($layout == 3 && $curdate != $evdate) {
