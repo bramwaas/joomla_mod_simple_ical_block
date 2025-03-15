@@ -699,8 +699,8 @@ END:VCALENDAR';
             }  else {
                 $cat_ary = array_map("strtolower",(empty($e->categories)) ? ['']:$e->categories );
                 if ($add_sum_catflt){ 
-                    $cat_ary = array_merge($cat_ary,
-                    explode(',',strtolower(str_replace([' ', ',,'], [','], (string) $e->summary)))
+                    $cat_ary = array_merge($cat_ary, (empty($e->summary)?[]:
+                    explode(',',strtolower(str_replace([' ', ',,'], [','], $e->summary))))
                     );
                 }
                 if ('' == $cat_ary[0] && 1 < count($cat_ary)) { array_shift($cat_ary);
