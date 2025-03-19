@@ -50,14 +50,14 @@ use Joomla\CMS\Factory;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalHelper;
 
-if (!empty($wa))$wa->addInlineStyle('.simple_ical_block p[hidden]{display:none !important;}', ['name' => 'simple-ical-block-inline-style']);
+//if (!empty($wa))$wa->addInlineStyle('.simple_ical_block p[hidden]{display:none !important;}', ['name' => 'simple-ical-block-inline-style']);
 if (empty($secho)) {  $secho = ''; }
 
 if (empty($nohead) ) {
     $attributes = SimpleicalHelper::render_attributes( $params->toArray());
     $secho .= '<div id="' . $attributes['anchorId']  .'" data-sib-id="' . $attributes['sibid'] . '" ' . ' class="simple_ical_block ' . $attributes['title_collapse_toggle']. '" >';
 }
-$secho .= '<p hidden="">d270</p>';
+//$secho .= '<p hidden="">d270</p>';
 //self::display_block($attributes,$secho);
 /**
  * Front-end display of module, block or widget.
@@ -111,7 +111,7 @@ $secho .= '<p hidden="">d270</p>';
         $secho .= '<p hidden="">' . $msg . ' </p>';
     }
     if (!empty($data) && is_array($data)) {
-        $secho .= '<ul class="list-group' . $attributes['suffix_lg_class'] . ' simple-ical-widget" > ';
+        $secho .= '<ul class="list-group' . $attributes['suffix_lg_class'] . ' simple-ical-widget 270" > ';
         $curdate = '';
         foreach($data as $e) {
             $idlist = explode("@", $e->uid );

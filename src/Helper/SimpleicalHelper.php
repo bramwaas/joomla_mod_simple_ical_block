@@ -229,7 +229,7 @@ class SimpleicalHelper
      */
 static function display_block($attributes, &$secho)
     {
-        $secho .= '<p hidden="">db270 fallback for old or missing lay_out templates since v2.7.0 (march 2025).</p>';
+//        $secho .= '<p hidden="">db270 fallback for old or missing lay_out templates since v2.7.0 (march 2025).</p>';
         try {
             $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
         } catch (\Exception $exc) {}
@@ -271,7 +271,7 @@ static function display_block($attributes, &$secho)
                 $secho .= '<p hidden="">' . $msg . ' </p>';
             }
             if (!empty($data) && is_array($data)) {
-                $secho .= '<ul class="list-group' . $attributes['suffix_lg_class'] . ' simple-ical-widget" > ';
+                $secho .= '<ul class="list-group' . $attributes['suffix_lg_class'] . ' simple-ical-widget 270" > ';
                 $curdate = '';
                 foreach($data as $e) {
                     $idlist = explode("@", $e->uid );
