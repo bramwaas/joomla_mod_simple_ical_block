@@ -353,7 +353,11 @@ static function display_block($attributes, &$secho)
                     if(!empty($e->location)) {
                         $secho .= '<span class="location">'. str_replace("\n", '<br>', $e->location). '</span>';
                     }
-                    $secho .= '</div></li>';
+                    if ('summary' == $attributes['tag_sum']) {
+                        $secho .= '</details></li>';
+                    } else {
+                        $secho .= '</div></li>';
+                    }
                     $curdate =  $evdate;
                 }
                 if ($layout < 2 ) {
