@@ -8,8 +8,7 @@
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl
  * @developer A.H.C. Waasdorp
- *
- *
+ * 
  * simpleicalblock is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -36,21 +35,26 @@
  * 2.5.2 renamed SimpleicalblockHelper to SimpleicalHelper and moved functions common with WP to top
  * 2.6.0 improve security by following Wordpress Plugin Check recommendations. 
  * Replace echo by $secho in &$secho param a.o. in display_block, to simplify escaping output by replacing multiple echoes by one.
- * clean all echoed output to safe HTML
+ * clean all echoed output to safe HTML 
  * 2.6.1 added cast $class to string in sanitize_html_clss and sanitize_html_class after, defaults for new collapse fields issue #39 of joomlafun
- *  
+ * 2.7.0 Remove toggle to allow safe html in summary and description, save html is always allowed now.
+ * Sameday as logical and calculated with localtime instead of gmdate. Move display_block back to default layout to improve support for override
+ * and use layout template with original name without 'rest-' or 'ajax-' for rest output. Add support for details/summary tag combination. Removed 
+ * ev_class from li head.
+
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
 defined('_JEXEC') or die ('Restricted access');
 
-
 use Joomla\CMS\Date\Date as Jdate;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Response\JsonResponse;
 use Joomla\Filter\InputFilter;
+use Joomla\Registry\Registry;
 use WaasdorpSoekhan\Module\Simpleicalblock\Site\IcsParser;
 
 /**
@@ -79,6 +83,7 @@ class SimpleicalHelper
         'i',
         'span',
         'strong',
+        'summary',
         'u'
     ];
     /*
@@ -113,6 +118,7 @@ class SimpleicalHelper
         'span',
         'strike',
         'strong',
+        'summary',
         'u',
         'ul'
     ];
@@ -195,9 +201,13 @@ class SimpleicalHelper
         'suffix_lg_class' => '',
         'suffix_lgi_class' => ' py-0',
         'suffix_lgia_class' => '',
-        'allowhtml' => false,
+        'allowhtml' => true,
         'after_events' => '',
         'no_events' => '',
+        'categories_filter_op' => '',
+        'categories_filter' => '',
+        'categories_display' => '',
+        'add_sum_catflt' => false,
         'clear_cache_now' => false,
         'period_limits' => '1',
         'tzid_ui' => '',
@@ -216,13 +226,11 @@ class SimpleicalHelper
      * @param array $attributes
      * @param string &$secho (reference to $secho), output to echo in calling function, to simplify escaping output by replacing multiple echoes by one 
      *            Saved attribute/option values from database.
+     *  NOT USED only as fallback for old or missing lay_out templates,  
      */
-    static function display_block($attributes, &$secho)
+static function display_block($attributes, &$secho)
     {
-//         if (empty(self::$input_fl)) {
-//             self::$input_fl = new InputFilter(self::$allowed_tags, self::$allowed_attrs, InputFilter::ONLY_ALLOW_DEFINED_TAGS, InputFilter::ONLY_ALLOW_DEFINED_ATTRIBUTES);
-//         }
-        $sn = 0;
+//        $secho .= '<p hidden="">db270 fallback for old or missing lay_out templates since v2.7.0 (march 2025).</p>';
         try {
             $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
         } catch (\Exception $exc) {}
@@ -261,10 +269,10 @@ class SimpleicalHelper
             $ipd = IcsParser::getData($attributes);
             $data = $ipd['data'];
             foreach ($ipd['messages'] as $msg) {
-                $secho .= '<!-- ' . $msg . ' -->';
+                $secho .= '<p hidden="">' . $msg . ' </p>';
             }
             if (!empty($data) && is_array($data)) {
-                $secho .= '<ul class="list-group' . $attributes['suffix_lg_class'] . ' simple-ical-widget" > ';
+                $secho .= '<ul class="list-group' . $attributes['suffix_lg_class'] . ' simple-ical-widget 270" > ';
                 $curdate = '';
                 foreach($data as $e) {
                     $idlist = explode("@", $e->uid );
@@ -276,6 +284,7 @@ class SimpleicalHelper
                     $e_dtend_1 = new Jdate ($e->end -1);
                     $e_dtend_1->setTimezone($attributes['tz_ui']);
                     $evdate = $e_dtstart->format($dflg, true, true);
+                    $sameday = ($e_dtstart->format('yz', true, true) === $e_dtend->format('yz', true, true));
                     $ev_class =  ((!empty($e->cal_class)) ? ' ' . self::sanitize_html_clss($e->cal_class): '');
                     $cat_list = '';
                     if (!empty($e->categories)) {
@@ -288,12 +297,7 @@ class SimpleicalHelper
                                 . '</small></div>';
                         }
                     }
-                    if ( !$attributes['allowhtml']) {
-                        if (!empty($e->summary)) $e->summary = htmlspecialchars($e->summary);
-                        if (!empty($e->description)) $e->description = htmlspecialchars($e->description);
-                        if (!empty($e->location)) $e->location = htmlspecialchars($e->location);
-                    }
-                    if (date('yz', $e->start) != date('yz', $e->end)) {
+                    if (! $sameday) {
                         $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . $e_dtend_1->format($dflgend, true, true));
                     }
                     $evdtsum = (($e->startisdate === false) ? $e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true) : '');
@@ -301,12 +305,17 @@ class SimpleicalHelper
                         if  ($curdate != '') {
                             $secho .= '</ul></li>';
                         }
-                        $secho .= '<li class="list-group-item' . $sflgi . $ev_class . ' head">' . '<span class="ical-date">' . ucfirst($evdate) . '</span><ul class="list-group' . $attributes['suffix_lg_class'] . '">';
+                        $secho .= '<li class="list-group-item' . $sflgi . ' head">' . '<span class="ical-date">' . ucfirst($evdate) . '</span><ul class="list-group' . $attributes['suffix_lg_class'] . '">';
                     }
                     $secho .= '<li class="list-group-item' . $sflgi . $ev_class . '">';
                     if ($layout == 3 && $curdate != $evdate) {
                         $secho .= '<span class="ical-date">' . ucfirst($evdate) . '</span>' . (('a' == $attributes['tag_sum']) ? '<br>' : '');
                     }
+
+                    if ('summary' == $attributes['tag_sum']) {
+                        $secho .= '<details class="ical_details' . $sflgia . '" id="'. $itemid. '">';
+                    }
+                    
                     $secho .=  '<' . $attributes['tag_sum'] . ' class="ical_summary' . $sflgia . (('a' == $attributes['tag_sum']) ? '" data-toggle="collapse" data-bs-toggle="collapse" href="#' . $itemid . '" aria-expanded="false" aria-controls="' . $itemid . '">' : '">');
                     if ($layout != 2)	{
                         $secho .= $evdtsum;
@@ -314,11 +323,16 @@ class SimpleicalHelper
                     if(!empty($e->summary)) {
                         $secho .= str_replace("\n", '<br>', $e->summary);
                     }
-                    $secho .= '</' . $attributes['tag_sum'] . '>';
+                    $secho .= '</' . $attributes['tag_sum'] . '>' . $cat_list;
                     if ($layout == 2)	{
                         $secho .= '<span>'. $evdate . $evdtsum . '</span>';
                     }
-                    $secho .= $cat_list . '<div class="ical_details' . $sflgia . (('a' == $attributes['tag_sum']) ? ' collapse' : '') . '" id="'. $itemid. '">';
+
+                    if ('summary' != $attributes['tag_sum']) {
+                        $secho .= '<div class="ical_details' . $sflgia . (('a' == $attributes['tag_sum']) ? ' collapse' : '') . '" id="'. $itemid. '">';
+                    }
+                    
+                    
                     if(!empty($e->description) && trim($e->description) > '' && $excerptlength !== 0) {
                         if ($excerptlength !== '' && strlen($e->description) > $excerptlength) {$e->description = substr($e->description, 0, $excerptlength + 1);
                         if (rtrim($e->description) !== $e->description) {$e->description = substr($e->description, 0, $excerptlength);}
@@ -331,7 +345,7 @@ class SimpleicalHelper
                         $e->description = str_replace("\n", '<br>', $e->description);
                         $secho .= '<span class="dsc">'. $e->description. ((strrpos($e->description, '<br>') === (strlen($e->description) - 4)) ? '' : '<br>'). '</span>';
                     }
-                    if ($e->startisdate === false && date('yz', $e->start) === date('yz', $e->end))	{
+                    if ($e->startisdate === false && $sameday)	{
                         $secho .= '<span class="time">' . ($e_dtstart->format($dftstart, true, true)).
                         '</span><span class="time">' . ($e_dtend->format($dftend, true, true)). '</span> ' ;
                     } else {
@@ -340,7 +354,11 @@ class SimpleicalHelper
                     if(!empty($e->location)) {
                         $secho .= '<span class="location">'. str_replace("\n", '<br>', $e->location). '</span>';
                     }
-                    $secho .= '</div></li>';
+                    if ('summary' == $attributes['tag_sum']) {
+                        $secho .= '</details></li>';
+                    } else {
+                        $secho .= '</div></li>';
+                    }
                     $curdate =  $evdate;
                 }
                 if ($layout < 2 ) {
@@ -388,8 +406,6 @@ class SimpleicalHelper
         $block_attributes['suffix_lg_class'] = self::sanitize_html_clss($block_attributes['suffix_lg_class']);
         $block_attributes['suffix_lgi_class'] = self::sanitize_html_clss($block_attributes['suffix_lgi_class']);
         $block_attributes['suffix_lgia_class'] = self::sanitize_html_clss($block_attributes['suffix_lgia_class']);
-//        $block_attributes['anchorId'] = self::sanitize_html_clss($block_attributes['anchorId'], 'simpleicalblock' . $block_attributes['sibid']);
-        
         
         return $block_attributes;
     }
@@ -415,8 +431,9 @@ class SimpleicalHelper
     }
     /**
      * call Rest / Ajax component.
-     * Get block content wth sibid, (active menu Itemid,) postid, and client timezone from request
-     *
+     * Get block content wth sibid, (= active menu Itemid,)  and client timezone from request
+     * use layout template with templatename wthout 'rest-' or 'ajax-' or default.
+     * 
      * @param Input object $input $app-> 
      * 
      * @return JsonResponse object $data 
@@ -426,30 +443,42 @@ class SimpleicalHelper
      *  "data":     ["content": {null| string: content of module},
      *               "params":  {null| array: used params ] 
      * ]
-     * sinc 2.4.0
-     *
+     * since 2.4.0
+     * 
      */
     public static function getAjax()
-    {   
-        $input = Factory::getApplication()->getInput();
-        $params = $input->getArray();
-        unset($params['option'],$params['module'],$params['method'],$params['view'],);
-        if (empty($params['sibid'])) {
+    {   $app = Factory::getApplication();
+        $input = $app->getInput();
+        $ippars = $input->getArray();
+        unset($ippars['option'],$ippars['module'],$ippars['method'],$ippars['view'],);
+        if (empty($ippars['sibid'])) {
             $secho = '<p>' .  Text::_('MOD_SIMPLEICALBLOCK_EMPTYSIBID') .'</p>';
         } else {
-            $mod = ModuleHelper::getModuleById($params['sibid']);
-            if (empty($mod->params)) {
+            $module = ModuleHelper::getModuleById($ippars['sibid']);
+            if (empty($module->params)) {
                 $secho = '<p>' .  Text::_('MOD_SIMPLEICALBLOCK_NOPARAMS') .'</p>';
             } else {
                 $secho = '';
-                $attributes = self::render_attributes( array_merge( json_decode($mod->params, true), $params));
-                self::display_block($attributes, $secho);
+                $attributes = self::render_attributes( array_merge( json_decode($module->params, true), $ippars));
+                $params = new Registry($attributes); // for use in layout (overrides)
+                $path = str_ireplace(['ajax-', 'rest-'] ,['',''], (string) $attributes['layout']);
+                if ($attributes['layout'] == $path) $path = '_:default';
+                $path = ModuleHelper::getLayoutPath($module->module, $path );
+                $nohead = true;
+                if (is_file( $path)) {
+                    ob_start(); // catch echoed and cleaned layout output
+                    require $path;
+                    $secho .= ob_get_clean();
+                }
+                else{
+                    self::display_block($attributes, $secho);
+                    $secho = self::clean_output($secho);
+                }
             }
         }
-        $secho = self::clean_output($secho);
         $data = [
-            'content' => $secho ,
-            'params' => $params
+            'content' => $secho,
+            'params' => $ippars
         ];
         return $data;
     }

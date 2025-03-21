@@ -6,19 +6,6 @@
  *
  * note that this class does not implement all ICS functionality.
  *   bw 20220630 copied from Wordpress simple-google-icalendar-widget version 2.0.3
- * Version: 0.0.4
- *  replace WP transient_functions by  SimpleicalblockHelper::transient_functions ;
- *  replace wp_remote_get by Http->get(), create Http object in var $http  construct and thus necesary to instantiate the class
- *  replace get_option('timezone_string') and wp_timezone by Factory::getApplication()->get('offset') and ...
- *  replace wp_date( by date(
- *  replace transient by cache type 'output'; split transientId in cahegroup and cacheID to distinguish the group in system clear cache
- * 0.0.6 11-8-2022 added try around $this->http->get($url) 
- *   added start index 1 to array protocols to prevent 0 as incorrect fals result of array_search to 'http'. 
- *   replaced webcal:// by http:// before http->get() to prevent curl protocol error.
- * 0.0.7 moved instantiating http to fetch() because it is only local used.
- *   Added header Accept-Encoding: '' (['headers' => ['Accept-Encoding' => ['']]]); to let curl accepts all known encoding and decode them.
- *   Then removed decoding based on Content-Encoding header because body is already decoded by curl. 
- * 2.0.1 back to static functions getData() and fetch() only instantiate object in fetch when parsing must be done (like it always was in WP)   
  * 2.1.0 calendar_id can be array of ID;class elements; elements foreach in fetch() to parse each element; sort moved to fetch() after foreach.
  *   parse() directly add in events in $this->events, add html-class from new input parameter to each event
  *   Make properties from most important parameters during instantiation of the class to limit copying of input params in several functions.
@@ -38,6 +25,7 @@
  * while retaining , or ; when escaped with \ and use the same function for list of url's and input filter categorie list. 
  * use temporary replace \\ by chr(20) and replace chr(20) by \ instead of explode and implode to prevent use of \\ as unescape char.
  * 2.6.0 escaping error messages.
+ * 2.7.0 Enable to add summary to filtering categories, when add_sum_catflt add words from summary to categories for filtering. 
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site;
 // no direct access
@@ -108,7 +96,7 @@ END:VCALENDAR';
      * @var array english abbreviations and names of weekdays.
      */
     private static $weekdays = array(
-         'MO' => 'monday',
+        'MO' => 'monday',
         'TU' => 'tuesday',
         'WE' => 'wednesday',
         'TH' => 'thursday',
@@ -270,7 +258,7 @@ END:VCALENDAR';
      * @since 2.1.0
      */
     protected $calendar_ids = '';
-     /**
+    /**
      * cache time in minutes
      *
      * @var    int
@@ -342,9 +330,9 @@ END:VCALENDAR';
     /**
      * Parse ical string to individual events
      *
-     * @param   string      $str the   content of the file to parse as a string.
+     * @param   string      $str the  content of the file to parse as a string.
      * @param   string      $cal_class the html-class for this calendar
-     * @param   int         $cal_ord   order in list of this calendar 
+     * @param   int         $cal_ord   order in list of this calendar
      *
      * @return  void        $this->events is filled with the parsed event objects.
      *                      $this->replaceevents is filedd with id's of replaced events (to remove them)
@@ -369,9 +357,9 @@ END:VCALENDAR';
                 $e = $this->parseVevent($eventStr);
                 $e->cal_class = $cal_class;
                 $e->cal_ord = $cal_ord;
-                    if (!empty($e->recurid)){
-                        $this->replaceevents[] = array($e->uid, $e->recurid );
-                    }
+                if (!empty($e->recurid)){
+                    $this->replaceevents[] = array($e->uid, $e->recurid );
+                }
                 if ($this->p_start < $e->end && $this->p_end > $e->start && (empty($e->exdate) || ! in_array($e->start, $e->exdate))) {
                     $this->events[] = $e;
                 }
@@ -683,20 +671,21 @@ END:VCALENDAR';
         } while($haveVevent);
     }
 /*
-     * Limit events to the first event_count events in the event - period/window.
-     * filter against categories filter.
+ * Limit events to the first event_count events in the event - period/window.
+ * filter against categories filter and words of summary when add_sum_catflt
  * Events are already sorted
  * 
-     * @param  array of objects $data_events events parsed or cached.
-     * @param int timestamp $p_start start datetime of period/window with events displayed
-     * @param int timestamp $p_end (not included) end datetime of period/window with events displayed
-     * @param  int $e_count limits the maximum number of events  
-     * @param stringt $cat_filter comma separated list of categories to compare (intersect) with events categories   
-     * @param string  $cat_filter_op Operator to asses result of intersection from a list or '' for no filtering.
-     *
+ * @param  array of objects $data_events events parsed or cached.
+ * @param int timestamp $p_start start datetime of period/window with events displayed
+ * @param int timestamp $p_end (not included) end datetime of period/window with events displayed
+ * @param  int $e_count limits the maximum number of events  
+ * @param stringt $cat_filter comma separated list of categories to compare (intersect) with events categories   
+ * @param string  $cat_filter_op Operator to asses result of intersection from a list or '' for no filtering.
+ * @param boolean $add_sum_catflt add words from summary to categories fro filtering
+ *
  * @return  array       remaining event objects.
  */
-    static function getFutureEvents($data_events, $p_start, $p_end, $e_count, $cat_filter = '', $cat_filter_op = '' ) {
+    static function getFutureEvents($data_events, $p_start, $p_end, $e_count, $cat_filter = '', $cat_filter_op = '', $add_sum_catflt = false ) {
         // 
         if (!empty($cat_filter_op))  {
             $cat_filter_ary = array_map("strtolower",(empty($cat_filter)) ? [''] : self::unescTextList($cat_filter));
@@ -708,7 +697,15 @@ END:VCALENDAR';
             if (empty($cat_filter_op)) {
                 $cat_filter_result = true; // no filter
             }  else {
-                $cat_is_cnt = count(array_intersect($cat_filter_ary,(array_map("strtolower",($e->categories) ?? ['']))));
+                $cat_ary = array_map("strtolower",(empty($e->categories)) ? ['']:$e->categories );
+                if ($add_sum_catflt){ 
+                    $cat_ary = array_merge($cat_ary, (empty($e->summary)?[]:
+                    explode(',',strtolower(str_replace([' ', ',,'], [','], $e->summary))))
+                    );
+                }
+                if ('' == $cat_ary[0] && 1 < count($cat_ary)) { array_shift($cat_ary);
+                }
+                $cat_is_cnt = count(array_intersect($cat_filter_ary,($cat_ary)));
                 switch ($cat_filter_op) {
                     case "ANY":
                     $cat_filter_result = (0 < $cat_is_cnt);
@@ -850,9 +847,9 @@ END:VCALENDAR';
         if ($a->start == $b->start) {
             if ($a->end == $b->end) {
                 return ($a->cal_ord - $b->cal_ord);
-            } 
+            }
             else return ($a->end - $b->end);
-        } 
+        }
         else return ($a->start - $b->start);
     }
     /**
@@ -1101,7 +1098,7 @@ END:VCALENDAR';
         if ( ! array_key_exists('data', $ipd)) {
             $ipd = ['data'=>$ipd, 'messages'=>[]];
         }
-        return ['data'=>self::getFutureEvents($ipd['data'], $p_start, $p_end, $instance['event_count'], (($instance['categories_filter'])??''), (($instance['categories_filter_op'])??'')),
+        return ['data'=>self::getFutureEvents($ipd['data'], $p_start, $p_end, $instance['event_count'], (($instance['categories_filter'])??''), (($instance['categories_filter_op'])??''), ($instance['add_sum_catflt']??false)),
             'messages'=>$ipd['messages']];
     }
     /**
@@ -1150,7 +1147,7 @@ END:VCALENDAR';
             try {
                 $this->parse($httpBody,  $cal_class, $cal_ord );
             } catch(\Exception $exc) {
-                continue ;
+                continue;
             }
         } // end foreach
 

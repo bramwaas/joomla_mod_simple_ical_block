@@ -9,7 +9,7 @@ Tags: Event Calendar, Google Calendar, iCal, Events, Block, Calendar, iCalendar,
 Requires at least Joomla: 4.0
 Tested up to: 5.2
 Requires PHP: 7
-Stable tag: 2.6.1
+Stable tag: 2.7.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
  
@@ -32,7 +32,7 @@ These are great, but as soon as you want to make a few adjustments to the stylin
 * Choose date / time format that best suits your website in settings screen.
 * Displays per event DTSTART, DTEND, SUMMARY, LOCATION and DESCRIPTION. DTSTART is required other components are optional. 
 * Displays most common repeating events. Frequency Yearly, Monthly, Weekly, Dayly (not Hourly, Minutely and smaller periods)    
-* Basic support for filter on Categories Warning: MS Outlook does not share categories via iCal now. Google and iCloud calendar don't support categories at all. So this will not work with these calendars.   
+* Basic support for filter on Categories Warning: MS Outlook does not share categories via iCal now. Google and iCloud calendar don't support categories at all. So this will not work with these calendars. Therefore now also possible to filter on words in summary   
 
 Adjusted settings for start with summary:  
 Start with summary.: "true"  
@@ -252,6 +252,8 @@ This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.
 * works with Joomla 4 or higher.
 
 == Changelog ==
+* 2.7.0 Enable to add words of summary to categories for filtering (after issue #36 'Filtering by keyword' by gonzob for Joomla module).  Remove toggle to allow safe html in summary and description, save html is always allowed now. Move display_block back to default layout to improve support for override and use layout template with original name without 'rest-' or 'ajax-' for rest output to make that also overridable. Added support
+for details/summary tag combination. 
 * 2.6.1 added cast $class to string in sanitize_html_clss and sanitize_html_class after issue #39 of joomlafun
 * 2.6.0 Improved protection against xss attacks in accordance with changes made to wp-plugin following a reported XSS vulnerability in the wp-plugin. Checked with Wordpress Plugin Check (PCP). Fixed this vulnerability and other PCP errors and warnings, as required by Wordpress to remain in the plugin directory.     
 Replace echo with $secho in &$secho parameter e.g. in display_block, to simplify escaping output by replacing multiple echoes with one.   
@@ -275,25 +277,3 @@ Basic parse Recurrence-ID (only one Recurrence-ID event to replace one occurrenc
   Solved issue: Warning: date() expects at most 2 parameters, 3 given in ...IcsParser.php on line 542 caused by wp_date() / date() replacement.    
   Support BYSETPOS in response to a github issue on the WP block of peppergrayxyz. Support WKST.   
 * 2.0.0 major and minor vesion number aligned with those of Wordpress block with the same functionality and the same code for the IcsParser block apart from CMS specific functions (get_option('timezone_string') / Factory::getApplication()->get('offset'), wp_transient / cache type 'output' and wp_remote_get / Joomla\Http\Http->get()) and temporary wp_date() / date().
-* 0.0.7 added Accept-Encoding: '' to http request to tell curl to handle compressed results (known by the server) correct.
-* 0.0.6 added translations and adjustments to comply with JED checker.
-* 0.0.5 added documentation tab in settings form.
-* 0.0.4 replace transient by cache type 'output'; split transientId in cachegroup and cacheID to distinguish the group in a.o. System/Clear cache
-* 0.0.3 module works in Joomla 4, with #example, with file, and with requests from google or outlook. 
-  Output is comparable with output of WP block but more testing and clean up needs to be done.
-* 0.0.0 imported V2.0.3 of my Wordpress plugin [Simple Google Calendar Outlook Events Block Widget](https://wordpress.org/plugins/simple-google-icalendar-widget/) and made modifications to let it work with Joomla 4.
-* copied src/IcsParser.php with IcsParser class from WP includes/IcsParser.php; replaced wp specific functions like wp_date() wp_remote_get() and
-  get_option('timezone_string') by PHP or Joomla alternatives.
-* created transient functions in SimpleicalblockHelper based on functionality of WP transient functions. Used the new transient functions
-  in ICsParser.
-* copied most of content of default.php from WP display_block() in includes/SimpleicalBlock; replaced wp specific functions like wp_date() wp_remote_get() and
-  get_option('timezone_string') by PHP or Joomla alternatives. Because php date() has no translation like wp_date() more modifications made to
-  use Joomla Date object when output needs to be translated. 
-  Used strip_tags with allowed html for wp_kses(,'post') and copied most of the code of WP sanitize_html_class() 
-  to sanitize_html_class() in SimpleicalblockHelper added space as valid character to accommodate more classes in one class attribute.
-* copied $allowed_tags_sum and other preparation of parameters/attributes functionality of render_block() in SimpleicalblockHelper    
-  from includes/SimpleicalBlock.php
-* created config/fields in mod_simpleical_block.xml based on WP edit elements in simple-ical-block.js 
-  and form() function in simple-google-icalendar-widget.php. Removed title as we already have a module title. Filled blockid with module.id.
-* created CleartransientnowRule to handle action on field clear_cache_now like it is done in the WP widget; 
-   i.e. deleting the transient when the parameters are saved and clear_cache_now = true.
