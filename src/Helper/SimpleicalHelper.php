@@ -41,6 +41,7 @@
  * Sameday as logical and calculated with localtime instead of gmdate. Move display_block back to default layout to improve support for override
  * and use layout template with original name without 'rest-' or 'ajax-' for rest output. Add support for details/summary tag combination. Removed 
  * ev_class from li head.
+
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
