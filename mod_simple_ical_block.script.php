@@ -2,16 +2,17 @@
 /**
  * @version $Id: mod_simple_ical_block.script.php
  * @package simple_ical_bloc
- * @copyright Copyright (C) 2024 - 2024 AHC Waasdorp, All rights reserved.
+ * @copyright Copyright (C) 2024 - 2026 AHC Waasdorp, All rights reserved.
  * @license http://www.gnu.org/licenses GNU/GPL
  * @author url: https://www.waasdorpsoekhan.nl
  * @author email contact@waasdorpsoekhan.nl
  * @developer AHC Waasdorp
  * 2024-04-25 remove unused file(s) and maps.
+ * 2026-05-15 v3.0.1 replaced Joomla\CMS\Filesystem classes by Joomla\Filesystem classes. 
  */
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
-use Joomla\CMS\Filesystem\Path;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Path;
 use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Language\Text;
 
