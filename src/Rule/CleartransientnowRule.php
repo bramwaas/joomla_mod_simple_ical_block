@@ -3,7 +3,7 @@
  * @package Joomla.Site
  * @subpackage Templates.dna
  *
- * @copyright Copyright (C) 2022 - 2023 Bram Waasdorp. All rights reserved.
+ * @copyright Copyright (C) 2022 - 2026 Bram Waasdorp. All rights reserved.
  * @license GNU General Public License version 3 or later
  * used to Clear calendar cache before save when asked for.
  * 31-7-2022 0.0.4 replace transient by cache type 'output'; split transientId in cahegroup and cacheID to distinguish the group in system clear cache
@@ -16,8 +16,9 @@ namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Rule;
 use Joomla\CMS\Cache\Controller\OutputController;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;   // voor vertalingen???
-use Joomla\CMS\Form\FormRule;
 use Joomla\CMS\Form\Form;
+use Joomla\CMS\Form\FormRule;
+
 // use WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalblockHelper;
 
 

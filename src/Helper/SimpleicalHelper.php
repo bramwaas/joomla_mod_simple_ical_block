@@ -42,6 +42,7 @@
  * and use layout template with original name without 'rest-' or 'ajax-' for rest output. Add support for details/summary tag combination. Removed 
  * ev_class from li head.
  * 3.0.0 remove messages to front-end, replaced by Log
+ * v3.0.1 replaced Joomla\CMS\Filesystem classes by Joomla\Filesystem classes.
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
@@ -49,7 +50,7 @@ defined('_JEXEC') or die ('Restricted access');
 
 use Joomla\CMS\Date\Date as Jdate;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
+use Joomla\Filesystem\File;
 use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Response\JsonResponse;
