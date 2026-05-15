@@ -2,17 +2,17 @@
 <extension type="module"   client="site" method="upgrade">
   	<compatibility>
     	<include>
-      		<versions from="4.0.0" to="6.99.99" />
+      		<versions from="5.0.0" to="6.99.99" />
     	</include>
   	</compatibility>
 	<name>Simple iCal Block</name>
-	<creationDate>15-12-2025</creationDate>	
+	<creationDate>15-05-2026</creationDate>	
 	<author>A.H.C. Waasdorp</author>
 	<copyright>Copyright (C) 2022 - 2026 A.H.C. Waasdorp, All rights reserved.</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<authorEmail>contact@waasdorpsoekhan.nl</authorEmail>
 	<authorUrl>http://www.waasdorpsoekhan.nl</authorUrl>
-	<version>3.0.0</version>
+	<version>3.0.1</version>
 	<description><![CDATA[<div class="sib-info" style="color: #3f48cc;"><p><img class="sib-img" src="../media/mod_simple_ical_block/icons/simpleicalicon128x128.svg" style="display: inline-block; width: 2em; height:auto; margin-right: 0.5em;"/>Simple iCal Calendar Events Block</p></div>
 	]]></description>
 	<namespace path="src">WaasdorpSoekhan\Module\Simpleicalblock</namespace>
