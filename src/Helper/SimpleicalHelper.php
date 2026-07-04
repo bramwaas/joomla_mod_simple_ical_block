@@ -42,7 +42,8 @@
  * and use layout template with original name without 'rest-' or 'ajax-' for rest output. Add support for details/summary tag combination. Removed 
  * ev_class from li head.
  * 3.0.0 remove messages to front-end, replaced by Log
- * v3.0.1 replaced Joomla\CMS\Filesystem classes by Joomla\Filesystem classes.
+ * 3.0.1 replaced Joomla\CMS\Filesystem classes by Joomla\Filesystem classes.
+ * 3.1.0 whitelist Ajax params to solve security vulnerability issue
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
@@ -431,7 +432,7 @@ static function display_block($attributes, &$secho)
      * Get block content wth sibid, (= active menu Itemid,)  and client timezone from request
      * use layout template with templatename wthout 'rest-' or 'ajax-' or default.
      * 
-     * @param Input object $input $app-> 
+     * @param Input object $input $app-> (whitelisted to only the necessary parameters)
      * 
      * @return JsonResponse object $data 
      * ["succes":   {true|false},
@@ -446,8 +447,8 @@ static function display_block($attributes, &$secho)
     public static function getAjax()
     {   $app = Factory::getApplication();
         $input = $app->getInput();
-        $ippars = $input->getArray();
-        unset($ippars['option'],$ippars['module'],$ippars['method'],$ippars['view'],);
+        $ippars = array_intersect_key($ippars,['sibid'=>'' , 'tzid_ui'=>'', 'wptype'=>'']);
+//        unset($ippars['option'],$ippars['module'],$ippars['method'],$ippars['view'],);
         if (empty($ippars['sibid'])) {
             $secho = '<p>' .  Text::_('MOD_SIMPLEICALBLOCK_EMPTYSIBID') .'</p>';
         } else {
