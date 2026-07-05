@@ -43,7 +43,7 @@
  * ev_class from li head.
  * 3.0.0 remove messages to front-end, replaced by Log
  * 3.0.1 replaced Joomla\CMS\Filesystem classes by Joomla\Filesystem classes.
- * 3.1.0 whitelist Ajax params to solve security vulnerability issue
+ * 3.1.0 whitelist Ajax params to solve a possible security vulnerability issue, removed unused display_block() function.
  */
 namespace WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper;
 // no direct access
@@ -221,155 +221,6 @@ class SimpleicalHelper
         'after_title'   => '</h3>'
     ];
     /**
-     * Front-end display of module, block or widget.
-     *
-     * @see
-     *
-     * @param array $attributes
-     * @param string &$secho (reference to $secho), output to echo in calling function, to simplify escaping output by replacing multiple echoes by one 
-     *            Saved attribute/option values from database.
-     *  NOT USED only as fallback for old or missing lay_out templates,  
-     */
-static function display_block($attributes, &$secho)
-    {
-        try {
-            $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
-        } catch (\Exception $exc) {}
-        if (empty($attributes['tz_ui']))
-            try {
-                $attributes['tzid_ui'] = str_replace('Etc/GMT ','Etc/GMT+',$attributes['tzid_ui']);
-                $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
-        } catch (\Exception $exc) {}
-        if (empty($attributes['tz_ui']))
-            try {
-                $attributes['tzid_ui'] = Factory::getApplication()->get('offset');
-                $attributes['tz_ui'] = new \DateTimeZone($attributes['tzid_ui']);
-        } catch (\Exception $exc) {}
-        if (empty($attributes['tz_ui'])) {
-            $attributes['tzid_ui'] = 'UTC';
-            $attributes['tz_ui'] = new \DateTimeZone('UTC');
-        }
-        $layout = (isset($attributes['sib_layout'])) ? intval($attributes['sib_layout']) : 3;
-        $dflg = (isset($attributes['dateformat_lg'])) ? $attributes['dateformat_lg'] : 'l jS \of F';
-        $dflgend = (isset($attributes['dateformat_lgend'])) ? $attributes['dateformat_lgend'] : '';
-        $dftsum = (isset($attributes['dateformat_tsum'])) ? $attributes['dateformat_tsum'] : 'G:i ';
-        $dftsend = (isset($attributes['dateformat_tsend'])) ? $attributes['dateformat_tsend'] : '';
-        $dftstart = (isset($attributes['dateformat_tstart'])) ? $attributes['dateformat_tstart'] : 'G:i';
-        $dftend = (isset($attributes['dateformat_tend'])) ? $attributes['dateformat_tend'] : ' - G:i ';
-        $excerptlength = (isset($attributes['excerptlength']) && ' ' < trim($attributes['excerptlength']) ) ? (int) $attributes['excerptlength'] : '' ;
-        $sflgi = $attributes['suffix_lgi_class'];
-        $sflgia = $attributes['suffix_lgia_class'];
-        if (empty($attributes['categories_display'])) {
-            $cat_disp = false;
-        } else {
-            $cat_disp = true;
-            $cat_sep = '</small>'.$attributes['categories_display'].'<small>';
-        }
-        if (! in_array($attributes['tag_sum'], self::$allowed_tags_sum))
-            $attributes['tag_sum'] = 'a';
-            $ipd = IcsParser::getData($attributes);
-            $data = $ipd['data'];
-            if (!empty($data) && is_array($data)) {
-                $secho .= '<ul class="list-group' . $attributes['suffix_lg_class'] . ' simple-ical-widget v300" > ';
-                $curdate = '';
-                foreach($data as $e) {
-                    $idlist = explode("@", $e->uid );
-                    $itemid = 'b' . $attributes['sibid'] . '_' . $idlist[0];
-                    $e_dtstart = new Jdate ($e->start);
-                    $e_dtstart->setTimezone($attributes['tz_ui']);
-                    $e_dtend = new Jdate ($e->end);
-                    $e_dtend->setTimezone($attributes['tz_ui']);
-                    $e_dtend_1 = new Jdate ($e->end -1);
-                    $e_dtend_1->setTimezone($attributes['tz_ui']);
-                    $evdate = $e_dtstart->format($dflg, true, true);
-                    $sameday = ($e_dtstart->format('yz', true, true) === $e_dtend->format('yz', true, true));
-                    $ev_class =  ((!empty($e->cal_class)) ? ' ' . self::sanitize_html_clss($e->cal_class): '');
-                    $cat_list = '';
-                    if (!empty($e->categories)) {
-                        $ev_class = $ev_class . ' ' . implode( ' ',
-                            array_map( "WaasdorpSoekhan\Module\Simpleicalblock\Site\Helper\SimpleicalHelper::sanitize_html_class"
-                                , $e->categories ));
-                        if ($cat_disp) {
-                            $cat_list = '<div class="categories"><small>'
-                                . implode($cat_sep,str_replace("\n", '<br>', $e->categories ))
-                                . '</small></div>';
-                        }
-                    }
-                    if (! $sameday) {
-                        $evdate = str_replace(array("</div><div>", "</h4><h4>", "</h5><h5>", "</h6><h6>" ), '', $evdate . $e_dtend_1->format($dflgend, true, true));
-                    }
-                    $evdtsum = (($e->startisdate === false) ? $e_dtstart->format($dftsum, true, true) . $e_dtend->format($dftsend, true, true) : '');
-                    if ($layout < 2 && $curdate != $evdate) {
-                        if  ($curdate != '') {
-                            $secho .= '</ul></li>';
-                        }
-                        $secho .= '<li class="list-group-item' . $sflgi . ' head">' . '<span class="ical-date">' . ucfirst($evdate) . '</span><ul class="list-group' . $attributes['suffix_lg_class'] . '">';
-                    }
-                    $secho .= '<li class="list-group-item' . $sflgi . $ev_class . '">';
-                    if ($layout == 3 && $curdate != $evdate) {
-                        $secho .= '<span class="ical-date">' . ucfirst($evdate) . '</span>' . (('a' == $attributes['tag_sum']) ? '<br>' : '');
-                    }
-
-                    if ('summary' == $attributes['tag_sum']) {
-                        $secho .= '<details class="ical_details' . $sflgia . '" id="'. $itemid. '">';
-                    }
-                    
-                    $secho .=  '<' . $attributes['tag_sum'] . ' class="ical_summary' . $sflgia . (('a' == $attributes['tag_sum']) ? '" data-toggle="collapse" data-bs-toggle="collapse" href="#' . $itemid . '" aria-expanded="false" aria-controls="' . $itemid . '">' : '">');
-                    if ($layout != 2)	{
-                        $secho .= $evdtsum;
-                    }
-                    if(!empty($e->summary)) {
-                        $secho .= str_replace("\n", '<br>', $e->summary);
-                    }
-                    $secho .= '</' . $attributes['tag_sum'] . '>' . $cat_list;
-                    if ($layout == 2)	{
-                        $secho .= '<span>'. $evdate . $evdtsum . '</span>';
-                    }
-
-                    if ('summary' != $attributes['tag_sum']) {
-                        $secho .= '<div class="ical_details' . $sflgia . (('a' == $attributes['tag_sum']) ? ' collapse' : '') . '" id="'. $itemid. '">';
-                    }
-                    
-                    
-                    if(!empty($e->description) && trim($e->description) > '' && $excerptlength !== 0) {
-                        if ($excerptlength !== '' && strlen($e->description) > $excerptlength) {$e->description = substr($e->description, 0, $excerptlength + 1);
-                        if (rtrim($e->description) !== $e->description) {$e->description = substr($e->description, 0, $excerptlength);}
-                        else {if (strrpos($e->description, ' ', max(0,$excerptlength - 10))!== false OR strrpos($e->description, "\n", max(0,$excerptlength - 10))!== false )
-                        {$e->description = substr($e->description, 0, max(strrpos($e->description, "\n", max(0,$excerptlength - 10)),strrpos($e->description, ' ', max(0,$excerptlength - 10))));
-                        } else
-                        {$e->description = substr($e->description, 0, $excerptlength);}
-                        }
-                        }
-                        $e->description = str_replace("\n", '<br>', $e->description);
-                        $secho .= '<span class="dsc">'. $e->description. ((strrpos($e->description, '<br>') === (strlen($e->description) - 4)) ? '' : '<br>'). '</span>';
-                    }
-                    if ($e->startisdate === false && $sameday)	{
-                        $secho .= '<span class="time">' . ($e_dtstart->format($dftstart, true, true)).
-                        '</span><span class="time">' . ($e_dtend->format($dftend, true, true)). '</span> ' ;
-                    } else {
-                        $secho .= '';
-                    }
-                    if(!empty($e->location)) {
-                        $secho .= '<span class="location">'. str_replace("\n", '<br>', $e->location). '</span>';
-                    }
-                    if ('summary' == $attributes['tag_sum']) {
-                        $secho .= '</details></li>';
-                    } else {
-                        $secho .= '</div></li>';
-                    }
-                    $curdate =  $evdate;
-                }
-                if ($layout < 2 ) {
-                    $secho .= '</ul></li>';
-            }
-                $secho .= '</ul>';
-                $secho .= $attributes['after_events'];
-            } else {
-                $secho .= $attributes['no_events'];
-            }
-            $secho .= '<br class="clear v300" />';
-    }
-    /**
      * copied from WP sanitize_html_class, and added space as allowed character to accomodate multiple classes in one string.
      * Strips the string down to A-Z, ,a-z,0-9,_,-. If this results in an empty string then it will return the alternative value supplied.
      *
@@ -469,8 +320,7 @@ static function display_block($attributes, &$secho)
                     $secho .= ob_get_clean();
                 }
                 else{
-                    self::display_block($attributes, $secho);
-                    $secho = self::clean_output($secho);
+                    $secho = '<p>' .  Text::_('MOD_SIMPLEICALBLOCK_NOLAYOUTFILE') .'</p>';
                 }
             }
         }

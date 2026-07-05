@@ -204,7 +204,7 @@ if (empty($nohead) ) {
     } else {
         $secho .= $attributes['no_events'];
     }
-    $secho .= '<br class="clear v300" />';
+    $secho .= '<br class="clear v310" />';
 }
 /* end display_block */
 if (empty($nohead)) {
