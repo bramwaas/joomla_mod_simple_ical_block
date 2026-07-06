@@ -298,7 +298,7 @@ class SimpleicalHelper
     public static function getAjax()
     {   $app = Factory::getApplication();
         $input = $app->getInput();
-        $ippars = array_intersect_key($ippars,['sibid'=>'' , 'tzid_ui'=>'', 'wptype'=>'']);
+        $ippars = array_intersect_key($input->getArray(),['sibid'=>'' , 'tzid_ui'=>'', 'wptype'=>'']);
 //        unset($ippars['option'],$ippars['module'],$ippars['method'],$ippars['view'],);
         if (empty($ippars['sibid'])) {
             $secho = '<p>' .  Text::_('MOD_SIMPLEICALBLOCK_EMPTYSIBID') .'</p>';
